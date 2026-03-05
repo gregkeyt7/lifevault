@@ -450,61 +450,35 @@ function defaultVault(){
 }
 
 /* ==========================
-   License gate (Gumroad)
+   License gate DISABLED (for smooth customer experience)
+   NOTE: This makes the app public if someone has the URL.
 ========================== */
 function openSubscribe(){
   if(CONFIG.subscribeUrl && CONFIG.subscribeUrl.startsWith("http")) window.open(CONFIG.subscribeUrl, "_blank");
   else toast("Set CONFIG.subscribeUrl in index.html");
 }
+
 async function verifyLicense(){
-  $("pwErr").textContent="";
-  const key = $("licKey").value.trim();
+  // Always unlock immediately
+  $("pwErr").textContent = "";
+  $("pwState").textContent = "✅ Access granted";
+  S.s(K.licOk,"1");
+  S.s(K.licKey,"BYPASS");
   const email = $("licEmail").value.trim();
+  if(email) S.s(K.licEmail,email);
 
-  if(!CONFIG.gumroadProductId || CONFIG.gumroadProductId.includes("REPLACE_")){
-    $("pwErr").textContent="Developer error: gumroadProductId not set.";
-    return;
-  }
-  if(!key){ $("pwErr").textContent="Enter your license key."; return; }
-
-  try{
-    $("pwState").textContent="⏳ Verifying…";
-    const params = new URLSearchParams({
-      product_id: CONFIG.gumroadProductId,
-      license_key: key,
-      increment_uses_count: "false"
-    });
-
-    const res = await fetch("https://api.gumroad.com/v2/licenses/verify", {
-      method:"POST",
-      headers: {"Content-Type":"application/x-www-form-urlencoded"},
-      body: params.toString()
-    });
-    const j = await res.json();
-    if(j && j.success===true){
-      S.s(K.licOk,"1");
-      S.s(K.licKey,key);
-      if(email) S.s(K.licEmail,email);
-      $("pwState").textContent="✅ Verified";
-      $("paywall").classList.remove("open");
-      boot();
-      toast("License verified");
-    }else{
-      S.d(K.licOk);
-      $("pwState").textContent="❌ Invalid";
-      $("pwErr").textContent="Invalid key. Subscribe, then paste the key here.";
-    }
-  }catch(e){
-    $("pwState").textContent="⚠️ Network";
-    $("pwErr").textContent="Could not verify. Check internet and try again.";
-  }
+  $("paywall").classList.remove("open");
+  boot();
+  toast("Welcome to LifeVault");
 }
+
 function logoutLicense(){
+  // Keep logout working (locks app again until they click Verify & Continue)
   S.d(K.licOk); S.d(K.licKey); S.d(K.licEmail);
   lockMemory();
   $("lock").classList.remove("open");
   $("paywall").classList.add("open");
-  toast("License logged out");
+  toast("Locked");
 }
 
 /* ==========================
