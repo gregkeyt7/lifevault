@@ -6,84 +6,248 @@
   <meta name="theme-color" content="#2563eb" />
   <link rel="manifest" href="manifest.json" />
   <title>LifeVault™</title>
+
   <style>
     :root{
-      --bg:#0b1220; --card:#0f172a; --card2:#111c33; --text:#e5e7eb; --muted:#94a3b8;
+      --bg:#0b1220;
+      --card:#0f172a;
+      --card2:#111c33;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
       --border:rgba(148,163,184,.18);
+
       --blue:#2563eb; --blue2:#1d4ed8;
-      --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+      --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --purple:#7c3aed;
+
       --shadow:0 10px 25px rgba(0,0,0,.35);
+      --shadow2:0 22px 55px rgba(0,0,0,.55);
       --r:14px; --r2:18px;
     }
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 800px at 20% 0%, rgba(37,99,235,.35), transparent 60%),
-      radial-gradient(900px 700px at 90% 20%, rgba(124,58,237,.25), transparent 55%), var(--bg); color:var(--text);}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(1200px 800px at 20% 0%, rgba(37,99,235,.35), transparent 60%),
+        radial-gradient(900px 700px at 90% 20%, rgba(124,58,237,.25), transparent 55%),
+        radial-gradient(900px 600px at 20% 90%, rgba(34,197,94,.12), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
     a{color:inherit}
-    .wrap{max-width:1080px;margin:0 auto;padding:18px 14px 70px}
-    .topbar{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .wrap{max-width:1120px;margin:0 auto;padding:18px 14px 80px}
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      background:rgba(11,18,32,.72);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);
+    }
     .topbar .wrap{padding:14px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:var(--shadow)}
-    .title{font-weight:900;letter-spacing:-.6px;font-size:1.05rem}
-    .subtitle{font-size:.8rem;color:var(--muted)}
     .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-weight:800;font-size:.78rem;color:var(--text);background:rgba(255,255,255,.03)}
-    .btn{border:none;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:260px}
+    .logo{
+      width:38px;height:38px;border-radius:12px;
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;box-shadow:var(--shadow);
+      letter-spacing:-.5px;
+      user-select:none;
+    }
+    .title{font-weight:1000;letter-spacing:-.6px;font-size:1.05rem}
+    .subtitle{font-size:.82rem;color:var(--muted)}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      font-weight:900;font-size:.78rem;
+      color:var(--text);
+      background:rgba(255,255,255,.03);
+      user-select:none;
+    }
+    .pill.good{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .pill.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .pill.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+
+    .btn{
+      border:none;border-radius:12px;
+      padding:10px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      transition:.15s;
+      display:inline-flex;align-items:center;gap:8px;
+      user-select:none;
+      white-space:nowrap;
+    }
     .btn:active{transform:scale(.98)}
     .btn.blue{background:var(--blue);color:white}
     .btn.blue:hover{background:var(--blue2)}
     .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
     .btn.ghost:hover{background:rgba(255,255,255,.03)}
     .btn.red{background:var(--red);color:white}
-    .grid{display:grid;grid-template-columns:260px 1fr;gap:14px;margin-top:16px}
+    .btn.green{background:var(--green);color:#06240f}
+    .btn.green:hover{filter:brightness(1.06)}
+    .btn.small{padding:8px 10px;border-radius:10px;font-size:.9rem}
+
+    .grid{display:grid;grid-template-columns:280px 1fr;gap:14px;margin-top:16px}
     @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--r2); box-shadow:var(--shadow); overflow:hidden}
-    .card h2{margin:0;font-size:1.0rem}
-    .card .hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:var(--r2);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
     .card .bd{padding:14px 16px}
-    .nav .item{padding:10px 12px;border-radius:12px;cursor:pointer;border:1px solid transparent;display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:900}
+    .card h2{margin:0;font-size:1.0rem}
+
+    .nav .item{
+      padding:10px 12px;border-radius:12px;
+      cursor:pointer;border:1px solid transparent;
+      display:flex;align-items:center;gap:10px;
+      color:var(--muted);
+      font-weight:1000;
+      user-select:none;
+    }
     .nav .item:hover{background:rgba(255,255,255,.03)}
-    .nav .item.active{background:rgba(37,99,235,.18);border-color:rgba(37,99,235,.35);color:#dbeafe}
-    .kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-    @media(max-width:700px){.kpi{grid-template-columns:1fr}}
-    .kpi .box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:12px}
-    .kpi .n{font-size:1.6rem;font-weight:1000;letter-spacing:-.8px}
-    .kpi .l{color:var(--muted);font-weight:800;font-size:.8rem}
+    .nav .item.active{
+      background:rgba(37,99,235,.18);
+      border-color:rgba(37,99,235,.35);
+      color:#dbeafe;
+    }
+
+    .kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    @media(max-width:900px){.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .kpi .box{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:14px;padding:12px;
+      min-height:82px;
+    }
+    .kpi .n{font-size:1.6rem;font-weight:1100;letter-spacing:-.8px}
+    .kpi .l{color:var(--muted);font-weight:900;font-size:.8rem;margin-top:2px}
+    .kpi .m{color:#cbd5e1;font-weight:900;font-size:.78rem;margin-top:8px;opacity:.95}
+
     .fg{margin-bottom:10px}
-    label{display:block;font-size:.78rem;color:var(--muted);font-weight:900;margin-bottom:6px}
+    label{display:block;font-size:.78rem;color:var(--muted);font-weight:1000;margin-bottom:6px}
     input, textarea, select{
       width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);
       background:rgba(0,0,0,.18);color:var(--text);outline:none;font-size:.95rem
     }
     textarea{resize:vertical;min-height:70px}
+
     .list{display:flex;flex-direction:column;gap:10px}
-    .li{padding:12px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,.03);display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
-    .li .t{font-weight:1000}
+    .li{
+      padding:12px;border-radius:16px;border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      display:flex;gap:12px;align-items:flex-start;justify-content:space-between;
+    }
+    .li .t{font-weight:1100}
     .li .s{color:var(--muted);font-size:.83rem;margin-top:2px;line-height:1.35}
     .li .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:1000;border:1px solid var(--border);color:#e2e8f0;background:rgba(255,255,255,.03)}
+
+    .tag{
+      display:inline-flex;align-items:center;
+      padding:4px 10px;border-radius:999px;
+      font-size:.72rem;font-weight:1100;
+      border:1px solid var(--border);color:#e2e8f0;background:rgba(255,255,255,.03);
+      user-select:none;
+    }
     .tag.red{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.12)}
     .tag.amb{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .tag.good{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .tag.purp{border-color:rgba(124,58,237,.35);background:rgba(124,58,237,.10)}
+
     .hint{color:var(--muted);font-size:.82rem;line-height:1.35;margin-top:6px}
+    .divider{height:1px;background:var(--border);margin:12px 0}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:700px){.two{grid-template-columns:1fr}}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
     /* Overlay screens */
-    .screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+    .screen{
+      position:fixed;inset:0;
+      display:none;align-items:center;justify-content:center;
+      padding:18px;z-index:9999;
+    }
     .screen.open{display:flex}
-    .modal{width:min(560px,100%);border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:rgba(15,23,42,.78);backdrop-filter:blur(12px);box-shadow:0 25px 60px rgba(0,0,0,.55)}
-    .modal .hd{padding:14px 16px;border-bottom:1px solid rgba(148,163,184,.18);display:flex;align-items:center;justify-content:space-between}
+    .modal{
+      width:min(620px,100%);
+      border-radius:22px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(15,23,42,.80);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow2);
+    }
+    .modal .hd{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(148,163,184,.18);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
     .modal .bd{padding:14px 16px}
-    .modal .ft{padding:12px 16px;border-top:1px solid rgba(148,163,184,.18);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+    .modal .ft{
+      padding:12px 16px;border-top:1px solid rgba(148,163,184,.18);
+      display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap
+    }
+
     .dots{display:flex;justify-content:center;gap:10px;margin:12px 0 16px}
     .dot{width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.35)}
     .dot.f{background:#fff;border-color:#fff}
+
     .kp{display:grid;grid-template-columns:repeat(3,74px);gap:12px;justify-content:center}
-    .key{width:74px;height:74px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);color:#fff;font-size:1.4rem;font-weight:900;cursor:pointer}
+    .key{
+      width:74px;height:74px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.10);
+      color:#fff;font-size:1.4rem;font-weight:1000;
+      cursor:pointer;
+    }
     .key:hover{background:rgba(255,255,255,.16)}
-    .toast{position:fixed;right:16px;bottom:16px;z-index:10000;display:flex;flex-direction:column;gap:8px}
-    .toast .t{background:#0b1220;border:1px solid rgba(148,163,184,.22);color:#fff;padding:10px 12px;border-radius:14px;font-weight:900;box-shadow:var(--shadow);max-width:320px}
+
+    .toast{
+      position:fixed;right:16px;bottom:16px;z-index:10000;
+      display:flex;flex-direction:column;gap:8px;align-items:flex-end;
+    }
+    .toast .t{
+      background:#0b1220;
+      border:1px solid rgba(148,163,184,.22);
+      color:#fff;padding:10px 12px;border-radius:14px;
+      font-weight:1000;box-shadow:var(--shadow);max-width:360px;
+    }
+
+    .inline-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .callout{
+      border:1px solid rgba(124,58,237,.35);
+      background:rgba(124,58,237,.10);
+      border-radius:16px;
+      padding:12px;
+      color:#e9d5ff;
+    }
+    .callout strong{color:#fff}
+    .danger{
+      border:1px solid rgba(239,68,68,.35);
+      background:rgba(239,68,68,.10);
+      border-radius:16px;
+      padding:12px;
+      color:#fee2e2;
+    }
   </style>
 </head>
+
 <body>
 
-  <!-- Lock screen (PIN -> Master Password) -->
+  <!-- Lock / Setup / Unlock -->
   <div id="lock" class="screen">
     <div class="modal">
       <div class="hd">
@@ -91,35 +255,77 @@
           <div class="logo">LV</div>
           <div>
             <div class="title">LifeVault™</div>
-            <div class="subtitle">AES-GCM encrypted vault</div>
+            <div class="subtitle">Local, private, encrypted vault</div>
           </div>
         </div>
-        <span class="pill">🛡️ Secure</span>
+        <span class="pill" id="lockStatusPill">🛡️ Encrypted</span>
       </div>
 
+      <!-- First-time setup -->
       <div class="bd" id="setup" style="display:none">
-        <div class="hint" style="margin-bottom:10px">First-time setup: set a 4-digit PIN and a Master Password.</div>
-        <div class="fg"><label>PIN (4 digits)</label><input id="sp1" type="password" maxlength="4" inputmode="numeric" placeholder="1234" /></div>
-        <div class="fg"><label>Confirm PIN</label><input id="sp2" type="password" maxlength="4" inputmode="numeric" placeholder="1234" /></div>
-        <div class="fg"><label>Master Password (8+ chars)</label><input id="sm1" type="password" placeholder="Strong password" /></div>
-        <div class="fg"><label>Confirm Master Password</label><input id="sm2" type="password" placeholder="Confirm" /></div>
+        <div class="callout" style="margin-bottom:10px">
+          <strong>First-time setup</strong><br>
+          Set a 4-digit PIN + a Master Password. Your data stays encrypted on this device.
+        </div>
+
+        <div class="two">
+          <div class="fg">
+            <label>PIN (4 digits)</label>
+            <input id="sp1" type="password" maxlength="4" inputmode="numeric" placeholder="1234" autocomplete="new-password" />
+          </div>
+          <div class="fg">
+            <label>Confirm PIN</label>
+            <input id="sp2" type="password" maxlength="4" inputmode="numeric" placeholder="1234" autocomplete="new-password" />
+          </div>
+        </div>
+
+        <div class="fg">
+          <label>Master Password (12+ recommended)</label>
+          <input id="sm1" type="password" placeholder="Strong password" autocomplete="new-password" />
+        </div>
+        <div class="fg">
+          <label>Confirm Master Password</label>
+          <input id="sm2" type="password" placeholder="Confirm" autocomplete="new-password" />
+        </div>
+
         <div class="hint" id="sErr" style="color:#fecaca;min-height:18px"></div>
-        <button class="btn blue" onclick="doSetup()">Create Vault</button>
+
+        <div class="inline-actions">
+          <button class="btn blue" onclick="doSetup()">Create Vault</button>
+          <button class="btn ghost" onclick="resetAll()">Reset</button>
+        </div>
+
+        <div class="divider"></div>
+        <div class="hint">
+          Upgrade tip: after setup, enable <strong>Biometric Unlock</strong> (Face ID / Touch ID / Windows Hello) inside <strong>Security</strong>.
+        </div>
       </div>
 
+      <!-- PIN keypad -->
       <div class="bd" id="pinWrap" style="display:none">
         <div class="title" style="text-align:center;font-size:1.15rem">Enter PIN</div>
         <div class="dots" id="dots">
           <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
         <div class="kp" id="kp"></div>
+
         <div class="hint" id="pinErr" style="color:#fecaca;min-height:18px;text-align:center"></div>
+
+        <div class="inline-actions" style="justify-content:center">
+          <button class="btn ghost" onclick="tryBiometricUnlock()" id="bioBtn" style="display:none">🔓 Use Biometric</button>
+        </div>
       </div>
 
+      <!-- Master password -->
       <div class="bd" id="mpWrap" style="display:none">
         <div class="title" style="text-align:center;font-size:1.15rem">Decrypt Vault</div>
-        <div class="hint" style="text-align:center;margin:6px 0 10px">Enter your Master Password.</div>
-        <div class="fg"><label>Master Password</label><input id="mp" type="password" placeholder="Master Password" /></div>
+        <div class="hint" style="text-align:center;margin:6px 0 10px">
+          Enter your Master Password to decrypt your vault.
+        </div>
+        <div class="fg">
+          <label>Master Password</label>
+          <input id="mp" type="password" placeholder="Master Password" autocomplete="current-password" />
+        </div>
         <div class="hint" id="mpErr" style="color:#fecaca;min-height:18px"></div>
       </div>
 
@@ -142,11 +348,15 @@
             <div class="subtitle" id="subline">Private vault on this device</div>
           </div>
         </div>
+
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
           <span class="pill" id="lockPill">⏱️ Auto-lock: 2 min</span>
+          <span class="pill" id="healthPill">✨ Health: —</span>
           <button class="btn ghost" onclick="exportBackup()">Backup</button>
+          <button class="btn ghost" onclick="importBackup()">Import</button>
           <button class="btn ghost" onclick="openSettings()">Security</button>
-          <button class="btn ghost" onclick="openSubscribe()">Subscribe</button>
+          <button class="btn ghost" onclick="openBilling()">Manage Billing</button>
+          <button class="btn blue" onclick="openSubscribe()">Subscribe</button>
           <button class="btn red" onclick="openEmergency()">Emergency</button>
         </div>
       </div>
@@ -155,15 +365,21 @@
 
   <div class="wrap">
     <div class="grid">
+
       <!-- Left nav -->
       <div class="card nav">
-        <div class="hd"><h2>Sections</h2><span class="tag">Offline</span></div>
+        <div class="hd">
+          <h2>Sections</h2>
+          <span class="tag purp">Offline-first</span>
+        </div>
         <div class="bd">
           <div class="item active" data-tab="dash" onclick="tab('dash')">🏠 Dashboard</div>
           <div class="item" data-tab="em" onclick="tab('em')">🏥 Emergency Info</div>
           <div class="item" data-tab="pw" onclick="tab('pw')">🔑 Passwords</div>
           <div class="item" data-tab="docs" onclick="tab('docs')">📋 Documents</div>
           <div class="item" data-tab="rec" onclick="tab('rec')">🧾 Receipts & Warranties</div>
+          <div class="item" data-tab="files" onclick="tab('files')">📎 File Vault</div>
+          <div class="item" data-tab="legacy" onclick="tab('legacy')">🕊️ Digital Legacy</div>
           <div class="item" data-tab="ref" onclick="tab('ref')">📣 Invite Friends</div>
           <div class="item" onclick="lockApp()">🔒 Lock Vault</div>
         </div>
@@ -171,12 +387,23 @@
 
       <!-- Right content -->
       <div>
-        <!-- Dashboard -->
+
+        <!-- Dashboard (Upgrade #5: Premium dashboard + health score) -->
         <div class="card" id="t-dash">
-          <div class="hd"><h2>Dashboard</h2><span class="tag" id="secTag">Encrypted</span></div>
+          <div class="hd">
+            <h2>Dashboard</h2>
+            <span class="tag good" id="secTag">Encrypted</span>
+          </div>
           <div class="bd">
             <div class="kpi" id="kpi"></div>
-            <div class="hint" style="margin-top:12px" id="alerts"></div>
+            <div class="divider"></div>
+            <div class="toolbar">
+              <div class="hint" id="alerts"></div>
+              <div class="inline-actions">
+                <button class="btn ghost small" onclick="openVaultHealth()">Vault Health</button>
+                <button class="btn ghost small" onclick="openQuickAdd()">Quick Add</button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -184,12 +411,20 @@
         <div class="card" id="t-em" style="display:none;margin-top:14px">
           <div class="hd"><h2>Emergency Info</h2><span class="tag">Family-ready</span></div>
           <div class="bd">
-            <div class="fg"><label>Blood Type</label><input id="e_bt" placeholder="O+" /></div>
+            <div class="two">
+              <div class="fg"><label>Blood Type</label><input id="e_bt" placeholder="O+" /></div>
+              <div class="fg"><label>Doctor + Phone</label><input id="e_dr" placeholder="Dr. Smith • (555) 123-4567" /></div>
+            </div>
+
             <div class="fg"><label>Allergies</label><textarea id="e_al" placeholder="Penicillin, peanuts..."></textarea></div>
             <div class="fg"><label>Medications</label><textarea id="e_med" placeholder="Dose + frequency"></textarea></div>
             <div class="fg"><label>Conditions</label><textarea id="e_cond" placeholder="Diabetes, asthma..."></textarea></div>
-            <div class="fg"><label>Doctor + Phone</label><input id="e_dr" placeholder="Dr. Smith • (555) 123-4567" /></div>
-            <div class="fg"><label>Insurance + Policy #</label><input id="e_ins" placeholder="Provider • Policy #" /></div>
+
+            <div class="two">
+              <div class="fg"><label>Insurance + Policy #</label><input id="e_ins" placeholder="Provider • Policy #" /></div>
+              <div class="fg"><label>Emergency Contact</label><input id="e_ec" placeholder="Name • Phone" /></div>
+            </div>
+
             <button class="btn blue" onclick="saveEmergency()">Save Emergency Info</button>
             <div class="hint">Emergency Mode shows this in a single red screen for fast access.</div>
           </div>
@@ -199,16 +434,29 @@
         <div class="card" id="t-pw" style="display:none;margin-top:14px">
           <div class="hd">
             <h2>Passwords</h2>
-            <button class="btn blue" onclick="openPw()">+ Add</button>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="openPwAudit()">Audit</button>
+              <button class="btn blue" onclick="openPw()">+ Add</button>
+            </div>
           </div>
           <div class="bd">
-            <div class="fg"><label>Search</label><input id="pwq" placeholder="gmail, bank, netflix..." oninput="renderPw()" /></div>
+            <div class="two">
+              <div class="fg"><label>Search</label><input id="pwq" placeholder="gmail, bank, netflix..." oninput="renderPw()" /></div>
+              <div class="fg"><label>Filter</label>
+                <select id="pwf" onchange="renderPw()">
+                  <option value="all">All</option>
+                  <option value="weak">Weak only</option>
+                  <option value="notes">Has notes</option>
+                </select>
+              </div>
+            </div>
+
             <div class="list" id="pwList"></div>
             <div class="hint">Tip: use unique passwords. This vault stays encrypted on your device.</div>
           </div>
         </div>
 
-        <!-- Documents -->
+        <!-- Documents (Upgrade #3: add file attachments) -->
         <div class="card" id="t-docs" style="display:none;margin-top:14px">
           <div class="hd">
             <h2>Documents</h2>
@@ -216,11 +464,11 @@
           </div>
           <div class="bd">
             <div class="list" id="docList"></div>
-            <div class="hint">Add expiration dates so your dashboard warns you before renewal.</div>
+            <div class="hint">Add expiration dates so your dashboard warns you before renewal. Attach photos/PDFs for instant access.</div>
           </div>
         </div>
 
-        <!-- Receipts -->
+        <!-- Receipts (Upgrade #3: add file attachments) -->
         <div class="card" id="t-rec" style="display:none;margin-top:14px">
           <div class="hd">
             <h2>Receipts & Warranties</h2>
@@ -228,18 +476,98 @@
           </div>
           <div class="bd">
             <div class="list" id="recList"></div>
-            <div class="hint">Warranty reminders prevent missed claims.</div>
+            <div class="hint">Warranty reminders prevent missed claims. Attach receipt photos/PDFs.</div>
           </div>
         </div>
 
-        <!-- Referral -->
+        <!-- File Vault (Upgrade #3: dedicated encrypted file vault) -->
+        <div class="card" id="t-files" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>File Vault</h2>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="openFileAdd()">+ Add File</button>
+              <button class="btn ghost" onclick="openFileAdd(true)">📷 Take Photo</button>
+            </div>
+          </div>
+          <div class="bd">
+            <div class="two">
+              <div class="fg"><label>Search</label><input id="fq" placeholder="passport, insurance, receipt..." oninput="renderFiles()" /></div>
+              <div class="fg"><label>Category</label>
+                <select id="fc" onchange="renderFiles()">
+                  <option value="all">All</option>
+                  <option value="id">ID</option>
+                  <option value="medical">Medical</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="home">Home</option>
+                  <option value="receipts">Receipts</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="list" id="fileList"></div>
+            <div class="hint">Files are encrypted with AES-GCM and stored in IndexedDB on this device. Use Backup to export encrypted vault metadata (files remain local unless you export them).</div>
+          </div>
+        </div>
+
+        <!-- Digital Legacy (Upgrade #4) -->
+        <div class="card" id="t-legacy" style="display:none;margin-top:14px">
+          <div class="hd"><h2>Digital Legacy</h2><span class="tag amb">Family safety</span></div>
+          <div class="bd">
+            <div class="callout">
+              <strong>Purpose:</strong> If something happens to you, your family can recover what matters (IDs, policies, contacts).<br>
+              <strong>Important:</strong> LifeVault can’t “auto-send” anything without a backend. This feature helps you set a clean, simple plan.
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="two">
+              <div class="fg">
+                <label>Primary Trustee</label>
+                <input id="lg_t1" placeholder="Name • Email • Phone" />
+              </div>
+              <div class="fg">
+                <label>Backup Trustee</label>
+                <input id="lg_t2" placeholder="Name • Email • Phone" />
+              </div>
+            </div>
+
+            <div class="fg">
+              <label>Legacy Instructions (plain language)</label>
+              <textarea id="lg_notes" placeholder="Where backups are stored, where the master password is sealed, who to call, what to do first..."></textarea>
+            </div>
+
+            <div class="two">
+              <div class="fg">
+                <label>Backup Location</label>
+                <input id="lg_where" placeholder="Home safe • Bank deposit box • Trusted family member" />
+              </div>
+              <div class="fg">
+                <label>Sealed Master Password Location</label>
+                <input id="lg_passwhere" placeholder="Sealed envelope in safe, etc." />
+              </div>
+            </div>
+
+            <div class="inline-actions">
+              <button class="btn blue" onclick="saveLegacy()">Save Legacy Plan</button>
+              <button class="btn ghost" onclick="printLegacy()">Print Plan</button>
+              <button class="btn ghost" onclick="openLegacyChecklist()">Checklist</button>
+            </div>
+
+            <div class="divider"></div>
+            <div class="danger">
+              <strong>Do NOT store your Master Password in plaintext.</strong><br>
+              Best practice: write it on paper, seal it, store it in a safe / deposit box, and reference the location above.
+            </div>
+          </div>
+        </div>
+
+        <!-- Referral (Stripe-ready wording) -->
         <div class="card" id="t-ref" style="display:none;margin-top:14px">
           <div class="hd"><h2>Invite Friends</h2><span class="tag amb">Growth</span></div>
           <div class="bd">
             <div class="hint" style="margin-bottom:10px">
-              This creates a share link. For a true “automatic reward” system you need a backend.
-              Zero-backend version: ask users to paste their friend’s referral code into a Gumroad custom field at checkout,
-              then you award free months manually (fast, simple).
+              This generates a share link + referral code. To automate rewards, your backend should capture the referral code during Stripe Checkout
+              (as metadata) and apply rewards via your business process.
             </div>
             <div class="fg"><label>Your Referral Code</label><input id="refCode" readonly /></div>
             <div class="fg"><label>Share Link</label><input id="refLink" readonly /></div>
@@ -248,10 +576,11 @@
               <button class="btn ghost" onclick="copy('refCode')">Copy Code</button>
             </div>
             <div class="hint" style="margin-top:10px">
-              Recommended reward: “Invite 5 friends → 1 year free.” (You issue a Gumroad discount code manually.)
+              Recommended reward: “Invite 5 friends → 12 months free.” (Your backend can manage rewards; the UI supplies the referral code.)
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -289,15 +618,33 @@
   <div class="toast" id="toast"></div>
 
 <script>
+/* =========================================================
+   LifeVault™ — Single-file Premium Build (Offline-first)
+   Upgrades included:
+   1) Biometric Unlock UI (WebAuthn / platform authenticator)
+   2) Stripe Checkout + Billing Portal (client calls your /api endpoints)
+   3) Encrypted File Vault + attachments (IndexedDB storage)
+   4) Digital Legacy plan + printable checklist
+   5) Premium Dashboard Health score + audits + UX polish
+========================================================= */
+
 /* ==========================
    CONFIG (edit these)
 ========================== */
 const CONFIG = {
-  // Your Gumroad product page
-  subscribeUrl: "https://keytastic7.gumroad.com/l/gpfuxs",
+  // Stripe endpoints (your backend must implement these)
+  stripeCheckoutSessionUrl: "/api/create-checkout-session",
+  stripePortalSessionUrl: "/api/create-portal-session",
 
   // Auto-lock default (minutes)
-  autoLockMinutesDefault: 2
+  autoLockMinutesDefault: 2,
+
+  // Crypto tuning
+  pbkdf2Iterations: 310000,     // upgraded from 210k
+  verifierIterations: 180000,   // upgraded from 150k
+
+  // File limits (client-side safety)
+  maxFileMB: 25
 };
 
 /* ==========================
@@ -309,8 +656,11 @@ const K = {
   mpver: "lv_mpver",
   blob: "lv_blob",
   settings: "lv_settings",
-  user: "lv_user"
+  user: "lv_user",
+  lastBackup: "lv_last_backup",
+  bio: "lv_bio" // biometric enabled flag + credential id
 };
+
 const S = {
   g:(k)=>localStorage.getItem(k),
   s:(k,v)=>localStorage.setItem(k,v),
@@ -318,17 +668,22 @@ const S = {
 };
 
 /* ==========================
-   UI helpers
+   DOM helpers
 ========================== */
 const $ = (id)=>document.getElementById(id);
+
 function toast(msg){
   const t = $("toast");
   const el = document.createElement("div");
-  el.className="t";
+  el.className = "t";
   el.textContent = msg;
   t.appendChild(el);
-  setTimeout(()=>{ el.style.opacity="0"; setTimeout(()=>el.remove(),250); }, 2600);
+  setTimeout(()=>{
+    el.style.opacity="0";
+    setTimeout(()=>el.remove(), 250);
+  }, 2600);
 }
+
 function openModal(title, sub, bodyHTML, footHTML){
   $("mTitle").textContent = title || "Modal";
   $("mSub").textContent = sub || "";
@@ -336,57 +691,123 @@ function openModal(title, sub, bodyHTML, footHTML){
   $("mFoot").innerHTML = footHTML || "";
   $("modal").classList.add("open");
 }
+
 function closeModal(){ $("modal").classList.remove("open"); }
+
 function tab(name){
-  document.querySelectorAll(".nav .item").forEach(x=>x.classList.toggle("active", x.dataset.tab===name));
-  ["dash","em","pw","docs","rec","ref"].forEach(t=>{ const el=$("t-"+t); if(el) el.style.display = (t===name)?"block":"none"; });
-  if(window.innerWidth<=900) window.scrollTo({top:0,behavior:"smooth"});
+  document.querySelectorAll(".nav .item").forEach(x=>{
+    x.classList.toggle("active", x.dataset.tab === name);
+  });
+  ["dash","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
+    const el = $("t-"+t);
+    if(el) el.style.display = (t === name) ? "block" : "none";
+  });
+  if(window.innerWidth <= 900) window.scrollTo({top:0, behavior:"smooth"});
 }
+
 function copy(id){
   const el = $(id);
   el.select(); el.setSelectionRange(0, 99999);
   document.execCommand("copy");
-  toast("Copied");
+  toast("Copied ✓");
 }
 
 /* ==========================
-   Gumroad link (no paywall)
+   Stripe (front-end)
+   - Your backend must create sessions using Stripe SECRET key
 ========================== */
-function openSubscribe(){
-  if(CONFIG.subscribeUrl && CONFIG.subscribeUrl.startsWith("http")) window.open(CONFIG.subscribeUrl, "_blank");
-  else toast("Set CONFIG.subscribeUrl in index.html");
+async function openSubscribe(){
+  try{
+    const ref = S.g(K.user) || null;
+    const res = await fetch(CONFIG.stripeCheckoutSessionUrl, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ ref })
+    });
+    if(!res.ok) throw new Error("Checkout session failed");
+    const data = await res.json();
+    if(!data?.url) throw new Error("No URL returned");
+    window.location.href = data.url;
+  }catch(e){
+    toast("Checkout failed. Verify /api/create-checkout-session");
+  }
+}
+
+async function openBilling(){
+  try{
+    const res = await fetch(CONFIG.stripePortalSessionUrl, { method:"POST" });
+    if(!res.ok) throw new Error("Portal session failed");
+    const data = await res.json();
+    if(!data?.url) throw new Error("No URL returned");
+    window.location.href = data.url;
+  }catch(e){
+    toast("Billing portal failed. Verify /api/create-portal-session");
+  }
 }
 
 /* ==========================
    Crypto (AES-GCM + PBKDF2)
 ========================== */
-let VAULT = null;
-let AESKEY = null;
+let VAULT = null;     // decrypted object in memory
+let AESKEY = null;    // CryptoKey for AES-GCM
 let LAST = Date.now();
 let AUTOLOCK = CONFIG.autoLockMinutesDefault;
 
-function b64(bytes){ let s=""; bytes.forEach(b=>s+=String.fromCharCode(b)); return btoa(s); }
-function unb64(b){ const bin=atob(b); const out=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; }
+function b64(bytes){
+  let s="";
+  bytes.forEach(b=>s+=String.fromCharCode(b));
+  return btoa(s);
+}
+function unb64(b){
+  const bin = atob(b);
+  const out = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i);
+  return out;
+}
 
 async function deriveKey(pass, salt){
   const enc = new TextEncoder();
-  const base = await crypto.subtle.importKey("raw", enc.encode(pass), {name:"PBKDF2"}, false, ["deriveKey","deriveBits"]);
+  const base = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(pass),
+    {name:"PBKDF2"},
+    false,
+    ["deriveKey","deriveBits"]
+  );
   return crypto.subtle.deriveKey(
-    {name:"PBKDF2", salt, iterations:210000, hash:"SHA-256"},
+    {name:"PBKDF2", salt, iterations:CONFIG.pbkdf2Iterations, hash:"SHA-256"},
     base,
     {name:"AES-GCM", length:256},
     false,
     ["encrypt","decrypt"]
   );
 }
+
 async function verifier(pass, salt){
   const enc = new TextEncoder();
-  const base = await crypto.subtle.importKey("raw", enc.encode(pass), {name:"PBKDF2"}, false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt, iterations:150000, hash:"SHA-256"}, base, 256);
-  const hkey = await crypto.subtle.importKey("raw", bits, {name:"HMAC", hash:"SHA-256"}, false, ["sign"]);
+  const base = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(pass),
+    {name:"PBKDF2"},
+    false,
+    ["deriveBits"]
+  );
+  const bits = await crypto.subtle.deriveBits(
+    {name:"PBKDF2", salt, iterations:CONFIG.verifierIterations, hash:"SHA-256"},
+    base,
+    256
+  );
+  const hkey = await crypto.subtle.importKey(
+    "raw",
+    bits,
+    {name:"HMAC", hash:"SHA-256"},
+    false,
+    ["sign"]
+  );
   const sig = await crypto.subtle.sign("HMAC", hkey, enc.encode("LifeVault::Verifier"));
   return b64(new Uint8Array(sig));
 }
+
 async function encrypt(obj){
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const enc = new TextEncoder();
@@ -395,6 +816,7 @@ async function encrypt(obj){
   const wrap = {v:1, iv:b64(iv), ct:b64(new Uint8Array(ct))};
   return btoa(JSON.stringify(wrap));
 }
+
 async function decrypt(blob){
   const wrap = JSON.parse(atob(blob));
   const iv = unb64(wrap.iv);
@@ -403,59 +825,111 @@ async function decrypt(blob){
   const dec = new TextDecoder().decode(pt);
   return JSON.parse(dec);
 }
+
 async function persist(){
   if(!VAULT) return;
   S.s(K.blob, await encrypt(VAULT));
 }
 
 /* ==========================
-   Default vault
+   Default vault structure
 ========================== */
 function defaultVault(){
   return {
-    emergency:{bt:"",al:"",med:"",cond:"",dr:"",ins:""},
+    emergency:{bt:"",al:"",med:"",cond:"",dr:"",ins:"",ec:""},
     passwords:[],
-    documents:[],
-    receipts:[],
-    meta:{created:new Date().toISOString()}
+    documents:[],  // can attach fileIds
+    receipts:[],   // can attach fileIds
+    files:[],      // file metadata list (encrypted blobs stored in IndexedDB)
+    legacy:{t1:"",t2:"",notes:"",where:"",passwhere:""},
+    meta:{
+      created:new Date().toISOString(),
+      updated:new Date().toISOString()
+    }
   };
 }
 
 /* ==========================
-   Setup + Lock + Unlock
+   Auto-lock + security
 ========================== */
-let pinBuf="";
+function loadSettings(){
+  try{
+    const s = JSON.parse(S.g(K.settings)||"{}");
+    AUTOLOCK = Number(s.autoLockMin ?? CONFIG.autoLockMinutesDefault);
+    if(!AUTOLOCK || AUTOLOCK<1) AUTOLOCK = CONFIG.autoLockMinutesDefault;
+  }catch{
+    AUTOLOCK = CONFIG.autoLockMinutesDefault;
+  }
+  $("lockPill").textContent = "⏱️ Auto-lock: " + AUTOLOCK + " min";
+}
+
+function saveSettings(){
+  S.s(K.settings, JSON.stringify({autoLockMin:AUTOLOCK}));
+  $("lockPill").textContent = "⏱️ Auto-lock: " + AUTOLOCK + " min";
+}
+
+function touch(){ LAST = Date.now(); }
+
+["click","keydown","mousemove","touchstart","scroll"].forEach(ev=>{
+  document.addEventListener(ev, ()=>{ if(VAULT) touch(); }, {passive:true});
+});
+
+setInterval(()=>{
+  if(VAULT && Date.now()-LAST > AUTOLOCK*60*1000) lockApp();
+}, 2000);
+
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden && VAULT){
+    // premium security behavior: lock when tab is hidden (optional)
+    // Comment this out if you don't want it.
+    lockApp();
+  }
+});
+
+/* ==========================
+   Lock / Unlock flow
+========================== */
+let pinBuf = "";
 const KEYS = ["1","2","3","4","5","6","7","8","9","","0","⌫"];
 
 function buildKP(){
-  const kp=$("kp"); kp.innerHTML="";
+  const kp = $("kp");
+  kp.innerHTML = "";
   KEYS.forEach(k=>{
-    const b=document.createElement("button");
-    b.className="key";
-    if(!k){ b.style.visibility="hidden"; }
-    else{
-      b.textContent=k;
-      b.onclick=()=>pinPress(k);
+    const b = document.createElement("button");
+    b.className = "key";
+    if(!k){
+      b.style.visibility="hidden";
+    }else{
+      b.textContent = k;
+      b.onclick = ()=>pinPress(k);
     }
     kp.appendChild(b);
   });
 }
+
 function dots(){
-  document.querySelectorAll("#dots .dot").forEach((d,i)=>d.classList.toggle("f", i<pinBuf.length));
+  document.querySelectorAll("#dots .dot").forEach((d,i)=>{
+    d.classList.toggle("f", i < pinBuf.length);
+  });
 }
+
 function pinPress(k){
   if(k==="⌫") pinBuf = pinBuf.slice(0,-1);
-  else if(pinBuf.length<4) pinBuf += k;
+  else if(pinBuf.length < 4) pinBuf += k;
   dots();
-  if(pinBuf.length===4) setTimeout(checkPin,120);
+  if(pinBuf.length === 4) setTimeout(checkPin, 120);
 }
+
 function backToPin(){
   $("pinWrap").style.display="block";
   $("mpWrap").style.display="none";
   $("pinErr").textContent="";
   pinBuf=""; dots();
 }
+
 function lockMemory(){ VAULT=null; AESKEY=null; }
+
 function lockApp(){
   lockMemory();
   $("lock").classList.add("open");
@@ -463,11 +937,13 @@ function lockApp(){
   $("pinWrap").style.display="block";
   $("mpWrap").style.display="none";
   backToPin();
+  setLockStatus();
   toast("Locked");
 }
+
 async function checkPin(){
   const p = S.g(K.pin);
-  if(pinBuf===p){
+  if(pinBuf === p){
     $("pinWrap").style.display="none";
     $("mpWrap").style.display="block";
     $("mpErr").textContent="";
@@ -478,18 +954,28 @@ async function checkPin(){
     pinBuf=""; dots();
   }
 }
+
+function setLockStatus(){
+  const bio = getBioSettings();
+  $("bioBtn").style.display = (bio.enabled && bio.credId) ? "inline-flex" : "none";
+  $("lockStatusPill").textContent = bio.enabled ? "🧬 Biometric ready" : "🛡️ Encrypted";
+}
+
 async function doSetup(){
   $("sErr").textContent="";
-  const p1=$("sp1").value.trim(), p2=$("sp2").value.trim();
-  const m1=$("sm1").value, m2=$("sm2").value;
-  if(!/^\d{4}$/.test(p1)) { $("sErr").textContent="PIN must be 4 digits."; return; }
+  const p1 = $("sp1").value.trim();
+  const p2 = $("sp2").value.trim();
+  const m1 = $("sm1").value;
+  const m2 = $("sm2").value;
+
+  if(!/^\d{4}$/.test(p1)){ $("sErr").textContent="PIN must be 4 digits."; return; }
   if(p1!==p2){ $("sErr").textContent="PINs do not match."; return; }
-  if(!m1 || m1.length<8){ $("sErr").textContent="Master Password must be 8+ characters."; return; }
+  if(!m1 || m1.length < 8){ $("sErr").textContent="Master Password must be 8+ characters."; return; }
   if(m1!==m2){ $("sErr").textContent="Master passwords do not match."; return; }
 
   const salt = crypto.getRandomValues(new Uint8Array(16));
-  S.s(K.pin,p1);
-  S.s(K.salt,b64(salt));
+  S.s(K.pin, p1);
+  S.s(K.salt, b64(salt));
   S.s(K.mpver, await verifier(m1, salt));
 
   AESKEY = await deriveKey(m1, salt);
@@ -498,8 +984,9 @@ async function doSetup(){
 
   $("lock").classList.remove("open");
   initApp();
-  toast("Vault created");
+  toast("Vault created ✓");
 }
+
 async function unlock(){
   $("mpErr").textContent="";
   const pass = $("mp").value;
@@ -509,58 +996,165 @@ async function unlock(){
     const saltB64 = S.g(K.salt);
     const v = S.g(K.mpver);
     if(!saltB64 || !v){ $("mpErr").textContent="Vault not initialized."; return; }
+
     const salt = unb64(saltB64);
     const v2 = await verifier(pass, salt);
-    if(v2!==v){ $("mpErr").textContent="Wrong master password."; return; }
+    if(v2 !== v){ $("mpErr").textContent="Wrong master password."; return; }
 
     AESKEY = await deriveKey(pass, salt);
     const blob = S.g(K.blob);
     VAULT = blob ? await decrypt(blob) : defaultVault();
+
+    // ensure any missing new fields
+    VAULT.files = VAULT.files || [];
+    VAULT.legacy = VAULT.legacy || {t1:"",t2:"",notes:"",where:"",passwhere:""};
+    VAULT.meta = VAULT.meta || {created:new Date().toISOString(), updated:new Date().toISOString()};
+
     $("lock").classList.remove("open");
     initApp();
-    toast("Unlocked");
+    toast("Unlocked ✓");
   }catch(e){
     $("mpErr").textContent="Could not decrypt.";
   }
 }
 
 /* ==========================
-   Auto-lock + settings
+   Biometric Unlock (Upgrade #1)
+   Uses WebAuthn platform authenticator.
+   Note: We still require Master Password to decrypt (best security for offline-only).
+   This is a premium “FaceID/Hello prompt” and can be evolved later to full key-unwrapping.
 ========================== */
-function loadSettings(){
-  try{
-    const s = JSON.parse(S.g(K.settings)||"{}");
-    AUTOLOCK = Number(s.autoLockMin ?? CONFIG.autoLockMinutesDefault);
-    if(!AUTOLOCK || AUTOLOCK<1) AUTOLOCK = CONFIG.autoLockMinutesDefault;
-  }catch{ AUTOLOCK = CONFIG.autoLockMinutesDefault; }
-  $("lockPill").textContent = "⏱️ Auto-lock: "+AUTOLOCK+" min";
+function getBioSettings(){
+  try{ return JSON.parse(S.g(K.bio)||"{}"); }catch{ return {}; }
 }
-function saveSettings(){
-  S.s(K.settings, JSON.stringify({autoLockMin:AUTOLOCK}));
-  $("lockPill").textContent = "⏱️ Auto-lock: "+AUTOLOCK+" min";
+function setBioSettings(obj){
+  S.s(K.bio, JSON.stringify(obj||{}));
 }
-function touch(){ LAST=Date.now(); }
-["click","keydown","mousemove","touchstart","scroll"].forEach(ev=>document.addEventListener(ev,()=>{ if(VAULT) touch(); },{passive:true}));
-setInterval(()=>{ if(VAULT && Date.now()-LAST > AUTOLOCK*60*1000) lockApp(); }, 2500);
 
+function supportsWebAuthn(){
+  return !!(window.PublicKeyCredential && navigator.credentials);
+}
+
+async function enableBiometric(){
+  if(!supportsWebAuthn()){
+    toast("Biometric not supported on this device/browser.");
+    return;
+  }
+  try{
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const userId = crypto.getRandomValues(new Uint8Array(16));
+
+    const cred = await navigator.credentials.create({
+      publicKey:{
+        challenge,
+        rp:{ name:"LifeVault" },
+        user:{ id:userId, name:"lifevault-user", displayName:"LifeVault User" },
+        pubKeyCredParams:[{type:"public-key", alg:-7}],
+        authenticatorSelection:{
+          authenticatorAttachment:"platform",
+          userVerification:"required"
+        },
+        timeout:60000,
+        attestation:"none"
+      }
+    });
+
+    if(!cred) throw new Error("No credential created");
+
+    const rawId = new Uint8Array(cred.rawId);
+    const credIdB64 = b64(rawId);
+
+    setBioSettings({enabled:true, credId:credIdB64});
+    setLockStatus();
+    toast("Biometric enabled ✓");
+  }catch(e){
+    toast("Biometric setup canceled/failed.");
+  }
+}
+
+async function disableBiometric(){
+  setBioSettings({enabled:false, credId:null});
+  setLockStatus();
+  toast("Biometric disabled");
+}
+
+async function tryBiometricUnlock(){
+  const bio = getBioSettings();
+  if(!bio?.enabled || !bio?.credId){ toast("Biometric not enabled."); return; }
+  if(!supportsWebAuthn()){ toast("Biometric not supported."); return; }
+
+  try{
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const allowId = unb64(bio.credId);
+
+    await navigator.credentials.get({
+      publicKey:{
+        challenge,
+        allowCredentials:[{type:"public-key", id:allowId}],
+        userVerification:"required",
+        timeout:60000
+      }
+    });
+
+    // If successful, jump to master password step (still required for decrypt)
+    $("pinWrap").style.display="none";
+    $("mpWrap").style.display="block";
+    $("mpErr").textContent="";
+    $("mp").value="";
+    $("mp").focus();
+    toast("Biometric verified ✓");
+  }catch(e){
+    toast("Biometric failed/canceled.");
+  }
+}
+
+/* ==========================
+   Security settings modal
+========================== */
 function openSettings(){
+  const bio = getBioSettings();
+  const bioState = (bio?.enabled && bio?.credId) ? "Enabled" : "Off";
+  const bioBtnLabel = (bioState==="Enabled") ? "Disable" : "Enable";
+
   openModal(
     "Security",
-    "Auto-lock and vault controls",
+    "Auto-lock + biometric unlock (Face ID / Touch ID / Windows Hello)",
     `
-      <div class="fg"><label>Auto-lock minutes (1–60)</label><input id="al" type="number" min="1" max="60" value="${AUTOLOCK}"></div>
-      <div class="hint">Recommended: 2–5 minutes</div>
+      <div class="two">
+        <div class="fg">
+          <label>Auto-lock minutes (1–60)</label>
+          <input id="al" type="number" min="1" max="60" value="${AUTOLOCK}">
+          <div class="hint">Recommended: 2–5 minutes</div>
+        </div>
+        <div class="fg">
+          <label>Biometric Unlock</label>
+          <input value="${bioState}" readonly>
+          <div class="hint">Prompts your device biometrics, then you enter Master Password to decrypt.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="callout">
+        <strong>Tip:</strong> Export a backup after major updates. Store the file in a safe place.
+      </div>
     `,
     `
       <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn ghost" onclick="${bioState==="Enabled" ? "disableBiometric()" : "enableBiometric()"}">${bioBtnLabel} Biometric</button>
       <button class="btn blue" onclick="applySettings()">Save</button>
     `
   );
 }
+
 function applySettings(){
   const n = Number($("al").value);
   if(!n || n<1 || n>60){ toast("Pick 1–60"); return; }
-  AUTOLOCK = n; saveSettings(); closeModal(); toast("Saved");
+  AUTOLOCK = n;
+  saveSettings();
+  closeModal();
+  toast("Saved ✓");
+  renderDash();
 }
 
 /* ==========================
@@ -570,17 +1164,20 @@ function openEmergency(){
   const e = VAULT?.emergency || {};
   $("emBody").innerHTML = `
     <div style="display:grid;gap:10px">
-      <div><div style="font-weight:1000">Blood Type</div><div>${escapeHtml(e.bt||"—")}</div></div>
-      <div><div style="font-weight:1000">Allergies</div><div>${escapeHtml(e.al||"—")}</div></div>
-      <div><div style="font-weight:1000">Medications</div><div>${escapeHtml(e.med||"—")}</div></div>
-      <div><div style="font-weight:1000">Conditions</div><div>${escapeHtml(e.cond||"—")}</div></div>
-      <div><div style="font-weight:1000">Doctor</div><div>${escapeHtml(e.dr||"—")}</div></div>
-      <div><div style="font-weight:1000">Insurance</div><div>${escapeHtml(e.ins||"—")}</div></div>
+      <div><div style="font-weight:1100">Blood Type</div><div>${escapeHtml(e.bt||"—")}</div></div>
+      <div><div style="font-weight:1100">Allergies</div><div>${escapeHtml(e.al||"—")}</div></div>
+      <div><div style="font-weight:1100">Medications</div><div>${escapeHtml(e.med||"—")}</div></div>
+      <div><div style="font-weight:1100">Conditions</div><div>${escapeHtml(e.cond||"—")}</div></div>
+      <div><div style="font-weight:1100">Doctor</div><div>${escapeHtml(e.dr||"—")}</div></div>
+      <div><div style="font-weight:1100">Insurance</div><div>${escapeHtml(e.ins||"—")}</div></div>
+      <div><div style="font-weight:1100">Emergency Contact</div><div>${escapeHtml(e.ec||"—")}</div></div>
     </div>
   `;
   $("emScreen").classList.add("open");
 }
+
 function closeEmergency(){ $("emScreen").classList.remove("open"); }
+
 function copyEmergency(){
   const e = VAULT?.emergency || {};
   const txt = `LifeVault Emergency Summary
@@ -589,10 +1186,21 @@ Allergies: ${e.al||"-"}
 Meds: ${e.med||"-"}
 Conditions: ${e.cond||"-"}
 Doctor: ${e.dr||"-"}
-Insurance: ${e.ins||"-"}`;
-  navigator.clipboard.writeText(txt).then(()=>toast("Copied summary")).catch(()=>toast("Copy failed"));
+Insurance: ${e.ins||"-"}
+Emergency Contact: ${e.ec||"-"}`;
+  navigator.clipboard.writeText(txt)
+    .then(()=>toast("Copied summary ✓"))
+    .catch(()=>toast("Copy failed"));
 }
-function escapeHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+
+function escapeHtml(s){
+  return String(s||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
 async function saveEmergency(){
   VAULT.emergency = {
@@ -601,123 +1209,304 @@ async function saveEmergency(){
     med: $("e_med").value.trim(),
     cond: $("e_cond").value.trim(),
     dr: $("e_dr").value.trim(),
-    ins: $("e_ins").value.trim()
+    ins: $("e_ins").value.trim(),
+    ec: $("e_ec").value.trim()
   };
+  markUpdated();
   await persist();
-  toast("Saved");
+  toast("Saved ✓");
   renderDash();
 }
 
 /* ==========================
    Passwords
 ========================== */
+function pwStrengthScore(p){
+  // simple offline heuristic (0-100)
+  const s = String(p||"");
+  let score = 0;
+  if(s.length >= 8) score += 25;
+  if(s.length >= 12) score += 25;
+  if(/[A-Z]/.test(s)) score += 10;
+  if(/[a-z]/.test(s)) score += 10;
+  if(/[0-9]/.test(s)) score += 10;
+  if(/[^A-Za-z0-9]/.test(s)) score += 20;
+  return Math.min(100, score);
+}
+
+function isWeakPassword(p){
+  return pwStrengthScore(p) < 55;
+}
+
 function openPw(id){
   const p = (VAULT.passwords||[]).find(x=>x.id===id) || {id:"",site:"",user:"",pass:"",notes:""};
+  const strength = pwStrengthScore(p.pass||"");
   openModal(
     id ? "Edit Password" : "Add Password",
     "Stored encrypted locally",
     `
       <input type="hidden" id="pw_id" value="${escapeHtml(p.id||"")}">
-      <div class="fg"><label>Website/App *</label><input id="pw_site" value="${escapeHtml(p.site||"")}" placeholder="Gmail"></div>
-      <div class="fg"><label>Username</label><input id="pw_user" value="${escapeHtml(p.user||"")}" placeholder="you@email.com"></div>
-      <div class="fg"><label>Password *</label><input id="pw_pass" value="${escapeHtml(p.pass||"")}" placeholder="••••••••"></div>
-      <div class="fg"><label>Notes</label><textarea id="pw_notes">${escapeHtml(p.notes||"")}</textarea></div>
+
+      <div class="two">
+        <div class="fg"><label>Website/App *</label>
+          <input id="pw_site" value="${escapeHtml(p.site||"")}" placeholder="Gmail">
+        </div>
+        <div class="fg"><label>Username</label>
+          <input id="pw_user" value="${escapeHtml(p.user||"")}" placeholder="you@email.com">
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Password *</label>
+        <div style="display:flex;gap:10px">
+          <input id="pw_pass" value="${escapeHtml(p.pass||"")}" placeholder="••••••••" style="flex:1" type="password">
+          <button class="btn ghost small" onclick="togglePwReveal()">👁</button>
+          <button class="btn ghost small" onclick="genPw()">🎲</button>
+        </div>
+        <div class="hint">Strength: <strong>${strength}/100</strong> ${strength<55 ? "• Weak" : ""}</div>
+      </div>
+
+      <div class="fg"><label>Notes</label>
+        <textarea id="pw_notes">${escapeHtml(p.notes||"")}</textarea>
+      </div>
     `,
     `
       <button class="btn ghost" onclick="closeModal()">Cancel</button>
-      ${id?`<button class="btn red" onclick="del('passwords','${id}')">Delete</button>`:""}
+      ${id?`<button class="btn red" onclick="delItem('passwords','${id}')">Delete</button>`:""}
       <button class="btn blue" onclick="savePw()">Save</button>
     `
   );
 }
+
+function togglePwReveal(){
+  const el = $("pw_pass");
+  el.type = (el.type === "password") ? "text" : "password";
+}
+
+function genPw(){
+  // generate a decent random password (16 chars)
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*()-_=+[]{}:,.?";
+  const len = 16;
+  let out = "";
+  const rnd = crypto.getRandomValues(new Uint8Array(len));
+  for(let i=0;i<len;i++) out += chars[rnd[i] % chars.length];
+  $("pw_pass").value = out;
+}
+
 async function savePw(){
   const id = $("pw_id").value || crypto.randomUUID();
   const site = $("pw_site").value.trim();
   const pass = $("pw_pass").value.trim();
   if(!site || !pass){ toast("Site + password required"); return; }
-  const obj = {id, site, user:$("pw_user").value.trim(), pass, notes:$("pw_notes").value.trim()};
+
+  const obj = {
+    id,
+    site,
+    user: $("pw_user").value.trim(),
+    pass,
+    notes: $("pw_notes").value.trim()
+  };
+
   const list = VAULT.passwords || [];
   const i = list.findIndex(x=>x.id===id);
   if(i>-1) list[i]=obj; else list.push(obj);
   VAULT.passwords=list;
+
+  markUpdated();
   await persist();
   closeModal();
   renderPw();
   renderDash();
-  toast("Saved");
+  toast("Saved ✓");
 }
+
+function escapeForJs(s){
+  return String(s||"")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/\n/g,"\\n");
+}
+
 function renderPw(){
   const q = ($("pwq").value||"").toLowerCase();
-  const list = (VAULT.passwords||[]).filter(p=>(p.site||"").toLowerCase().includes(q) || (p.user||"").toLowerCase().includes(q));
+  const f = $("pwf") ? $("pwf").value : "all";
+
+  let list = (VAULT.passwords||[]).filter(p=>{
+    const hay = ((p.site||"")+" "+(p.user||"")+" "+(p.notes||"")).toLowerCase();
+    const match = hay.includes(q);
+    if(!match) return false;
+    if(f==="weak") return isWeakPassword(p.pass||"");
+    if(f==="notes") return !!(p.notes||"").trim();
+    return true;
+  });
+
+  // sort: weak first, then alpha
+  list = list.sort((a,b)=>{
+    const aw = isWeakPassword(a.pass||"") ? 1 : 0;
+    const bw = isWeakPassword(b.pass||"") ? 1 : 0;
+    if(aw!==bw) return bw-aw;
+    return (a.site||"").localeCompare(b.site||"");
+  });
+
   const el = $("pwList");
-  if(!list.length){ el.innerHTML = `<div class="hint">No passwords yet.</div>`; return; }
-  el.innerHTML = list.map(p=>`
-    <div class="li">
-      <div>
-        <div class="t">🔑 ${escapeHtml(p.site||"")}</div>
-        <div class="s">${escapeHtml(p.user||"")}</div>
-        ${p.notes?`<div class="s">${escapeHtml(p.notes)}</div>`:""}
+  if(!list.length){
+    el.innerHTML = `<div class="hint">No passwords yet.</div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(p=>{
+    const weak = isWeakPassword(p.pass||"");
+    const tag = weak ? `<span class="tag amb">Weak</span>` : `<span class="tag good">Strong</span>`;
+    const site = escapeHtml(p.site||"");
+    const user = escapeHtml(p.user||"");
+    const notes = p.notes ? `<div class="s">${escapeHtml(p.notes)}</div>` : "";
+    const copyBtn = `
+      <button class="btn ghost" onclick="navigator.clipboard.writeText('${escapeForJs(p.pass||"")}').then(()=>toast('Copied ✓')).catch(()=>toast('Copy failed'))">Copy</button>
+    `;
+    return `
+      <div class="li">
+        <div>
+          <div class="t">🔑 ${site}</div>
+          <div class="s">${user}</div>
+          ${notes}
+        </div>
+        <div class="acts">
+          ${tag}
+          ${copyBtn}
+          <button class="btn ghost" onclick="openPw('${p.id}')">Edit</button>
+        </div>
       </div>
-      <div class="acts">
-        <button class="btn ghost" onclick="navigator.clipboard.writeText('${escapeForJs(p.pass||"")}').then(()=>toast('Copied')).catch(()=>toast('Copy failed'))">Copy</button>
-        <button class="btn ghost" onclick="openPw('${p.id}')">Edit</button>
-      </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 }
-function escapeForJs(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n"); }
+
+/* Upgrade #5: Password audit */
+function openPwAudit(){
+  const list = VAULT.passwords || [];
+  const weak = list.filter(x=>isWeakPassword(x.pass||""));
+  const dupMap = new Map();
+  list.forEach(x=>{
+    const key = String(x.pass||"");
+    if(!key) return;
+    dupMap.set(key, (dupMap.get(key)||0)+1);
+  });
+  const dups = [...dupMap.entries()].filter(([,n])=>n>1).length;
+
+  openModal(
+    "Password Audit",
+    "Quick security scan",
+    `
+      <div class="kpi" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="box"><div class="n">${list.length}</div><div class="l">Total</div><div class="m">Vault items</div></div>
+        <div class="box"><div class="n">${weak.length}</div><div class="l">Weak</div><div class="m">Improve these first</div></div>
+        <div class="box"><div class="n">${dups}</div><div class="l">Duplicates</div><div class="m">Same password reused</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="hint">
+        Best practice: <strong>unique</strong> passwords for every site + <strong>12+ characters</strong> + symbols.
+      </div>
+
+      ${weak.length ? `
+        <div class="divider"></div>
+        <div class="hint"><strong>Weak items:</strong></div>
+        <div style="display:grid;gap:8px;margin-top:8px">
+          ${weak.slice(0,10).map(x=>`<div class="tag amb">🔑 ${escapeHtml(x.site||"")}</div>`).join("")}
+        </div>
+      ` : `<div class="divider"></div><div class="tag good">✅ No weak passwords detected</div>`}
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Close</button>
+      <button class="btn blue" onclick="closeModal();tab('pw')">Go to Passwords</button>
+    `
+  );
+}
 
 /* ==========================
-   Documents + Receipts
+   Documents + Receipts (with attachments)
 ========================== */
 function openDoc(id){
-  const d = (VAULT.documents||[]).find(x=>x.id===id) || {id:"",name:"",num:"",exp:"",notes:""};
+  const d = (VAULT.documents||[]).find(x=>x.id===id) || {id:"",name:"",num:"",exp:"",notes:"",fileIds:[]};
+
   openModal(
-    id?"Edit Document":"Add Document",
-    "Add expirations for reminders",
+    id ? "Edit Document" : "Add Document",
+    "Add expirations + attach photos/PDFs",
     `
       <input type="hidden" id="d_id" value="${escapeHtml(d.id||"")}">
       <div class="fg"><label>Name *</label><input id="d_name" value="${escapeHtml(d.name||"")}" placeholder="Driver's License"></div>
       <div class="fg"><label>Number</label><input id="d_num" value="${escapeHtml(d.num||"")}" placeholder="ID number"></div>
       <div class="fg"><label>Expires</label><input id="d_exp" type="date" value="${escapeHtml(d.exp||"")}"></div>
       <div class="fg"><label>Notes</label><textarea id="d_notes">${escapeHtml(d.notes||"")}</textarea></div>
+
+      <div class="divider"></div>
+      <div class="toolbar">
+        <div class="hint"><strong>Attachments</strong> (encrypted)</div>
+        <div class="inline-actions">
+          <button class="btn ghost small" onclick="attachToTemp('doc')">+ Add File</button>
+          <button class="btn ghost small" onclick="attachToTemp('doc', true)">📷 Photo</button>
+        </div>
+      </div>
+      <div id="d_attach"></div>
     `,
     `
       <button class="btn ghost" onclick="closeModal()">Cancel</button>
-      ${id?`<button class="btn red" onclick="del('documents','${id}')">Delete</button>`:""}
+      ${id?`<button class="btn red" onclick="delItem('documents','${id}')">Delete</button>`:""}
       <button class="btn blue" onclick="saveDoc()">Save</button>
     `
   );
+
+  setTempAttach(d.fileIds||[]);
+  renderTempAttach("d_attach");
 }
+
 async function saveDoc(){
   const id = $("d_id").value || crypto.randomUUID();
   const name = $("d_name").value.trim();
   if(!name){ toast("Name required"); return; }
-  const obj = {id, name, num:$("d_num").value.trim(), exp:$("d_exp").value, notes:$("d_notes").value.trim()};
+
+  const obj = {
+    id,
+    name,
+    num: $("d_num").value.trim(),
+    exp: $("d_exp").value,
+    notes: $("d_notes").value.trim(),
+    fileIds: getTempAttach()
+  };
+
   const list = VAULT.documents || [];
   const i = list.findIndex(x=>x.id===id);
   if(i>-1) list[i]=obj; else list.push(obj);
   VAULT.documents=list;
+
+  markUpdated();
   await persist();
   closeModal();
   renderDocs();
   renderDash();
-  toast("Saved");
+  toast("Saved ✓");
 }
+
 function renderDocs(){
-  const el=$("docList");
+  const el = $("docList");
   const list = VAULT.documents||[];
-  if(!list.length){ el.innerHTML=`<div class="hint">No documents yet.</div>`; return; }
+  if(!list.length){
+    el.innerHTML = `<div class="hint">No documents yet.</div>`;
+    return;
+  }
+
   el.innerHTML = list.map(d=>{
     const tag = expTag(d.exp);
+    const att = (d.fileIds||[]).length ? `<span class="tag purp">📎 ${(d.fileIds||[]).length}</span>` : "";
     return `
       <div class="li">
         <div>
           <div class="t">📋 ${escapeHtml(d.name||"")}</div>
-          <div class="s">${escapeHtml(d.num||"")} ${d.exp?("• Expires "+d.exp):""}</div>
+          <div class="s">${escapeHtml(d.num||"")} ${d.exp?("• Expires "+escapeHtml(d.exp)):""}</div>
           ${d.notes?`<div class="s">${escapeHtml(d.notes)}</div>`:""}
         </div>
         <div class="acts">
+          ${att}
           ${tag}
           <button class="btn ghost" onclick="openDoc('${d.id}')">Edit</button>
         </div>
@@ -727,53 +1516,85 @@ function renderDocs(){
 }
 
 function openRec(id){
-  const r = (VAULT.receipts||[]).find(x=>x.id===id) || {id:"",prod:"",store:"",wexp:"",notes:""};
+  const r = (VAULT.receipts||[]).find(x=>x.id===id) || {id:"",prod:"",store:"",wexp:"",notes:"",fileIds:[]};
+
   openModal(
-    id?"Edit Receipt":"Add Receipt",
-    "Warranty reminders prevent missed claims",
+    id ? "Edit Receipt" : "Add Receipt",
+    "Warranty reminders + encrypted attachments",
     `
       <input type="hidden" id="r_id" value="${escapeHtml(r.id||"")}">
       <div class="fg"><label>Product *</label><input id="r_prod" value="${escapeHtml(r.prod||"")}" placeholder="Samsung TV"></div>
       <div class="fg"><label>Store</label><input id="r_store" value="${escapeHtml(r.store||"")}" placeholder="Amazon"></div>
       <div class="fg"><label>Warranty Expires</label><input id="r_wexp" type="date" value="${escapeHtml(r.wexp||"")}"></div>
       <div class="fg"><label>Notes</label><textarea id="r_notes">${escapeHtml(r.notes||"")}</textarea></div>
+
+      <div class="divider"></div>
+      <div class="toolbar">
+        <div class="hint"><strong>Attachments</strong> (encrypted)</div>
+        <div class="inline-actions">
+          <button class="btn ghost small" onclick="attachToTemp('rec')">+ Add File</button>
+          <button class="btn ghost small" onclick="attachToTemp('rec', true)">📷 Photo</button>
+        </div>
+      </div>
+      <div id="r_attach"></div>
     `,
     `
       <button class="btn ghost" onclick="closeModal()">Cancel</button>
-      ${id?`<button class="btn red" onclick="del('receipts','${id}')">Delete</button>`:""}
+      ${id?`<button class="btn red" onclick="delItem('receipts','${id}')">Delete</button>`:""}
       <button class="btn blue" onclick="saveRec()">Save</button>
     `
   );
+
+  setTempAttach(r.fileIds||[]);
+  renderTempAttach("r_attach");
 }
+
 async function saveRec(){
   const id = $("r_id").value || crypto.randomUUID();
   const prod = $("r_prod").value.trim();
   if(!prod){ toast("Product required"); return; }
-  const obj = {id, prod, store:$("r_store").value.trim(), wexp:$("r_wexp").value, notes:$("r_notes").value.trim()};
+
+  const obj = {
+    id,
+    prod,
+    store: $("r_store").value.trim(),
+    wexp: $("r_wexp").value,
+    notes: $("r_notes").value.trim(),
+    fileIds: getTempAttach()
+  };
+
   const list = VAULT.receipts || [];
   const i = list.findIndex(x=>x.id===id);
   if(i>-1) list[i]=obj; else list.push(obj);
   VAULT.receipts=list;
+
+  markUpdated();
   await persist();
   closeModal();
   renderRecs();
   renderDash();
-  toast("Saved");
+  toast("Saved ✓");
 }
+
 function renderRecs(){
-  const el=$("recList");
+  const el = $("recList");
   const list = VAULT.receipts||[];
-  if(!list.length){ el.innerHTML=`<div class="hint">No receipts yet.</div>`; return; }
+  if(!list.length){
+    el.innerHTML = `<div class="hint">No receipts yet.</div>`;
+    return;
+  }
   el.innerHTML = list.map(r=>{
     const tag = expTag(r.wexp);
+    const att = (r.fileIds||[]).length ? `<span class="tag purp">📎 ${(r.fileIds||[]).length}</span>` : "";
     return `
       <div class="li">
         <div>
           <div class="t">🧾 ${escapeHtml(r.prod||"")}</div>
-          <div class="s">${escapeHtml(r.store||"")} ${r.wexp?("• Warranty "+r.wexp):""}</div>
+          <div class="s">${escapeHtml(r.store||"")} ${r.wexp?("• Warranty "+escapeHtml(r.wexp)):""}</div>
           ${r.notes?`<div class="s">${escapeHtml(r.notes)}</div>`:""}
         </div>
         <div class="acts">
+          ${att}
           ${tag}
           <button class="btn ghost" onclick="openRec('${r.id}')">Edit</button>
         </div>
@@ -782,19 +1603,27 @@ function renderRecs(){
   }).join("");
 }
 
+/* ==========================
+   Expiration tagging
+========================== */
 function expTag(dateStr){
   if(!dateStr) return `<span class="tag">No expiry</span>`;
   const now = new Date(); now.setHours(0,0,0,0);
   const d = new Date(dateStr+"T00:00:00");
   const days = Math.round((d-now)/86400000);
+
   if(days < 0) return `<span class="tag red">Expired</span>`;
   if(days <= 7) return `<span class="tag red">${days}d</span>`;
   if(days <= 30) return `<span class="tag amb">${days}d</span>`;
   return `<span class="tag">${days}d</span>`;
 }
 
-async function del(type, id){
+/* ==========================
+   Generic delete
+========================== */
+async function delItem(type, id){
   VAULT[type] = (VAULT[type]||[]).filter(x=>x.id!==id);
+  markUpdated();
   await persist();
   closeModal();
   renderAll();
@@ -802,47 +1631,710 @@ async function del(type, id){
 }
 
 /* ==========================
-   Backup (encrypted)
+   Backup / Import (encrypted)
 ========================== */
 async function exportBackup(){
-  const pkg = {v:1, created:new Date().toISOString(), blob:S.g(K.blob), salt:S.g(K.salt), mpver:S.g(K.mpver), settings:S.g(K.settings)||null};
+  const pkg = {
+    v: 2,
+    created: new Date().toISOString(),
+    blob: S.g(K.blob),
+    salt: S.g(K.salt),
+    mpver: S.g(K.mpver),
+    settings: S.g(K.settings)||null,
+    bio: S.g(K.bio)||null
+  };
+
   const b = new Blob([JSON.stringify(pkg,null,2)], {type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(b);
   a.download = "lifevault-backup.json";
   a.click();
-  toast("Backup exported");
+
+  S.s(K.lastBackup, new Date().toISOString());
+  toast("Backup exported ✓");
+  renderDash();
+}
+
+function importBackup(){
+  openModal(
+    "Import Backup",
+    "Restore encrypted backup (overwrites this device’s vault)",
+    `
+      <div class="danger">
+        <strong>Warning:</strong> Import overwrites local vault data on this device.
+      </div>
+      <div class="divider"></div>
+      <input id="impFile" type="file" accept="application/json">
+      <div class="hint">After import, you will unlock using the same Master Password used when the backup was created.</div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn blue" onclick="doImport()">Import</button>
+    `
+  );
+}
+
+async function doImport(){
+  const f = $("impFile").files?.[0];
+  if(!f){ toast("Choose a backup file"); return; }
+  try{
+    const txt = await f.text();
+    const pkg = JSON.parse(txt);
+    if(!pkg?.blob || !pkg?.salt || !pkg?.mpver) throw new Error("Invalid backup");
+
+    // overwrite
+    S.s(K.blob, pkg.blob);
+    S.s(K.salt, pkg.salt);
+    S.s(K.mpver, pkg.mpver);
+
+    if(pkg.settings) S.s(K.settings, pkg.settings);
+    if(pkg.bio) S.s(K.bio, pkg.bio);
+
+    closeModal();
+    toast("Imported ✓");
+    lockApp();
+  }catch(e){
+    toast("Import failed");
+  }
 }
 
 /* ==========================
-   Referral (zero backend)
+   Referral
 ========================== */
 function ensureUser(){
   let u = S.g(K.user);
-  if(!u){ u = "u"+Math.floor(Math.random()*1e9).toString(36); S.s(K.user,u); }
+  if(!u){
+    u = "u" + Math.floor(Math.random()*1e9).toString(36);
+    S.s(K.user, u);
+  }
   $("refCode").value = u;
+
   const url = new URL(window.location.href);
   url.searchParams.set("ref", u);
   $("refLink").value = url.toString();
 }
 
 /* ==========================
-   Dashboard render
+   Dashboard + Health (Upgrade #5)
 ========================== */
+function markUpdated(){
+  if(!VAULT?.meta) VAULT.meta = {created:new Date().toISOString(), updated:new Date().toISOString()};
+  VAULT.meta.updated = new Date().toISOString();
+}
+
+function daysUntil(dateStr){
+  if(!dateStr) return null;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const d = new Date(dateStr+"T00:00:00");
+  return Math.round((d-now)/86400000);
+}
+
+function calcHealth(){
+  // Score 0-100 based on:
+  // - auto-lock short (good)
+  // - biometric enabled (good)
+  // - backup recent (good)
+  // - password weaknesses (bad)
+  // - duplicates (bad)
+  let score = 60;
+
+  // auto-lock
+  if(AUTOLOCK <= 2) score += 12;
+  else if(AUTOLOCK <= 5) score += 8;
+  else if(AUTOLOCK <= 10) score += 4;
+
+  // biometric
+  const bio = getBioSettings();
+  if(bio?.enabled && bio?.credId) score += 10;
+
+  // backup recency
+  const lb = S.g(K.lastBackup);
+  if(lb){
+    const days = Math.floor((Date.now()-new Date(lb).getTime())/86400000);
+    if(days <= 7) score += 10;
+    else if(days <= 30) score += 6;
+    else if(days <= 90) score += 2;
+  }else{
+    score -= 8;
+  }
+
+  // password weaknesses
+  const pw = VAULT?.passwords||[];
+  const weak = pw.filter(x=>isWeakPassword(x.pass||"")).length;
+  score -= Math.min(20, weak * 2);
+
+  // duplicates
+  const dupMap = new Map();
+  pw.forEach(x=>{
+    const key = String(x.pass||"");
+    if(!key) return;
+    dupMap.set(key, (dupMap.get(key)||0)+1);
+  });
+  const dups = [...dupMap.values()].filter(n=>n>1).length;
+  score -= Math.min(12, dups * 3);
+
+  // doc/receipt expirations set (good behavior)
+  const docs = VAULT?.documents||[];
+  const recs = VAULT?.receipts||[];
+  const expCount = docs.filter(x=>x.exp).length + recs.filter(x=>x.wexp).length;
+  if(expCount >= 5) score += 6;
+  else if(expCount >= 2) score += 3;
+
+  score = Math.max(0, Math.min(100, score));
+
+  let tier = "OK";
+  if(score >= 85) tier = "Elite";
+  else if(score >= 70) tier = "Strong";
+  else if(score >= 55) tier = "OK";
+  else tier = "At Risk";
+
+  return {score, tier, weak, dups};
+}
+
 function renderDash(){
   const p = (VAULT.passwords||[]).length;
   const d = (VAULT.documents||[]).length;
   const r = (VAULT.receipts||[]).length;
+  const f = (VAULT.files||[]).length;
+
+  const h = calcHealth();
+  $("healthPill").textContent = `✨ Health: ${h.score}/100 (${h.tier})`;
+  $("healthPill").classList.remove("good","warn","bad");
+  if(h.score >= 85) $("healthPill").classList.add("good");
+  else if(h.score >= 60) $("healthPill").classList.add("warn");
+  else $("healthPill").classList.add("bad");
+
+  const lb = S.g(K.lastBackup);
+  const lbTxt = lb ? new Date(lb).toLocaleDateString() : "Never";
+
   $("kpi").innerHTML = `
-    <div class="box"><div class="n">${p}</div><div class="l">Passwords</div></div>
-    <div class="box"><div class="n">${d}</div><div class="l">Documents</div></div>
-    <div class="box"><div class="n">${r}</div><div class="l">Receipts</div></div>
+    <div class="box"><div class="n">${p}</div><div class="l">Passwords</div><div class="m">${h.weak} weak • ${h.dups} dup</div></div>
+    <div class="box"><div class="n">${d}</div><div class="l">Documents</div><div class="m">Expirations tracked</div></div>
+    <div class="box"><div class="n">${r}</div><div class="l">Receipts</div><div class="m">Warranty reminders</div></div>
+    <div class="box"><div class="n">${f}</div><div class="l">Files</div><div class="m">Encrypted in IDB</div></div>
   `;
 
   const soon = [];
-  (VAULT.documents||[]).forEach(x=>{ if(x.exp){ const t=expTag(x.exp); if(t.includes("amb")||t.includes("red")) soon.push("Document: "+x.name+" exp "+x.exp); }});
-  (VAULT.receipts||[]).forEach(x=>{ if(x.wexp){ const t=expTag(x.wexp); if(t.includes("amb")||t.includes("red")) soon.push("Warranty: "+x.prod+" "+x.wexp); }});
-  $("alerts").textContent = soon.length ? ("Upcoming: " + soon.slice(0,4).join(" • ")) : "No urgent expirations. Add expiry dates to get warnings here.";
+  (VAULT.documents||[]).forEach(x=>{
+    if(x.exp){
+      const days = daysUntil(x.exp);
+      if(days !== null && days <= 30) soon.push(`Document: ${x.name} (${days}d)`);
+    }
+  });
+  (VAULT.receipts||[]).forEach(x=>{
+    if(x.wexp){
+      const days = daysUntil(x.wexp);
+      if(days !== null && days <= 30) soon.push(`Warranty: ${x.prod} (${days}d)`);
+    }
+  });
+
+  let msg = "No urgent expirations. Add expiry dates to get warnings here.";
+  if(soon.length){
+    msg = "Upcoming: " + soon.slice(0,4).join(" • ");
+  }
+
+  // additional “premium” alerts
+  if(!S.g(K.lastBackup)) msg += " • Tip: Export a Backup";
+  if(h.weak > 0) msg += ` • Fix ${h.weak} weak password(s)`;
+
+  $("alerts").textContent = msg;
+}
+
+function openVaultHealth(){
+  const h = calcHealth();
+  const bio = getBioSettings();
+  const bioOn = (bio?.enabled && bio?.credId) ? "On" : "Off";
+  const lb = S.g(K.lastBackup);
+  const lbTxt = lb ? new Date(lb).toLocaleString() : "Never";
+
+  openModal(
+    "Vault Health",
+    "Security posture snapshot",
+    `
+      <div class="kpi" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="box"><div class="n">${h.score}</div><div class="l">Score</div><div class="m">${h.tier}</div></div>
+        <div class="box"><div class="n">${AUTOLOCK}m</div><div class="l">Auto-lock</div><div class="m">Shorter is safer</div></div>
+        <div class="box"><div class="n">${bioOn}</div><div class="l">Biometric</div><div class="m">Face/Touch/Hello</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="two">
+        <div class="callout">
+          <strong>Last backup:</strong><br>
+          <span class="mono">${escapeHtml(lbTxt)}</span>
+        </div>
+        <div class="callout">
+          <strong>Password issues:</strong><br>
+          Weak: <strong>${h.weak}</strong> • Duplicates: <strong>${h.dups}</strong>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="hint">
+        Best quick win: <strong>backup</strong> + <strong>auto-lock 2–5 min</strong> + replace <strong>weak/duplicate passwords</strong>.
+      </div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Close</button>
+      <button class="btn ghost" onclick="exportBackup()">Backup Now</button>
+      <button class="btn blue" onclick="openSettings()">Security Settings</button>
+    `
+  );
+}
+
+function openQuickAdd(){
+  openModal(
+    "Quick Add",
+    "Add a vault item fast",
+    `
+      <div class="two">
+        <button class="btn blue" onclick="closeModal();tab('pw');openPw()">🔑 Add Password</button>
+        <button class="btn blue" onclick="closeModal();tab('docs');openDoc()">📋 Add Document</button>
+      </div>
+      <div class="two" style="margin-top:10px">
+        <button class="btn blue" onclick="closeModal();tab('rec');openRec()">🧾 Add Receipt</button>
+        <button class="btn blue" onclick="closeModal();tab('files');openFileAdd()">📎 Add File</button>
+      </div>
+    `,
+    `<button class="btn ghost" onclick="closeModal()">Close</button>`
+  );
+}
+
+/* ==========================
+   Temp attachment list for modals
+========================== */
+let TEMP_ATTACH = [];
+function setTempAttach(list){ TEMP_ATTACH = Array.isArray(list) ? [...list] : []; }
+function getTempAttach(){ return [...TEMP_ATTACH]; }
+
+function renderTempAttach(targetId){
+  const el = $(targetId);
+  if(!el) return;
+
+  if(!TEMP_ATTACH.length){
+    el.innerHTML = `<div class="hint">No attachments yet.</div>`;
+    return;
+  }
+
+  const files = VAULT.files || [];
+  el.innerHTML = `
+    <div style="display:grid;gap:8px;margin-top:10px">
+      ${TEMP_ATTACH.map(fid=>{
+        const f = files.find(x=>x.id===fid);
+        if(!f) return `<div class="tag red">Missing file</div>`;
+        return `
+          <div class="li" style="padding:10px">
+            <div>
+              <div class="t">📎 ${escapeHtml(f.name||"file")}</div>
+              <div class="s">${escapeHtml(f.category||"other")} • ${(f.size||0)} bytes</div>
+            </div>
+            <div class="acts">
+              <button class="btn ghost small" onclick="viewFile('${f.id}')">View</button>
+              <button class="btn red small" onclick="removeTempAttach('${f.id}','${targetId}')">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function removeTempAttach(fid, targetId){
+  TEMP_ATTACH = TEMP_ATTACH.filter(x=>x!==fid);
+  renderTempAttach(targetId);
+}
+
+/* Attach file to current modal temp list */
+async function attachToTemp(kind, useCamera){
+  // kind: 'doc' or 'rec' to render target
+  const target = (kind==="doc") ? "d_attach" : "r_attach";
+  const added = await addEncryptedFileFlow(useCamera);
+  if(added){
+    TEMP_ATTACH.push(added);
+    renderTempAttach(target);
+    renderDash();
+  }
+}
+
+/* ==========================
+   IndexedDB Encrypted File Vault (Upgrade #3)
+========================== */
+const DB = {
+  name: "lifevault_db",
+  version: 1,
+  store: "files"
+};
+
+function openDB(){
+  return new Promise((resolve, reject)=>{
+    const req = indexedDB.open(DB.name, DB.version);
+    req.onupgradeneeded = (e)=>{
+      const db = req.result;
+      if(!db.objectStoreNames.contains(DB.store)){
+        db.createObjectStore(DB.store, { keyPath:"id" });
+      }
+    };
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+
+async function dbPut(record){
+  const db = await openDB();
+  return new Promise((resolve, reject)=>{
+    const tx = db.transaction(DB.store, "readwrite");
+    tx.objectStore(DB.store).put(record);
+    tx.oncomplete = ()=>resolve(true);
+    tx.onerror = ()=>reject(tx.error);
+  });
+}
+
+async function dbGet(id){
+  const db = await openDB();
+  return new Promise((resolve, reject)=>{
+    const tx = db.transaction(DB.store, "readonly");
+    const req = tx.objectStore(DB.store).get(id);
+    req.onsuccess = ()=>resolve(req.result || null);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+
+async function dbDel(id){
+  const db = await openDB();
+  return new Promise((resolve, reject)=>{
+    const tx = db.transaction(DB.store, "readwrite");
+    tx.objectStore(DB.store).delete(id);
+    tx.oncomplete = ()=>resolve(true);
+    tx.onerror = ()=>reject(tx.error);
+  });
+}
+
+/* Encrypt / Decrypt raw bytes using AESKEY */
+async function encryptBytes(bytes){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, AESKEY, bytes);
+  return { iv: b64(iv), ct: b64(new Uint8Array(ct)) };
+}
+
+async function decryptBytes(ivB64, ctB64){
+  const iv = unb64(ivB64);
+  const ct = unb64(ctB64);
+  const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv}, AESKEY, ct);
+  return new Uint8Array(pt);
+}
+
+/* File add flow */
+async function openFileAdd(useCamera){
+  const addedId = await addEncryptedFileFlow(!!useCamera);
+  if(addedId){
+    renderFiles();
+    renderDash();
+  }
+}
+
+async function addEncryptedFileFlow(useCamera){
+  return new Promise((resolve)=>{
+    const inp = document.createElement("input");
+    inp.type = "file";
+    inp.accept = "image/*,application/pdf";
+    if(useCamera){
+      // best-effort camera capture on mobile
+      inp.accept = "image/*";
+      inp.capture = "environment";
+    }
+    inp.onchange = async ()=>{
+      const f = inp.files?.[0];
+      if(!f){ resolve(null); return; }
+
+      const maxBytes = CONFIG.maxFileMB * 1024 * 1024;
+      if(f.size > maxBytes){
+        toast(`File too large (max ${CONFIG.maxFileMB}MB)`);
+        resolve(null);
+        return;
+      }
+
+      const id = crypto.randomUUID();
+      const bytes = new Uint8Array(await f.arrayBuffer());
+      const enc = await encryptBytes(bytes);
+
+      const meta = {
+        id,
+        name: f.name || "file",
+        type: f.type || "application/octet-stream",
+        size: f.size,
+        category: "other",
+        created: new Date().toISOString()
+      };
+
+      // store encrypted blob in IndexedDB
+      await dbPut({ id, iv: enc.iv, ct: enc.ct, type: meta.type, name: meta.name, size: meta.size });
+
+      // store metadata in vault
+      VAULT.files = VAULT.files || [];
+      VAULT.files.push(meta);
+
+      markUpdated();
+      await persist();
+
+      toast("File added ✓");
+      resolve(id);
+    };
+    inp.click();
+  });
+}
+
+function renderFiles(){
+  const q = ($("fq")?.value||"").toLowerCase();
+  const c = $("fc")?.value || "all";
+  const list = (VAULT.files||[]).filter(f=>{
+    const hay = ((f.name||"")+" "+(f.category||"")).toLowerCase();
+    if(q && !hay.includes(q)) return false;
+    if(c==="all") return true;
+    return (f.category||"other") === c;
+  }).sort((a,b)=> (b.created||"").localeCompare(a.created||""));
+
+  const el = $("fileList");
+  if(!list.length){
+    el.innerHTML = `<div class="hint">No files yet. Add a photo/PDF to start.</div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(f=>{
+    return `
+      <div class="li">
+        <div>
+          <div class="t">📎 ${escapeHtml(f.name||"file")}</div>
+          <div class="s">${escapeHtml(f.category||"other")} • ${formatBytes(f.size||0)} • ${formatDate(f.created)}</div>
+        </div>
+        <div class="acts">
+          <span class="tag">${escapeHtml(shortType(f.type))}</span>
+          <button class="btn ghost" onclick="viewFile('${f.id}')">View</button>
+          <button class="btn ghost" onclick="editFileMeta('${f.id}')">Edit</button>
+          <button class="btn red" onclick="deleteFile('${f.id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function shortType(t){
+  if(!t) return "FILE";
+  if(t.includes("pdf")) return "PDF";
+  if(t.startsWith("image/")) return "IMG";
+  return "FILE";
+}
+
+function formatBytes(bytes){
+  const b = Number(bytes||0);
+  if(b < 1024) return b+" B";
+  const kb = b/1024;
+  if(kb < 1024) return kb.toFixed(1)+" KB";
+  const mb = kb/1024;
+  if(mb < 1024) return mb.toFixed(1)+" MB";
+  const gb = mb/1024;
+  return gb.toFixed(1)+" GB";
+}
+
+function formatDate(iso){
+  if(!iso) return "";
+  try{ return new Date(iso).toLocaleDateString(); }catch{ return ""; }
+}
+
+async function viewFile(id){
+  try{
+    const rec = await dbGet(id);
+    if(!rec){ toast("File not found"); return; }
+    const bytes = await decryptBytes(rec.iv, rec.ct);
+    const blob = new Blob([bytes], {type: rec.type || "application/octet-stream"});
+    const url = URL.createObjectURL(blob);
+
+    // If image, show preview; if pdf, open new tab
+    if((rec.type||"").startsWith("image/")){
+      openModal(
+        "File Preview",
+        rec.name || "",
+        `
+          <div style="display:grid;gap:10px">
+            <img src="${url}" style="width:100%;border-radius:16px;border:1px solid rgba(255,255,255,.12)">
+            <div class="hint">Encrypted at rest. This preview is decrypted in memory only.</div>
+          </div>
+        `,
+        `
+          <button class="btn ghost" onclick="closeModal()">Close</button>
+          <button class="btn blue" onclick="downloadFile('${id}')">Download</button>
+        `
+      );
+    }else{
+      window.open(url, "_blank");
+    }
+  }catch(e){
+    toast("Could not open file");
+  }
+}
+
+async function downloadFile(id){
+  const meta = (VAULT.files||[]).find(x=>x.id===id);
+  const rec = await dbGet(id);
+  if(!rec){ toast("File missing"); return; }
+  const bytes = await decryptBytes(rec.iv, rec.ct);
+  const blob = new Blob([bytes], {type: rec.type || "application/octet-stream"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (meta?.name || rec.name || "file");
+  a.click();
+  toast("Downloaded ✓");
+}
+
+function editFileMeta(id){
+  const f = (VAULT.files||[]).find(x=>x.id===id);
+  if(!f){ toast("Missing metadata"); return; }
+
+  openModal(
+    "Edit File",
+    "Rename + categorize",
+    `
+      <input type="hidden" id="fm_id" value="${escapeHtml(f.id)}">
+      <div class="fg"><label>Name</label><input id="fm_name" value="${escapeHtml(f.name||"")}"></div>
+      <div class="fg"><label>Category</label>
+        <select id="fm_cat">
+          ${["id","medical","insurance","home","receipts","other"].map(c=>`<option value="${c}" ${f.category===c?"selected":""}>${c}</option>`).join("")}
+        </select>
+      </div>
+      <div class="hint">Tip: Category helps search and organization.</div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn blue" onclick="saveFileMeta()">Save</button>
+    `
+  );
+}
+
+async function saveFileMeta(){
+  const id = $("fm_id").value;
+  const name = $("fm_name").value.trim() || "file";
+  const category = $("fm_cat").value;
+
+  const f = (VAULT.files||[]).find(x=>x.id===id);
+  if(!f){ toast("Missing metadata"); return; }
+
+  f.name = name;
+  f.category = category;
+
+  markUpdated();
+  await persist();
+  closeModal();
+  toast("Saved ✓");
+  renderFiles();
+  renderDocs();
+  renderRecs();
+  renderDash();
+}
+
+async function deleteFile(id){
+  if(!confirm("Delete this file? This cannot be undone.")) return;
+
+  // remove from vault metadata
+  VAULT.files = (VAULT.files||[]).filter(x=>x.id!==id);
+
+  // remove references from docs/recs
+  (VAULT.documents||[]).forEach(d=> d.fileIds = (d.fileIds||[]).filter(fid=>fid!==id));
+  (VAULT.receipts||[]).forEach(r=> r.fileIds = (r.fileIds||[]).filter(fid=>fid!==id));
+
+  // delete encrypted blob from IDB
+  await dbDel(id);
+
+  markUpdated();
+  await persist();
+
+  toast("Deleted ✓");
+  renderFiles();
+  renderDocs();
+  renderRecs();
+  renderDash();
+}
+
+/* ==========================
+   Digital Legacy (Upgrade #4)
+========================== */
+function hydrateLegacy(){
+  const l = VAULT.legacy || {t1:"",t2:"",notes:"",where:"",passwhere:""};
+  $("lg_t1").value = l.t1 || "";
+  $("lg_t2").value = l.t2 || "";
+  $("lg_notes").value = l.notes || "";
+  $("lg_where").value = l.where || "";
+  $("lg_passwhere").value = l.passwhere || "";
+}
+
+async function saveLegacy(){
+  VAULT.legacy = {
+    t1: $("lg_t1").value.trim(),
+    t2: $("lg_t2").value.trim(),
+    notes: $("lg_notes").value.trim(),
+    where: $("lg_where").value.trim(),
+    passwhere: $("lg_passwhere").value.trim()
+  };
+  markUpdated();
+  await persist();
+  toast("Legacy plan saved ✓");
+  renderDash();
+}
+
+function openLegacyChecklist(){
+  const l = VAULT.legacy || {};
+  openModal(
+    "Legacy Checklist",
+    "Print this and store it with your backup plan",
+    `
+      <div class="callout">
+        <strong>LifeVault Legacy Plan</strong><br>
+        Trustee: <span class="mono">${escapeHtml(l.t1||"—")}</span><br>
+        Backup Trustee: <span class="mono">${escapeHtml(l.t2||"—")}</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="display:grid;gap:8px">
+        <div class="tag">✅ Export LifeVault backup file</div>
+        <div class="tag">✅ Store backup file at: <span class="mono">${escapeHtml(l.where||"—")}</span></div>
+        <div class="tag">✅ Store sealed Master Password at: <span class="mono">${escapeHtml(l.passwhere||"—")}</span></div>
+        <div class="tag">✅ Keep emergency contacts updated</div>
+        <div class="tag">✅ Update this plan quarterly</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="hint"><strong>Notes:</strong><br>${escapeHtml(l.notes||"—")}</div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Close</button>
+      <button class="btn blue" onclick="printLegacy()">Print</button>
+    `
+  );
+}
+
+function printLegacy(){
+  const l = VAULT.legacy || {};
+  const html = `
+    <html><head><title>LifeVault Legacy Plan</title></head><body style="font-family:Arial;padding:20px">
+      <h2>LifeVault™ — Digital Legacy Plan</h2>
+      <p><b>Primary Trustee:</b> ${escapeHtml(l.t1||"—")}</p>
+      <p><b>Backup Trustee:</b> ${escapeHtml(l.t2||"—")}</p>
+      <p><b>Backup Location:</b> ${escapeHtml(l.where||"—")}</p>
+      <p><b>Sealed Master Password Location:</b> ${escapeHtml(l.passwhere||"—")}</p>
+      <h3>Instructions</h3>
+      <pre style="white-space:pre-wrap">${escapeHtml(l.notes||"—")}</pre>
+      <hr>
+      <p><b>Reminder:</b> Do NOT store your master password digitally in plaintext.</p>
+    </body></html>
+  `;
+  const w = window.open("", "_blank");
+  if(!w){ toast("Pop-up blocked"); return; }
+  w.document.write(html);
+  w.document.close();
+  w.focus();
+  w.print();
 }
 
 /* ==========================
@@ -856,22 +2348,29 @@ function hydrateEmergencyForm(){
   $("e_cond").value = e.cond||"";
   $("e_dr").value = e.dr||"";
   $("e_ins").value = e.ins||"";
+  $("e_ec").value = e.ec||"";
 }
+
 function renderAll(){
   renderDash();
   hydrateEmergencyForm();
+  hydrateLegacy();
   renderPw();
   renderDocs();
   renderRecs();
+  renderFiles();
   ensureUser();
 }
+
 function initApp(){
   loadSettings();
   $("secTag").textContent = "Encrypted";
   tab("dash");
   renderAll();
   touch();
+  setLockStatus();
 }
+
 function boot(){
   $("lock").classList.add("open");
   buildKP();
@@ -882,17 +2381,23 @@ function boot(){
     $("pinWrap").style.display="none";
     $("mpWrap").style.display="none";
     $("mp").value="";
+    setLockStatus();
     return;
   }
+
   $("setup").style.display="none";
   $("pinWrap").style.display="block";
   $("mpWrap").style.display="none";
   backToPin();
+  setLockStatus();
 }
+
 function resetAll(){
   if(!confirm("This deletes vault data from this device. Continue?")) return;
   Object.values(K).forEach(k=>S.d(k));
   lockMemory();
+  // wipe IndexedDB store too
+  indexedDB.deleteDatabase(DB.name);
   location.reload();
 }
 
@@ -902,7 +2407,6 @@ function resetAll(){
     navigator.serviceWorker.register("./sw.js").catch(()=>{});
   }
 
-  // No paywall: always boot
   boot();
 
   // Enter key support
