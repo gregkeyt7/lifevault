@@ -82,40 +82,32 @@
   </style>
 </head>
 <body>
-  <!-- Paywall -->
-  <div id="paywall" class="screen open">
-    <div class="modal">
-      <div class="hd">
-        <div class="brand">
-          <div class="logo">LV</div>
-          <div>
-            <div class="title">LifeVault™</div>
-            <div class="subtitle">Encrypted • Offline • Family-ready</div>
-          </div>
+<!-- Paywall -->
+<div id="paywall" class="screen">
+  <div class="modal">
+    <div class="hd">
+      <div class="brand">
+        <div class="logo">LV</div>
+        <div>
+          <div class="title">LifeVault™</div>
+          <div class="subtitle">Encrypted • Offline • Family-ready</div>
         </div>
-        <span class="pill" id="pwState">🔒 License required</span>
       </div>
-      <div class="bd">
-        <div class="hint" style="margin-bottom:10px">
-          Enter your Gumroad license key to unlock this app on this device.
-        </div>
-        <div class="fg">
-          <label>License Key</label>
-          <input id="licKey" placeholder="XXXX-XXXX-XXXX-XXXX" />
-        </div>
-        <div class="fg">
-          <label>Email (optional)</label>
-          <input id="licEmail" placeholder="you@email.com" />
-        </div>
-        <div class="hint" id="pwErr" style="color:#fecaca;min-height:18px"></div>
-      </div>
-      <div class="ft">
-        <button class="btn ghost" onclick="resetAll()">Reset</button>
-        <button class="btn ghost" onclick="openSubscribe()">Subscribe ($1.99/mo)</button>
-        <button class="btn blue" onclick="verifyLicense()">Verify & Continue</button>
+      <span class="pill">Welcome</span>
+    </div>
+
+    <div class="bd">
+      <div class="hint" style="margin-bottom:10px">
+        Your secure vault runs entirely on your device.
       </div>
     </div>
+
+    <div class="ft">
+      <button class="btn blue" onclick="boot()">Enter LifeVault</button>
+      <button class="btn ghost" onclick="openSubscribe()">Subscribe ($1.99/mo)</button>
+    </div>
   </div>
+</div>
 
   <!-- Lock screen (PIN -> Master Password) -->
   <div id="lock" class="screen">
