@@ -82,32 +82,6 @@
   </style>
 </head>
 <body>
-<!-- Paywall -->
-<div id="paywall" class="screen">
-  <div class="modal">
-    <div class="hd">
-      <div class="brand">
-        <div class="logo">LV</div>
-        <div>
-          <div class="title">LifeVault™</div>
-          <div class="subtitle">Encrypted • Offline • Family-ready</div>
-        </div>
-      </div>
-      <span class="pill">Welcome</span>
-    </div>
-
-    <div class="bd">
-      <div class="hint" style="margin-bottom:10px">
-        Your secure vault runs entirely on your device.
-      </div>
-    </div>
-
-    <div class="ft">
-      <button class="btn blue" onclick="boot()">Enter LifeVault</button>
-      <button class="btn ghost" onclick="openSubscribe()">Subscribe ($1.99/mo)</button>
-    </div>
-  </div>
-</div>
 
   <!-- Lock screen (PIN -> Master Password) -->
   <div id="lock" class="screen">
@@ -117,7 +91,7 @@
           <div class="logo">LV</div>
           <div>
             <div class="title">LifeVault™</div>
-            <div class="subtitle">AES‑GCM encrypted vault</div>
+            <div class="subtitle">AES-GCM encrypted vault</div>
           </div>
         </div>
         <span class="pill">🛡️ Secure</span>
@@ -169,10 +143,10 @@
           </div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
-          <span class="pill" id="licPill">🧾 Licensed</span>
-          <span class="pill" id="lockPill">⏱️ Auto‑lock: 2 min</span>
+          <span class="pill" id="lockPill">⏱️ Auto-lock: 2 min</span>
           <button class="btn ghost" onclick="exportBackup()">Backup</button>
           <button class="btn ghost" onclick="openSettings()">Security</button>
+          <button class="btn ghost" onclick="openSubscribe()">Subscribe</button>
           <button class="btn red" onclick="openEmergency()">Emergency</button>
         </div>
       </div>
@@ -192,7 +166,6 @@
           <div class="item" data-tab="rec" onclick="tab('rec')">🧾 Receipts & Warranties</div>
           <div class="item" data-tab="ref" onclick="tab('ref')">📣 Invite Friends</div>
           <div class="item" onclick="lockApp()">🔒 Lock Vault</div>
-          <div class="item" onclick="logoutLicense()">🧾 Log out License</div>
         </div>
       </div>
 
@@ -264,7 +237,7 @@
           <div class="hd"><h2>Invite Friends</h2><span class="tag amb">Growth</span></div>
           <div class="bd">
             <div class="hint" style="margin-bottom:10px">
-              This creates a share link. For a true “automatic reward” system you need a backend.  
+              This creates a share link. For a true “automatic reward” system you need a backend.
               Zero-backend version: ask users to paste their friend’s referral code into a Gumroad custom field at checkout,
               then you award free months manually (fast, simple).
             </div>
@@ -320,8 +293,10 @@
    CONFIG (edit these)
 ========================== */
 const CONFIG = {
-  gumroadProductId: "uwa0uZOC15KUsph6-6f_WQ==",
+  // Your Gumroad product page
   subscribeUrl: "https://keytastic7.gumroad.com/l/gpfuxs",
+
+  // Auto-lock default (minutes)
   autoLockMinutesDefault: 2
 };
 
@@ -329,9 +304,6 @@ const CONFIG = {
    Storage keys
 ========================== */
 const K = {
-  licOk: "lv_lic_ok",
-  licKey: "lv_lic_key",
-  licEmail: "lv_lic_email",
   pin: "lv_pin",
   salt: "lv_salt",
   mpver: "lv_mpver",
@@ -375,6 +347,14 @@ function copy(id){
   el.select(); el.setSelectionRange(0, 99999);
   document.execCommand("copy");
   toast("Copied");
+}
+
+/* ==========================
+   Gumroad link (no paywall)
+========================== */
+function openSubscribe(){
+  if(CONFIG.subscribeUrl && CONFIG.subscribeUrl.startsWith("http")) window.open(CONFIG.subscribeUrl, "_blank");
+  else toast("Set CONFIG.subscribeUrl in index.html");
 }
 
 /* ==========================
@@ -439,27 +419,6 @@ function defaultVault(){
     receipts:[],
     meta:{created:new Date().toISOString()}
   };
-}
-
-/* ==========================
-   License gate DISABLED (for smooth customer experience)
-   NOTE: This makes the app public if someone has the URL.
-========================== */
-function openSubscribe(){
-  if(CONFIG.subscribeUrl && CONFIG.subscribeUrl.startsWith("http")) window.open(CONFIG.subscribeUrl, "_blank");
-  else toast("Set CONFIG.subscribeUrl in index.html");
-}
-
-async function verifyLicense(){
-  // TEMP: Disable license verification
-  $("pwErr").textContent="";
-  $("pwState").textContent="Access granted";
-
-  S.s(K.licOk,"1");
-  S.s(K.licKey,"FREE_ACCESS");
-
-  $("paywall").classList.remove("open");
-  boot();
 }
 
 /* ==========================
@@ -574,11 +533,11 @@ function loadSettings(){
     AUTOLOCK = Number(s.autoLockMin ?? CONFIG.autoLockMinutesDefault);
     if(!AUTOLOCK || AUTOLOCK<1) AUTOLOCK = CONFIG.autoLockMinutesDefault;
   }catch{ AUTOLOCK = CONFIG.autoLockMinutesDefault; }
-  $("lockPill").textContent = "⏱️ Auto‑lock: "+AUTOLOCK+" min";
+  $("lockPill").textContent = "⏱️ Auto-lock: "+AUTOLOCK+" min";
 }
 function saveSettings(){
   S.s(K.settings, JSON.stringify({autoLockMin:AUTOLOCK}));
-  $("lockPill").textContent = "⏱️ Auto‑lock: "+AUTOLOCK+" min";
+  $("lockPill").textContent = "⏱️ Auto-lock: "+AUTOLOCK+" min";
 }
 function touch(){ LAST=Date.now(); }
 ["click","keydown","mousemove","touchstart","scroll"].forEach(ev=>document.addEventListener(ev,()=>{ if(VAULT) touch(); },{passive:true}));
@@ -843,7 +802,7 @@ async function del(type, id){
 }
 
 /* ==========================
-   Backup / Restore (encrypted)
+   Backup (encrypted)
 ========================== */
 async function exportBackup(){
   const pkg = {v:1, created:new Date().toISOString(), blob:S.g(K.blob), salt:S.g(K.salt), mpver:S.g(K.mpver), settings:S.g(K.settings)||null};
@@ -880,7 +839,6 @@ function renderDash(){
     <div class="box"><div class="n">${r}</div><div class="l">Receipts</div></div>
   `;
 
-  // Alerts
   const soon = [];
   (VAULT.documents||[]).forEach(x=>{ if(x.exp){ const t=expTag(x.exp); if(t.includes("amb")||t.includes("red")) soon.push("Document: "+x.name+" exp "+x.exp); }});
   (VAULT.receipts||[]).forEach(x=>{ if(x.wexp){ const t=expTag(x.wexp); if(t.includes("amb")||t.includes("red")) soon.push("Warranty: "+x.prod+" "+x.wexp); }});
@@ -899,7 +857,6 @@ function hydrateEmergencyForm(){
   $("e_dr").value = e.dr||"";
   $("e_ins").value = e.ins||"";
 }
-
 function renderAll(){
   renderDash();
   hydrateEmergencyForm();
@@ -908,16 +865,13 @@ function renderAll(){
   renderRecs();
   ensureUser();
 }
-
 function initApp(){
   loadSettings();
-  $("licPill").textContent = (S.g(K.licOk)==="1") ? "🧾 Licensed" : "🧾 Unlicensed";
   $("secTag").textContent = "Encrypted";
   tab("dash");
   renderAll();
   touch();
 }
-
 function boot(){
   $("lock").classList.add("open");
   buildKP();
@@ -935,9 +889,8 @@ function boot(){
   $("mpWrap").style.display="none";
   backToPin();
 }
-
 function resetAll(){
-  if(!confirm("This deletes vault + license from this device. Continue?")) return;
+  if(!confirm("This deletes vault data from this device. Continue?")) return;
   Object.values(K).forEach(k=>S.d(k));
   lockMemory();
   location.reload();
@@ -945,23 +898,15 @@ function resetAll(){
 
 /* Entry */
 (function(){
-  // PWA SW
   if("serviceWorker" in navigator){
     navigator.serviceWorker.register("./sw.js").catch(()=>{});
   }
 
-  // License gate
-  const ok = (S.g(K.licOk)==="1");
-  if(ok){
-    $("paywall").classList.remove("open");
-    boot();
-  }else{
-    $("paywall").classList.add("open");
-  }
+  // No paywall: always boot
+  boot();
 
   // Enter key support
   document.addEventListener("keydown",(e)=>{
-    if($("paywall").classList.contains("open") && e.key==="Enter") verifyLicense();
     if($("lock").classList.contains("open") && $("mpWrap").style.display==="block" && e.key==="Enter") unlock();
     if($("lock").classList.contains("open") && $("pinWrap").style.display==="block"){
       if(e.key>="0" && e.key<="9") pinPress(e.key);
