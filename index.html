@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="manifest" href="manifest.json" />
+  <title>LifeVault™</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f172a; --card2:#111c33; --text:#e5e7eb; --muted:#94a3b8;
+      --border:rgba(148,163,184,.18);
+      --blue:#2563eb; --blue2:#1d4ed8;
+      --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+      --shadow:0 10px 25px rgba(0,0,0,.35);
+      --r:14px; --r2:18px;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 800px at 20% 0%, rgba(37,99,235,.35), transparent 60%),
+      radial-gradient(900px 700px at 90% 20%, rgba(124,58,237,.25), transparent 55%), var(--bg); color:var(--text);}
+    a{color:inherit}
+    .wrap{max-width:1080px;margin:0 auto;padding:18px 14px 70px}
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .topbar .wrap{padding:14px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:var(--shadow)}
+    .title{font-weight:900;letter-spacing:-.6px;font-size:1.05rem}
+    .subtitle{font-size:.8rem;color:var(--muted)}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-weight:800;font-size:.78rem;color:var(--text);background:rgba(255,255,255,.03)}
+    .btn{border:none;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+    .btn:active{transform:scale(.98)}
+    .btn.blue{background:var(--blue);color:white}
+    .btn.blue:hover{background:var(--blue2)}
+    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+    .btn.ghost:hover{background:rgba(255,255,255,.03)}
+    .btn.red{background:var(--red);color:white}
+    .grid{display:grid;grid-template-columns:260px 1fr;gap:14px;margin-top:16px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--r2); box-shadow:var(--shadow); overflow:hidden}
+    .card h2{margin:0;font-size:1.0rem}
+    .card .hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .card .bd{padding:14px 16px}
+    .nav .item{padding:10px 12px;border-radius:12px;cursor:pointer;border:1px solid transparent;display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:900}
+    .nav .item:hover{background:rgba(255,255,255,.03)}
+    .nav .item.active{background:rgba(37,99,235,.18);border-color:rgba(37,99,235,.35);color:#dbeafe}
+    .kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    @media(max-width:700px){.kpi{grid-template-columns:1fr}}
+    .kpi .box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .kpi .n{font-size:1.6rem;font-weight:1000;letter-spacing:-.8px}
+    .kpi .l{color:var(--muted);font-weight:800;font-size:.8rem}
+    .fg{margin-bottom:10px}
+    label{display:block;font-size:.78rem;color:var(--muted);font-weight:900;margin-bottom:6px}
+    input, textarea, select{
+      width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);
+      background:rgba(0,0,0,.18);color:var(--text);outline:none;font-size:.95rem
+    }
+    textarea{resize:vertical;min-height:70px}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .li{padding:12px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,.03);display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+    .li .t{font-weight:1000}
+    .li .s{color:var(--muted);font-size:.83rem;margin-top:2px;line-height:1.35}
+    .li .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:1000;border:1px solid var(--border);color:#e2e8f0;background:rgba(255,255,255,.03)}
+    .tag.red{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.12)}
+    .tag.amb{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .hint{color:var(--muted);font-size:.82rem;line-height:1.35;margin-top:6px}
+    /* Overlay screens */
+    .screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+    .screen.open{display:flex}
+    .modal{width:min(560px,100%);border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:rgba(15,23,42,.78);backdrop-filter:blur(12px);box-shadow:0 25px 60px rgba(0,0,0,.55)}
+    .modal .hd{padding:14px 16px;border-bottom:1px solid rgba(148,163,184,.18);display:flex;align-items:center;justify-content:space-between}
+    .modal .bd{padding:14px 16px}
+    .modal .ft{padding:12px 16px;border-top:1px solid rgba(148,163,184,.18);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+    .dots{display:flex;justify-content:center;gap:10px;margin:12px 0 16px}
+    .dot{width:12px;height:12px;border-radius:999px;border:2px solid rgba(255,255,255,.35)}
+    .dot.f{background:#fff;border-color:#fff}
+    .kp{display:grid;grid-template-columns:repeat(3,74px);gap:12px;justify-content:center}
+    .key{width:74px;height:74px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);color:#fff;font-size:1.4rem;font-weight:900;cursor:pointer}
+    .key:hover{background:rgba(255,255,255,.16)}
+    .toast{position:fixed;right:16px;bottom:16px;z-index:10000;display:flex;flex-direction:column;gap:8px}
+    .toast .t{background:#0b1220;border:1px solid rgba(148,163,184,.22);color:#fff;padding:10px 12px;border-radius:14px;font-weight:900;box-shadow:var(--shadow);max-width:320px}
+  </style>
+</head>
+<body>
+  <!-- Paywall -->
+  <div id="paywall" class="screen open">
+    <div class="modal">
+      <div class="hd">
+        <div class="brand">
+          <div class="logo">LV</div>
+          <div>
+            <div class="title">LifeVault™</div>
+            <div class="subtitle">Encrypted • Offline • Family-ready</div>
+          </div>
+        </div>
+        <span class="pill" id="pwState">🔒 License required</span>
+      </div>
+      <div class="bd">
+        <div class="hint" style="margin-bottom:10px">
+          Enter your Gumroad license key to unlock this app on this device.
+        </div>
+        <div class="fg">
+          <label>License Key</label>
+          <input id="licKey" placeholder="XXXX-XXXX-XXXX-XXXX" />
+        </div>
+        <div class="fg">
+          <label>Email (optional)</label>
+          <input id="licEmail" placeholder="you@email.com" />
+        </div>
+        <div class="hint" id="pwErr" style="color:#fecaca;min-height:18px"></div>
+      </div>
+      <div class="ft">
+        <button class="btn ghost" onclick="resetAll()">Reset</button>
+        <button class="btn ghost" onclick="openSubscribe()">Subscribe ($1.99/mo)</button>
+        <button class="btn blue" onclick="verifyLicense()">Verify & Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lock screen (PIN -> Master Password) -->
+  <div id="lock" class="screen">
+    <div class="modal">
+      <div class="hd">
+        <div class="brand">
+          <div class="logo">LV</div>
+          <div>
+            <div class="title">LifeVault™</div>
+            <div class="subtitle">AES‑GCM encrypted vault</div>
+          </div>
+        </div>
+        <span class="pill">🛡️ Secure</span>
+      </div>
+
+      <div class="bd" id="setup" style="display:none">
+        <div class="hint" style="margin-bottom:10px">First-time setup: set a 4-digit PIN and a Master Password.</div>
+        <div class="fg"><label>PIN (4 digits)</label><input id="sp1" type="password" maxlength="4" inputmode="numeric" placeholder="1234" /></div>
+        <div class="fg"><label>Confirm PIN</label><input id="sp2" type="password" maxlength="4" inputmode="numeric" placeholder="1234" /></div>
+        <div class="fg"><label>Master Password (8+ chars)</label><input id="sm1" type="password" placeholder="Strong password" /></div>
+        <div class="fg"><label>Confirm Master Password</label><input id="sm2" type="password" placeholder="Confirm" /></div>
+        <div class="hint" id="sErr" style="color:#fecaca;min-height:18px"></div>
+        <button class="btn blue" onclick="doSetup()">Create Vault</button>
+      </div>
+
+      <div class="bd" id="pinWrap" style="display:none">
+        <div class="title" style="text-align:center;font-size:1.15rem">Enter PIN</div>
+        <div class="dots" id="dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="kp" id="kp"></div>
+        <div class="hint" id="pinErr" style="color:#fecaca;min-height:18px;text-align:center"></div>
+      </div>
+
+      <div class="bd" id="mpWrap" style="display:none">
+        <div class="title" style="text-align:center;font-size:1.15rem">Decrypt Vault</div>
+        <div class="hint" style="text-align:center;margin:6px 0 10px">Enter your Master Password.</div>
+        <div class="fg"><label>Master Password</label><input id="mp" type="password" placeholder="Master Password" /></div>
+        <div class="hint" id="mpErr" style="color:#fecaca;min-height:18px"></div>
+      </div>
+
+      <div class="ft">
+        <button class="btn ghost" onclick="resetAll()">Reset</button>
+        <button class="btn ghost" onclick="backToPin()">Back</button>
+        <button class="btn blue" onclick="unlock()">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="row">
+        <div class="brand">
+          <div class="logo">LV</div>
+          <div>
+            <div class="title">LifeVault™</div>
+            <div class="subtitle" id="subline">Private vault on this device</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+          <span class="pill" id="licPill">🧾 Licensed</span>
+          <span class="pill" id="lockPill">⏱️ Auto‑lock: 2 min</span>
+          <button class="btn ghost" onclick="exportBackup()">Backup</button>
+          <button class="btn ghost" onclick="openSettings()">Security</button>
+          <button class="btn red" onclick="openEmergency()">Emergency</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="grid">
+      <!-- Left nav -->
+      <div class="card nav">
+        <div class="hd"><h2>Sections</h2><span class="tag">Offline</span></div>
+        <div class="bd">
+          <div class="item active" data-tab="dash" onclick="tab('dash')">🏠 Dashboard</div>
+          <div class="item" data-tab="em" onclick="tab('em')">🏥 Emergency Info</div>
+          <div class="item" data-tab="pw" onclick="tab('pw')">🔑 Passwords</div>
+          <div class="item" data-tab="docs" onclick="tab('docs')">📋 Documents</div>
+          <div class="item" data-tab="rec" onclick="tab('rec')">🧾 Receipts & Warranties</div>
+          <div class="item" data-tab="ref" onclick="tab('ref')">📣 Invite Friends</div>
+          <div class="item" onclick="lockApp()">🔒 Lock Vault</div>
+          <div class="item" onclick="logoutLicense()">🧾 Log out License</div>
+        </div>
+      </div>
+
+      <!-- Right content -->
+      <div>
+        <!-- Dashboard -->
+        <div class="card" id="t-dash">
+          <div class="hd"><h2>Dashboard</h2><span class="tag" id="secTag">Encrypted</span></div>
+          <div class="bd">
+            <div class="kpi" id="kpi"></div>
+            <div class="hint" style="margin-top:12px" id="alerts"></div>
+          </div>
+        </div>
+
+        <!-- Emergency Info -->
+        <div class="card" id="t-em" style="display:none;margin-top:14px">
+          <div class="hd"><h2>Emergency Info</h2><span class="tag">Family-ready</span></div>
+          <div class="bd">
+            <div class="fg"><label>Blood Type</label><input id="e_bt" placeholder="O+" /></div>
+            <div class="fg"><label>Allergies</label><textarea id="e_al" placeholder="Penicillin, peanuts..."></textarea></div>
+            <div class="fg"><label>Medications</label><textarea id="e_med" placeholder="Dose + frequency"></textarea></div>
+            <div class="fg"><label>Conditions</label><textarea id="e_cond" placeholder="Diabetes, asthma..."></textarea></div>
+            <div class="fg"><label>Doctor + Phone</label><input id="e_dr" placeholder="Dr. Smith • (555) 123-4567" /></div>
+            <div class="fg"><label>Insurance + Policy #</label><input id="e_ins" placeholder="Provider • Policy #" /></div>
+            <button class="btn blue" onclick="saveEmergency()">Save Emergency Info</button>
+            <div class="hint">Emergency Mode shows this in a single red screen for fast access.</div>
+          </div>
+        </div>
+
+        <!-- Passwords -->
+        <div class="card" id="t-pw" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Passwords</h2>
+            <button class="btn blue" onclick="openPw()">+ Add</button>
+          </div>
+          <div class="bd">
+            <div class="fg"><label>Search</label><input id="pwq" placeholder="gmail, bank, netflix..." oninput="renderPw()" /></div>
+            <div class="list" id="pwList"></div>
+            <div class="hint">Tip: use unique passwords. This vault stays encrypted on your device.</div>
+          </div>
+        </div>
+
+        <!-- Documents -->
+        <div class="card" id="t-docs" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Documents</h2>
+            <button class="btn blue" onclick="openDoc()">+ Add</button>
+          </div>
+          <div class="bd">
+            <div class="list" id="docList"></div>
+            <div class="hint">Add expiration dates so your dashboard warns you before renewal.</div>
+          </div>
+        </div>
+
+        <!-- Receipts -->
+        <div class="card" id="t-rec" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Receipts & Warranties</h2>
+            <button class="btn blue" onclick="openRec()">+ Add</button>
+          </div>
+          <div class="bd">
+            <div class="list" id="recList"></div>
+            <div class="hint">Warranty reminders prevent missed claims.</div>
+          </div>
+        </div>
+
+        <!-- Referral -->
+        <div class="card" id="t-ref" style="display:none;margin-top:14px">
+          <div class="hd"><h2>Invite Friends</h2><span class="tag amb">Growth</span></div>
+          <div class="bd">
+            <div class="hint" style="margin-bottom:10px">
+              This creates a share link. For a true “automatic reward” system you need a backend.  
+              Zero-backend version: ask users to paste their friend’s referral code into a Gumroad custom field at checkout,
+              then you award free months manually (fast, simple).
+            </div>
+            <div class="fg"><label>Your Referral Code</label><input id="refCode" readonly /></div>
+            <div class="fg"><label>Share Link</label><input id="refLink" readonly /></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn blue" onclick="copy('refLink')">Copy Link</button>
+              <button class="btn ghost" onclick="copy('refCode')">Copy Code</button>
+            </div>
+            <div class="hint" style="margin-top:10px">
+              Recommended reward: “Invite 5 friends → 1 year free.” (You issue a Gumroad discount code manually.)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Fullscreen -->
+  <div id="emScreen" class="screen" style="background:#ef4444">
+    <div class="modal" style="background:rgba(127,29,29,.35)">
+      <div class="hd" style="border-bottom:1px solid rgba(255,255,255,.2)">
+        <div class="title" style="color:#fff">🚨 EMERGENCY MODE</div>
+        <button class="btn ghost" style="color:#fff;border-color:rgba(255,255,255,.35)" onclick="closeEmergency()">Close</button>
+      </div>
+      <div class="bd" id="emBody" style="color:#fff"></div>
+      <div class="ft" style="border-top:1px solid rgba(255,255,255,.2)">
+        <button class="btn ghost" style="color:#fff;border-color:rgba(255,255,255,.35)" onclick="copyEmergency()">Copy Summary</button>
+        <button class="btn blue" onclick="tab('em');closeEmergency()">Edit Info</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generic modal -->
+  <div id="modal" class="screen" style="background:rgba(0,0,0,.55)">
+    <div class="modal">
+      <div class="hd">
+        <div>
+          <div class="title" id="mTitle">Modal</div>
+          <div class="subtitle" id="mSub"> </div>
+        </div>
+        <button class="btn ghost" onclick="closeModal()">✕</button>
+      </div>
+      <div class="bd" id="mBody"></div>
+      <div class="ft" id="mFoot"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ==========================
+   CONFIG (edit these)
+========================== */
+const CONFIG = {
+  gumroadProductId: "gpfuxs",
+  subscribeUrl: "https://keytastic7.gumroad.com/l/gpfuxs",
+  autoLockMinutesDefault: 2
+};
+
+/* ==========================
+   Storage keys
+========================== */
+const K = {
+  licOk: "lv_lic_ok",
+  licKey: "lv_lic_key",
+  licEmail: "lv_lic_email",
+  pin: "lv_pin",
+  salt: "lv_salt",
+  mpver: "lv_mpver",
+  blob: "lv_blob",
+  settings: "lv_settings",
+  user: "lv_user"
+};
+const S = {
+  g:(k)=>localStorage.getItem(k),
+  s:(k,v)=>localStorage.setItem(k,v),
+  d:(k)=>localStorage.removeItem(k)
+};
+
+/* ==========================
+   UI helpers
+========================== */
+const $ = (id)=>document.getElementById(id);
+function toast(msg){
+  const t = $("toast");
+  const el = document.createElement("div");
+  el.className="t";
+  el.textContent = msg;
+  t.appendChild(el);
+  setTimeout(()=>{ el.style.opacity="0"; setTimeout(()=>el.remove(),250); }, 2600);
+}
+function openModal(title, sub, bodyHTML, footHTML){
+  $("mTitle").textContent = title || "Modal";
+  $("mSub").textContent = sub || "";
+  $("mBody").innerHTML = bodyHTML || "";
+  $("mFoot").innerHTML = footHTML || "";
+  $("modal").classList.add("open");
+}
+function closeModal(){ $("modal").classList.remove("open"); }
+function tab(name){
+  document.querySelectorAll(".nav .item").forEach(x=>x.classList.toggle("active", x.dataset.tab===name));
+  ["dash","em","pw","docs","rec","ref"].forEach(t=>{ const el=$("t-"+t); if(el) el.style.display = (t===name)?"block":"none"; });
+  if(window.innerWidth<=900) window.scrollTo({top:0,behavior:"smooth"});
+}
+function copy(id){
+  const el = $(id);
+  el.select(); el.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  toast("Copied");
+}
+
+/* ==========================
+   Crypto (AES-GCM + PBKDF2)
+========================== */
+let VAULT = null;
+let AESKEY = null;
+let LAST = Date.now();
+let AUTOLOCK = CONFIG.autoLockMinutesDefault;
+
+function b64(bytes){ let s=""; bytes.forEach(b=>s+=String.fromCharCode(b)); return btoa(s); }
+function unb64(b){ const bin=atob(b); const out=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; }
+
+async function deriveKey(pass, salt){
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey("raw", enc.encode(pass), {name:"PBKDF2"}, false, ["deriveKey","deriveBits"]);
+  return crypto.subtle.deriveKey(
+    {name:"PBKDF2", salt, iterations:210000, hash:"SHA-256"},
+    base,
+    {name:"AES-GCM", length:256},
+    false,
+    ["encrypt","decrypt"]
+  );
+}
+async function verifier(pass, salt){
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey("raw", enc.encode(pass), {name:"PBKDF2"}, false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt, iterations:150000, hash:"SHA-256"}, base, 256);
+  const hkey = await crypto.subtle.importKey("raw", bits, {name:"HMAC", hash:"SHA-256"}, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", hkey, enc.encode("LifeVault::Verifier"));
+  return b64(new Uint8Array(sig));
+}
+async function encrypt(obj){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const pt = enc.encode(JSON.stringify(obj));
+  const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, AESKEY, pt);
+  const wrap = {v:1, iv:b64(iv), ct:b64(new Uint8Array(ct))};
+  return btoa(JSON.stringify(wrap));
+}
+async function decrypt(blob){
+  const wrap = JSON.parse(atob(blob));
+  const iv = unb64(wrap.iv);
+  const ct = unb64(wrap.ct);
+  const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv}, AESKEY, ct);
+  const dec = new TextDecoder().decode(pt);
+  return JSON.parse(dec);
+}
+async function persist(){
+  if(!VAULT) return;
+  S.s(K.blob, await encrypt(VAULT));
+}
+
+/* ==========================
+   Default vault
+========================== */
+function defaultVault(){
+  return {
+    emergency:{bt:"",al:"",med:"",cond:"",dr:"",ins:""},
+    passwords:[],
+    documents:[],
+    receipts:[],
+    meta:{created:new Date().toISOString()}
+  };
+}
+
+/* ==========================
+   License gate (Gumroad)
+========================== */
+function openSubscribe(){
+  if(CONFIG.subscribeUrl && CONFIG.subscribeUrl.startsWith("http")) window.open(CONFIG.subscribeUrl, "_blank");
+  else toast("Set CONFIG.subscribeUrl in index.html");
+}
+async function verifyLicense(){
+  $("pwErr").textContent="";
+  const key = $("licKey").value.trim();
+  const email = $("licEmail").value.trim();
+
+  if(!CONFIG.gumroadProductId || CONFIG.gumroadProductId.includes("REPLACE_")){
+    $("pwErr").textContent="Developer error: gumroadProductId not set.";
+    return;
+  }
+  if(!key){ $("pwErr").textContent="Enter your license key."; return; }
+
+  try{
+    $("pwState").textContent="⏳ Verifying…";
+    const params = new URLSearchParams({
+      product_id: CONFIG.gumroadProductId,
+      license_key: key,
+      increment_uses_count: "false"
+    });
+
+    const res = await fetch("https://api.gumroad.com/v2/licenses/verify", {
+      method:"POST",
+      headers: {"Content-Type":"application/x-www-form-urlencoded"},
+      body: params.toString()
+    });
+    const j = await res.json();
+    if(j && j.success===true){
+      S.s(K.licOk,"1");
+      S.s(K.licKey,key);
+      if(email) S.s(K.licEmail,email);
+      $("pwState").textContent="✅ Verified";
+      $("paywall").classList.remove("open");
+      boot();
+      toast("License verified");
+    }else{
+      S.d(K.licOk);
+      $("pwState").textContent="❌ Invalid";
+      $("pwErr").textContent="Invalid key. Subscribe, then paste the key here.";
+    }
+  }catch(e){
+    $("pwState").textContent="⚠️ Network";
+    $("pwErr").textContent="Could not verify. Check internet and try again.";
+  }
+}
+function logoutLicense(){
+  S.d(K.licOk); S.d(K.licKey); S.d(K.licEmail);
+  lockMemory();
+  $("lock").classList.remove("open");
+  $("paywall").classList.add("open");
+  toast("License logged out");
+}
+
+/* ==========================
+   Setup + Lock + Unlock
+========================== */
+let pinBuf="";
+const KEYS = ["1","2","3","4","5","6","7","8","9","","0","⌫"];
+
+function buildKP(){
+  const kp=$("kp"); kp.innerHTML="";
+  KEYS.forEach(k=>{
+    const b=document.createElement("button");
+    b.className="key";
+    if(!k){ b.style.visibility="hidden"; }
+    else{
+      b.textContent=k;
+      b.onclick=()=>pinPress(k);
+    }
+    kp.appendChild(b);
+  });
+}
+function dots(){
+  document.querySelectorAll("#dots .dot").forEach((d,i)=>d.classList.toggle("f", i<pinBuf.length));
+}
+function pinPress(k){
+  if(k==="⌫") pinBuf = pinBuf.slice(0,-1);
+  else if(pinBuf.length<4) pinBuf += k;
+  dots();
+  if(pinBuf.length===4) setTimeout(checkPin,120);
+}
+function backToPin(){
+  $("pinWrap").style.display="block";
+  $("mpWrap").style.display="none";
+  $("pinErr").textContent="";
+  pinBuf=""; dots();
+}
+function lockMemory(){ VAULT=null; AESKEY=null; }
+function lockApp(){
+  lockMemory();
+  $("lock").classList.add("open");
+  $("setup").style.display="none";
+  $("pinWrap").style.display="block";
+  $("mpWrap").style.display="none";
+  backToPin();
+  toast("Locked");
+}
+async function checkPin(){
+  const p = S.g(K.pin);
+  if(pinBuf===p){
+    $("pinWrap").style.display="none";
+    $("mpWrap").style.display="block";
+    $("mpErr").textContent="";
+    $("mp").value="";
+    $("mp").focus();
+  }else{
+    $("pinErr").textContent="Wrong PIN.";
+    pinBuf=""; dots();
+  }
+}
+async function doSetup(){
+  $("sErr").textContent="";
+  const p1=$("sp1").value.trim(), p2=$("sp2").value.trim();
+  const m1=$("sm1").value, m2=$("sm2").value;
+  if(!/^\d{4}$/.test(p1)) { $("sErr").textContent="PIN must be 4 digits."; return; }
+  if(p1!==p2){ $("sErr").textContent="PINs do not match."; return; }
+  if(!m1 || m1.length<8){ $("sErr").textContent="Master Password must be 8+ characters."; return; }
+  if(m1!==m2){ $("sErr").textContent="Master passwords do not match."; return; }
+
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  S.s(K.pin,p1);
+  S.s(K.salt,b64(salt));
+  S.s(K.mpver, await verifier(m1, salt));
+
+  AESKEY = await deriveKey(m1, salt);
+  VAULT = defaultVault();
+  await persist();
+
+  $("lock").classList.remove("open");
+  initApp();
+  toast("Vault created");
+}
+async function unlock(){
+  $("mpErr").textContent="";
+  const pass = $("mp").value;
+  if(!pass){ $("mpErr").textContent="Enter master password."; return; }
+
+  try{
+    const saltB64 = S.g(K.salt);
+    const v = S.g(K.mpver);
+    if(!saltB64 || !v){ $("mpErr").textContent="Vault not initialized."; return; }
+    const salt = unb64(saltB64);
+    const v2 = await verifier(pass, salt);
+    if(v2!==v){ $("mpErr").textContent="Wrong master password."; return; }
+
+    AESKEY = await deriveKey(pass, salt);
+    const blob = S.g(K.blob);
+    VAULT = blob ? await decrypt(blob) : defaultVault();
+    $("lock").classList.remove("open");
+    initApp();
+    toast("Unlocked");
+  }catch(e){
+    $("mpErr").textContent="Could not decrypt.";
+  }
+}
+
+/* ==========================
+   Auto-lock + settings
+========================== */
+function loadSettings(){
+  try{
+    const s = JSON.parse(S.g(K.settings)||"{}");
+    AUTOLOCK = Number(s.autoLockMin ?? CONFIG.autoLockMinutesDefault);
+    if(!AUTOLOCK || AUTOLOCK<1) AUTOLOCK = CONFIG.autoLockMinutesDefault;
+  }catch{ AUTOLOCK = CONFIG.autoLockMinutesDefault; }
+  $("lockPill").textContent = "⏱️ Auto‑lock: "+AUTOLOCK+" min";
+}
+function saveSettings(){
+  S.s(K.settings, JSON.stringify({autoLockMin:AUTOLOCK}));
+  $("lockPill").textContent = "⏱️ Auto‑lock: "+AUTOLOCK+" min";
+}
+function touch(){ LAST=Date.now(); }
+["click","keydown","mousemove","touchstart","scroll"].forEach(ev=>document.addEventListener(ev,()=>{ if(VAULT) touch(); },{passive:true}));
+setInterval(()=>{ if(VAULT && Date.now()-LAST > AUTOLOCK*60*1000) lockApp(); }, 2500);
+
+function openSettings(){
+  openModal(
+    "Security",
+    "Auto-lock and vault controls",
+    `
+      <div class="fg"><label>Auto-lock minutes (1–60)</label><input id="al" type="number" min="1" max="60" value="${AUTOLOCK}"></div>
+      <div class="hint">Recommended: 2–5 minutes</div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn blue" onclick="applySettings()">Save</button>
+    `
+  );
+}
+function applySettings(){
+  const n = Number($("al").value);
+  if(!n || n<1 || n>60){ toast("Pick 1–60"); return; }
+  AUTOLOCK = n; saveSettings(); closeModal(); toast("Saved");
+}
+
+/* ==========================
+   Emergency Mode
+========================== */
+function openEmergency(){
+  const e = VAULT?.emergency || {};
+  $("emBody").innerHTML = `
+    <div style="display:grid;gap:10px">
+      <div><div style="font-weight:1000">Blood Type</div><div>${escapeHtml(e.bt||"—")}</div></div>
+      <div><div style="font-weight:1000">Allergies</div><div>${escapeHtml(e.al||"—")}</div></div>
+      <div><div style="font-weight:1000">Medications</div><div>${escapeHtml(e.med||"—")}</div></div>
+      <div><div style="font-weight:1000">Conditions</div><div>${escapeHtml(e.cond||"—")}</div></div>
+      <div><div style="font-weight:1000">Doctor</div><div>${escapeHtml(e.dr||"—")}</div></div>
+      <div><div style="font-weight:1000">Insurance</div><div>${escapeHtml(e.ins||"—")}</div></div>
+    </div>
+  `;
+  $("emScreen").classList.add("open");
+}
+function closeEmergency(){ $("emScreen").classList.remove("open"); }
+function copyEmergency(){
+  const e = VAULT?.emergency || {};
+  const txt = `LifeVault Emergency Summary
+Blood: ${e.bt||"-"}
+Allergies: ${e.al||"-"}
+Meds: ${e.med||"-"}
+Conditions: ${e.cond||"-"}
+Doctor: ${e.dr||"-"}
+Insurance: ${e.ins||"-"}`;
+  navigator.clipboard.writeText(txt).then(()=>toast("Copied summary")).catch(()=>toast("Copy failed"));
+}
+function escapeHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+
+async function saveEmergency(){
+  VAULT.emergency = {
+    bt: $("e_bt").value.trim(),
+    al: $("e_al").value.trim(),
+    med: $("e_med").value.trim(),
+    cond: $("e_cond").value.trim(),
+    dr: $("e_dr").value.trim(),
+    ins: $("e_ins").value.trim()
+  };
+  await persist();
+  toast("Saved");
+  renderDash();
+}
+
+/* ==========================
+   Passwords
+========================== */
+function openPw(id){
+  const p = (VAULT.passwords||[]).find(x=>x.id===id) || {id:"",site:"",user:"",pass:"",notes:""};
+  openModal(
+    id ? "Edit Password" : "Add Password",
+    "Stored encrypted locally",
+    `
+      <input type="hidden" id="pw_id" value="${escapeHtml(p.id||"")}">
+      <div class="fg"><label>Website/App *</label><input id="pw_site" value="${escapeHtml(p.site||"")}" placeholder="Gmail"></div>
+      <div class="fg"><label>Username</label><input id="pw_user" value="${escapeHtml(p.user||"")}" placeholder="you@email.com"></div>
+      <div class="fg"><label>Password *</label><input id="pw_pass" value="${escapeHtml(p.pass||"")}" placeholder="••••••••"></div>
+      <div class="fg"><label>Notes</label><textarea id="pw_notes">${escapeHtml(p.notes||"")}</textarea></div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      ${id?`<button class="btn red" onclick="del('passwords','${id}')">Delete</button>`:""}
+      <button class="btn blue" onclick="savePw()">Save</button>
+    `
+  );
+}
+async function savePw(){
+  const id = $("pw_id").value || crypto.randomUUID();
+  const site = $("pw_site").value.trim();
+  const pass = $("pw_pass").value.trim();
+  if(!site || !pass){ toast("Site + password required"); return; }
+  const obj = {id, site, user:$("pw_user").value.trim(), pass, notes:$("pw_notes").value.trim()};
+  const list = VAULT.passwords || [];
+  const i = list.findIndex(x=>x.id===id);
+  if(i>-1) list[i]=obj; else list.push(obj);
+  VAULT.passwords=list;
+  await persist();
+  closeModal();
+  renderPw();
+  renderDash();
+  toast("Saved");
+}
+function renderPw(){
+  const q = ($("pwq").value||"").toLowerCase();
+  const list = (VAULT.passwords||[]).filter(p=>(p.site||"").toLowerCase().includes(q) || (p.user||"").toLowerCase().includes(q));
+  const el = $("pwList");
+  if(!list.length){ el.innerHTML = `<div class="hint">No passwords yet.</div>`; return; }
+  el.innerHTML = list.map(p=>`
+    <div class="li">
+      <div>
+        <div class="t">🔑 ${escapeHtml(p.site||"")}</div>
+        <div class="s">${escapeHtml(p.user||"")}</div>
+        ${p.notes?`<div class="s">${escapeHtml(p.notes)}</div>`:""}
+      </div>
+      <div class="acts">
+        <button class="btn ghost" onclick="navigator.clipboard.writeText('${escapeForJs(p.pass||"")}').then(()=>toast('Copied')).catch(()=>toast('Copy failed'))">Copy</button>
+        <button class="btn ghost" onclick="openPw('${p.id}')">Edit</button>
+      </div>
+    </div>
+  `).join("");
+}
+function escapeForJs(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n"); }
+
+/* ==========================
+   Documents + Receipts
+========================== */
+function openDoc(id){
+  const d = (VAULT.documents||[]).find(x=>x.id===id) || {id:"",name:"",num:"",exp:"",notes:""};
+  openModal(
+    id?"Edit Document":"Add Document",
+    "Add expirations for reminders",
+    `
+      <input type="hidden" id="d_id" value="${escapeHtml(d.id||"")}">
+      <div class="fg"><label>Name *</label><input id="d_name" value="${escapeHtml(d.name||"")}" placeholder="Driver's License"></div>
+      <div class="fg"><label>Number</label><input id="d_num" value="${escapeHtml(d.num||"")}" placeholder="ID number"></div>
+      <div class="fg"><label>Expires</label><input id="d_exp" type="date" value="${escapeHtml(d.exp||"")}"></div>
+      <div class="fg"><label>Notes</label><textarea id="d_notes">${escapeHtml(d.notes||"")}</textarea></div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      ${id?`<button class="btn red" onclick="del('documents','${id}')">Delete</button>`:""}
+      <button class="btn blue" onclick="saveDoc()">Save</button>
+    `
+  );
+}
+async function saveDoc(){
+  const id = $("d_id").value || crypto.randomUUID();
+  const name = $("d_name").value.trim();
+  if(!name){ toast("Name required"); return; }
+  const obj = {id, name, num:$("d_num").value.trim(), exp:$("d_exp").value, notes:$("d_notes").value.trim()};
+  const list = VAULT.documents || [];
+  const i = list.findIndex(x=>x.id===id);
+  if(i>-1) list[i]=obj; else list.push(obj);
+  VAULT.documents=list;
+  await persist();
+  closeModal();
+  renderDocs();
+  renderDash();
+  toast("Saved");
+}
+function renderDocs(){
+  const el=$("docList");
+  const list = VAULT.documents||[];
+  if(!list.length){ el.innerHTML=`<div class="hint">No documents yet.</div>`; return; }
+  el.innerHTML = list.map(d=>{
+    const tag = expTag(d.exp);
+    return `
+      <div class="li">
+        <div>
+          <div class="t">📋 ${escapeHtml(d.name||"")}</div>
+          <div class="s">${escapeHtml(d.num||"")} ${d.exp?("• Expires "+d.exp):""}</div>
+          ${d.notes?`<div class="s">${escapeHtml(d.notes)}</div>`:""}
+        </div>
+        <div class="acts">
+          ${tag}
+          <button class="btn ghost" onclick="openDoc('${d.id}')">Edit</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openRec(id){
+  const r = (VAULT.receipts||[]).find(x=>x.id===id) || {id:"",prod:"",store:"",wexp:"",notes:""};
+  openModal(
+    id?"Edit Receipt":"Add Receipt",
+    "Warranty reminders prevent missed claims",
+    `
+      <input type="hidden" id="r_id" value="${escapeHtml(r.id||"")}">
+      <div class="fg"><label>Product *</label><input id="r_prod" value="${escapeHtml(r.prod||"")}" placeholder="Samsung TV"></div>
+      <div class="fg"><label>Store</label><input id="r_store" value="${escapeHtml(r.store||"")}" placeholder="Amazon"></div>
+      <div class="fg"><label>Warranty Expires</label><input id="r_wexp" type="date" value="${escapeHtml(r.wexp||"")}"></div>
+      <div class="fg"><label>Notes</label><textarea id="r_notes">${escapeHtml(r.notes||"")}</textarea></div>
+    `,
+    `
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      ${id?`<button class="btn red" onclick="del('receipts','${id}')">Delete</button>`:""}
+      <button class="btn blue" onclick="saveRec()">Save</button>
+    `
+  );
+}
+async function saveRec(){
+  const id = $("r_id").value || crypto.randomUUID();
+  const prod = $("r_prod").value.trim();
+  if(!prod){ toast("Product required"); return; }
+  const obj = {id, prod, store:$("r_store").value.trim(), wexp:$("r_wexp").value, notes:$("r_notes").value.trim()};
+  const list = VAULT.receipts || [];
+  const i = list.findIndex(x=>x.id===id);
+  if(i>-1) list[i]=obj; else list.push(obj);
+  VAULT.receipts=list;
+  await persist();
+  closeModal();
+  renderRecs();
+  renderDash();
+  toast("Saved");
+}
+function renderRecs(){
+  const el=$("recList");
+  const list = VAULT.receipts||[];
+  if(!list.length){ el.innerHTML=`<div class="hint">No receipts yet.</div>`; return; }
+  el.innerHTML = list.map(r=>{
+    const tag = expTag(r.wexp);
+    return `
+      <div class="li">
+        <div>
+          <div class="t">🧾 ${escapeHtml(r.prod||"")}</div>
+          <div class="s">${escapeHtml(r.store||"")} ${r.wexp?("• Warranty "+r.wexp):""}</div>
+          ${r.notes?`<div class="s">${escapeHtml(r.notes)}</div>`:""}
+        </div>
+        <div class="acts">
+          ${tag}
+          <button class="btn ghost" onclick="openRec('${r.id}')">Edit</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function expTag(dateStr){
+  if(!dateStr) return `<span class="tag">No expiry</span>`;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const d = new Date(dateStr+"T00:00:00");
+  const days = Math.round((d-now)/86400000);
+  if(days < 0) return `<span class="tag red">Expired</span>`;
+  if(days <= 7) return `<span class="tag red">${days}d</span>`;
+  if(days <= 30) return `<span class="tag amb">${days}d</span>`;
+  return `<span class="tag">${days}d</span>`;
+}
+
+async function del(type, id){
+  VAULT[type] = (VAULT[type]||[]).filter(x=>x.id!==id);
+  await persist();
+  closeModal();
+  renderAll();
+  toast("Deleted");
+}
+
+/* ==========================
+   Backup / Restore (encrypted)
+========================== */
+async function exportBackup(){
+  const pkg = {v:1, created:new Date().toISOString(), blob:S.g(K.blob), salt:S.g(K.salt), mpver:S.g(K.mpver), settings:S.g(K.settings)||null};
+  const b = new Blob([JSON.stringify(pkg,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(b);
+  a.download = "lifevault-backup.json";
+  a.click();
+  toast("Backup exported");
+}
+
+/* ==========================
+   Referral (zero backend)
+========================== */
+function ensureUser(){
+  let u = S.g(K.user);
+  if(!u){ u = "u"+Math.floor(Math.random()*1e9).toString(36); S.s(K.user,u); }
+  $("refCode").value = u;
+  const url = new URL(window.location.href);
+  url.searchParams.set("ref", u);
+  $("refLink").value = url.toString();
+}
+
+/* ==========================
+   Dashboard render
+========================== */
+function renderDash(){
+  const p = (VAULT.passwords||[]).length;
+  const d = (VAULT.documents||[]).length;
+  const r = (VAULT.receipts||[]).length;
+  $("kpi").innerHTML = `
+    <div class="box"><div class="n">${p}</div><div class="l">Passwords</div></div>
+    <div class="box"><div class="n">${d}</div><div class="l">Documents</div></div>
+    <div class="box"><div class="n">${r}</div><div class="l">Receipts</div></div>
+  `;
+
+  // Alerts
+  const soon = [];
+  (VAULT.documents||[]).forEach(x=>{ if(x.exp){ const t=expTag(x.exp); if(t.includes("amb")||t.includes("red")) soon.push("Document: "+x.name+" exp "+x.exp); }});
+  (VAULT.receipts||[]).forEach(x=>{ if(x.wexp){ const t=expTag(x.wexp); if(t.includes("amb")||t.includes("red")) soon.push("Warranty: "+x.prod+" "+x.wexp); }});
+  $("alerts").textContent = soon.length ? ("Upcoming: " + soon.slice(0,4).join(" • ")) : "No urgent expirations. Add expiry dates to get warnings here.";
+}
+
+/* ==========================
+   Boot / Init
+========================== */
+function hydrateEmergencyForm(){
+  const e = VAULT.emergency||{};
+  $("e_bt").value = e.bt||"";
+  $("e_al").value = e.al||"";
+  $("e_med").value = e.med||"";
+  $("e_cond").value = e.cond||"";
+  $("e_dr").value = e.dr||"";
+  $("e_ins").value = e.ins||"";
+}
+
+function renderAll(){
+  renderDash();
+  hydrateEmergencyForm();
+  renderPw();
+  renderDocs();
+  renderRecs();
+  ensureUser();
+}
+
+function initApp(){
+  loadSettings();
+  $("licPill").textContent = (S.g(K.licOk)==="1") ? "🧾 Licensed" : "🧾 Unlicensed";
+  $("secTag").textContent = "Encrypted";
+  tab("dash");
+  renderAll();
+  touch();
+}
+
+function boot(){
+  $("lock").classList.add("open");
+  buildKP();
+
+  const hasPin = !!S.g(K.pin);
+  if(!hasPin){
+    $("setup").style.display="block";
+    $("pinWrap").style.display="none";
+    $("mpWrap").style.display="none";
+    $("mp").value="";
+    return;
+  }
+  $("setup").style.display="none";
+  $("pinWrap").style.display="block";
+  $("mpWrap").style.display="none";
+  backToPin();
+}
+
+function resetAll(){
+  if(!confirm("This deletes vault + license from this device. Continue?")) return;
+  Object.values(K).forEach(k=>S.d(k));
+  lockMemory();
+  location.reload();
+}
+
+/* Entry */
+(function(){
+  // PWA SW
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  }
+
+  // License gate
+  const ok = (S.g(K.licOk)==="1");
+  if(ok){
+    $("paywall").classList.remove("open");
+    boot();
+  }else{
+    $("paywall").classList.add("open");
+  }
+
+  // Enter key support
+  document.addEventListener("keydown",(e)=>{
+    if($("paywall").classList.contains("open") && e.key==="Enter") verifyLicense();
+    if($("lock").classList.contains("open") && $("mpWrap").style.display==="block" && e.key==="Enter") unlock();
+    if($("lock").classList.contains("open") && $("pinWrap").style.display==="block"){
+      if(e.key>="0" && e.key<="9") pinPress(e.key);
+      if(e.key==="Backspace") pinPress("⌫");
+    }
+  });
+})();
+</script>
+</body>
+</html>
