@@ -459,26 +459,15 @@ function openSubscribe(){
 }
 
 async function verifyLicense(){
-  // Always unlock immediately
-  $("pwErr").textContent = "";
-  $("pwState").textContent = "✅ Access granted";
+  // TEMP: Disable license verification
+  $("pwErr").textContent="";
+  $("pwState").textContent="Access granted";
+
   S.s(K.licOk,"1");
-  S.s(K.licKey,"BYPASS");
-  const email = $("licEmail").value.trim();
-  if(email) S.s(K.licEmail,email);
+  S.s(K.licKey,"FREE_ACCESS");
 
   $("paywall").classList.remove("open");
   boot();
-  toast("Welcome to LifeVault");
-}
-
-function logoutLicense(){
-  // Keep logout working (locks app again until they click Verify & Continue)
-  S.d(K.licOk); S.d(K.licKey); S.d(K.licEmail);
-  lockMemory();
-  $("lock").classList.remove("open");
-  $("paywall").classList.add("open");
-  toast("Locked");
 }
 
 /* ==========================
