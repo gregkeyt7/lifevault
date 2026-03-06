@@ -391,6 +391,23 @@
         </div>
       </div>
 
+      <div class="divider"></div>
+
+<div class="kpi" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:10px;">
+  <div class="box">
+    <div class="n" id="refInvites">0</div>
+    <div class="l">Members Referred</div>
+  </div>
+  <div class="box">
+    <div class="n" id="refEarned">$0.00</div>
+    <div class="l">Referral Earnings</div>
+  </div>
+</div>
+
+<div class="hint" style="margin-top:10px">
+  Earn <strong>$1</strong> for every paying member you invite. Referral rewards are tracked and issued manually.
+</div>
+
       <!-- Right content -->
       <div>
 
@@ -676,7 +693,10 @@ const K = {
   settings: "lv_settings",
   user: "lv_user",
   lastBackup: "lv_last_backup",
-  bio: "lv_bio" // biometric enabled flag + credential id
+  bio: "lv_bio" // biometric enabled flag + credential id,
+  referralCode: "lv_referral_code",
+  referralInvites: "lv_referral_invites",
+  referralEarned: "lv_referral_earned"
 };
 
 const S = {
@@ -1731,6 +1751,29 @@ function ensureUser(){
   const url = new URL(CONFIG.appOrigin);
   url.searchParams.set("ref", u);
   $("refLink").value = url.toString();
+
+  // default counters
+  if(!S.g(K.referralInvites)) S.s(K.referralInvites, "0");
+  if(!S.g(K.referralEarned)) S.s(K.referralEarned, "0");
+
+  const invites = Number(S.g(K.referralInvites) || "0");
+  const earned = Number(S.g(K.referralEarned) || "0");
+
+  if($("refInvites")) $("refInvites").textContent = invites;
+  if($("refEarned")) $("refEarned").textContent = `$${earned.toFixed(2)}`;
+}
+
+  function captureReferralFromUrl(){
+  const url = new URL(window.location.href);
+  const ref = url.searchParams.get("ref");
+
+  if(ref){
+    S.s(K.referralCode, ref);
+
+    // optional: clean the URL after capture
+    url.searchParams.delete("ref");
+    window.history.replaceState({}, "", url.toString());
+  }
 }
 
 /* ==========================
@@ -2382,6 +2425,7 @@ function renderAll(){
 }
 
 function initApp(){
+  captureReferralFromUrl();
   loadSettings();
   $("secTag").textContent = "Encrypted";
   tab("dash");
