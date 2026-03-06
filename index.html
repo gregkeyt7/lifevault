@@ -568,30 +568,40 @@
         </div>
 
         <!-- Referral (Stripe-ready wording) -->
-        <div class="card" id="t-ref" style="display:none;margin-top:14px">
-          <div class="hd"><h2>Invite Friends</h2><span class="tag amb">Growth</span></div>
-          <div class="bd">
-            <div class="hint" style="margin-bottom:10px">
-              This generates a share link + referral code. To automate rewards, your backend should capture the referral code during Stripe Checkout
-              (as metadata) and apply rewards via your business process.
-            </div>
-            <div class="fg"><label>Your Referral Code</label><input id="refCode" readonly /></div>
-            <div class="fg"><label>Share Link</label><input id="refLink" readonly /></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn blue" onclick="copy('refLink')">Copy Link</button>
-              <button class="btn ghost" onclick="copy('refCode')">Copy Code</button>
-            </div>
-            <div class="hint" style="margin-top:10px">
-              Earn <strong>$1</strong> for every paying member you invite. 
-              Share your referral link and get rewarded when someone joins LifeVault through your link.
-              <small>Referral rewards are tracked and issued manually.</small>
-            </div>
-          </div>
-        </div>
+<div class="card" id="t-ref" style="display:none;margin-top:14px">
+  <div class="hd"><h2>Invite Friends</h2><span class="tag amb">Growth</span></div>
+  <div class="bd">
+    <div class="hint" style="margin-bottom:10px">
+      Share your referral link and earn <strong>$1</strong> for every paying member you invite.
+      Referral rewards are tracked and issued manually.
+    </div>
 
+    <div class="fg"><label>Your Referral Code</label><input id="refCode" readonly /></div>
+    <div class="fg"><label>Share Link</label><input id="refLink" readonly /></div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn blue" onclick="copy('refLink')">Copy Link</button>
+      <button class="btn ghost" onclick="copy('refCode')">Copy Code</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="kpi" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:10px;">
+      <div class="box">
+        <div class="n" id="refInvites">0</div>
+        <div class="l">Members Referred</div>
+      </div>
+      <div class="box">
+        <div class="n" id="refEarned">$0.00</div>
+        <div class="l">Referral Earnings</div>
       </div>
     </div>
+
+    <div class="hint" style="margin-top:10px">
+      Share your link. They join. You earn.
+    </div>
   </div>
+</div>
 
   <!-- Emergency Fullscreen -->
   <div id="emScreen" class="screen" style="background:#ef4444">
