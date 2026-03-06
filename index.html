@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#2563eb" />
   <meta http-equiv="Content-Security-Policy" content="
   default-src 'self';
-  connect-src 'self' https://lifevault-gate.gregkeyt7.workers.dev https://api.stripe.com;
+  connect-src 'self' https://privara-gate.gregkeyt7.workers.dev https://api.stripe.com;
   frame-src https://checkout.stripe.com;
   script-src 'self' 'unsafe-inline';
   style-src 'self' 'unsafe-inline';
   img-src 'self' data:;
   ">
   <link rel="manifest" href="manifest.json" />
-  <title>LifeVault™</title>
+  <title>Privara™</title>
 
   <style>
     :root{
@@ -250,6 +250,150 @@
       padding:12px;
       color:#fee2e2;
     }
+  
+    /* ===== Privara Premium upgrade ===== */
+    :root{
+      --ink:#f8fafc;
+      --glass:rgba(255,255,255,.05);
+      --brandA:#2563eb;
+      --brandB:#7c3aed;
+      --brandC:#06b6d4;
+    }
+    body{
+      background:
+        radial-gradient(1100px 700px at 10% -10%, rgba(37,99,235,.42), transparent 55%),
+        radial-gradient(1000px 680px at 100% 10%, rgba(124,58,237,.32), transparent 55%),
+        radial-gradient(900px 620px at 50% 100%, rgba(6,182,212,.16), transparent 60%),
+        linear-gradient(180deg,#060b16 0%,#0b1220 35%,#0b1220 100%);
+    }
+    .wrap{max-width:1180px}
+    .topbar{
+      background:rgba(6,11,22,.72);
+      box-shadow:0 10px 40px rgba(0,0,0,.18);
+    }
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 32%),
+        linear-gradient(135deg,var(--brandA),var(--brandB) 55%,var(--brandC));
+      box-shadow:0 12px 30px rgba(37,99,235,.28);
+    }
+    .brand-block{
+      position:relative;
+      overflow:hidden;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.11);
+      background:
+        radial-gradient(500px 220px at 0% 0%, rgba(37,99,235,.24), transparent 60%),
+        radial-gradient(460px 220px at 100% 0%, rgba(124,58,237,.24), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      padding:20px;
+      margin-bottom:14px;
+      box-shadow:0 24px 80px rgba(0,0,0,.28);
+    }
+    .brand-block::after{
+      content:"";
+      position:absolute; inset:auto -50px -50px auto;
+      width:220px; height:220px; border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.10), transparent 65%);
+      pointer-events:none;
+    }
+    .brand-grid{
+      display:grid;
+      grid-template-columns:1.35fr .95fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    @media(max-width:900px){ .brand-grid{grid-template-columns:1fr} }
+    .hero-title{
+      margin:0;
+      font-size:clamp(1.65rem,4vw,2.65rem);
+      line-height:1.02;
+      letter-spacing:-1.2px;
+      font-weight:1100;
+      color:var(--ink);
+    }
+    .hero-copy{
+      margin:10px 0 0;
+      max-width:62ch;
+      color:#cbd5e1;
+      line-height:1.5;
+      font-size:.98rem;
+    }
+    .hero-actions,.mini-actions{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;
+    }
+    .glass-box{
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:14px;
+      backdrop-filter:blur(10px);
+    }
+    .stack{display:grid; gap:12px}
+    .feature-chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
+      font-size:.8rem; font-weight:1000; color:#dbeafe;
+      margin:0 8px 8px 0;
+    }
+    .pw-lab{
+      border:1px solid rgba(255,255,255,.1);
+      background:
+        radial-gradient(420px 160px at 0% 0%, rgba(37,99,235,.12), transparent 60%),
+        rgba(255,255,255,.03);
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:14px;
+    }
+    .pw-preview{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:1rem;
+      letter-spacing:.3px;
+      padding:14px;
+      min-height:52px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(3,7,18,.55);
+      overflow-wrap:anywhere;
+    }
+    .range-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+    .checks{display:flex;gap:12px;flex-wrap:wrap}
+    .checks label{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:999px;padding:8px 12px;color:#dbeafe;
+      background:rgba(255,255,255,.03);margin-bottom:0;
+    }
+    .checks input{width:auto}
+    .mobile-dock{
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom:14px; z-index:80;
+      width:min(94%,680px);
+      display:none;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px; padding:10px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(6,11,22,.84);
+      backdrop-filter:blur(16px);
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .mobile-dock button{
+      border:none; border-radius:16px; padding:10px 8px;
+      background:rgba(255,255,255,.05); color:#e5e7eb; font-weight:900;
+      font-size:.8rem;
+    }
+    @media(max-width:900px){
+      .mobile-dock{display:grid}
+      .wrap{padding-bottom:110px}
+    }
+    .section-note{
+      color:#94a3b8;font-size:.82rem;line-height:1.45;
+    }
+
   </style>
 </head>
 
@@ -260,10 +404,10 @@
     <div class="modal">
       <div class="hd">
         <div class="brand">
-          <div class="logo">LV</div>
+          <div class="logo">PV</div>
           <div>
-            <div class="title">LifeVault™</div>
-            <div class="subtitle">Local, private, encrypted vault</div>
+            <div class="title">Privara™</div>
+            <div class="subtitle">Private, encrypted, family-ready vault</div>
           </div>
         </div>
         <span class="pill" id="lockStatusPill">🛡️ Encrypted</span>
@@ -350,10 +494,10 @@
     <div class="wrap">
       <div class="row">
         <div class="brand">
-          <div class="logo">LV</div>
+          <div class="logo">PV</div>
           <div>
-            <div class="title">LifeVault™</div>
-            <div class="subtitle" id="subline">Private vault on this device</div>
+            <div class="title">Privara™</div>
+            <div class="subtitle" id="subline">Private family vault, premium on every screen</div>
           </div>
         </div>
 
@@ -386,7 +530,7 @@
           <div class="item" data-tab="rec" onclick="tab('rec')">🧾 Receipts & Warranties</div>
           <div class="item" data-tab="files" onclick="tab('files')">📎 File Vault</div>
           <div class="item" data-tab="legacy" onclick="tab('legacy')">🕊️ Digital Legacy</div>
-          <div class="item" data-tab="ref" onclick="tab('ref')">📣 Invite Friends</div>
+          <div class="item" data-tab="ref" onclick="tab('ref')">📣 Share Privara</div>
           <div class="item" onclick="lockApp()">🔒 Lock Vault</div>
         </div>
       </div>
@@ -401,6 +545,42 @@
             <span class="tag good" id="secTag">Encrypted</span>
           </div>
           <div class="bd">
+            <div class="brand-block">
+              <div class="brand-grid">
+                <div>
+                  <div class="pill good">Premium privacy • only $1.99/month</div>
+                  <h3 class="hero-title">Privara keeps your family’s most important information protected, organized, and ready when life gets serious.</h3>
+                  <p class="hero-copy">Passwords, emergency details, documents, receipts, file storage, and legacy planning in one premium-looking vault that feels worth far more than $1.99.</p>
+                  <div style="margin-top:14px">
+                    <span class="feature-chip">🔐 Encrypted locally</span>
+                    <span class="feature-chip">📱 Beautiful on phone</span>
+                    <span class="feature-chip">🧠 Password generator</span>
+                    <span class="feature-chip">🗂️ Family-ready dashboard</span>
+                  </div>
+                  <div class="hero-actions">
+                    <button class="btn blue" onclick="openSubscribe()">Start Free Trial</button>
+                    <button class="btn ghost" onclick="openBilling()">Manage Billing</button>
+                    <button class="btn ghost" onclick="openQuickAdd()">Quick Add</button>
+                  </div>
+                </div>
+                <div class="stack">
+                  <div class="glass-box">
+                    <div class="subtitle">Privara Promise</div>
+                    <div style="font-size:1.25rem;font-weight:1100;letter-spacing:-.6px;margin-top:6px">Looks premium. Works fast. Feels safe.</div>
+                    <div class="section-note" style="margin-top:8px">Built to feel like a top-tier vault product, but simple enough for everyday families to use without confusion.</div>
+                  </div>
+                  <div class="glass-box">
+                    <div class="subtitle">Fast wins</div>
+                    <div class="mini-actions">
+                      <button class="btn ghost small" onclick="tab('pw')">Passwords</button>
+                      <button class="btn ghost small" onclick="tab('docs')">Documents</button>
+                      <button class="btn ghost small" onclick="tab('files')">Files</button>
+                      <button class="btn ghost small" onclick="tab('legacy')">Legacy</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="kpi" id="kpi"></div>
             <div class="divider"></div>
             <div class="toolbar">
@@ -457,6 +637,41 @@
               </div>
             </div>
 
+            <div class="pw-lab">
+              <div class="toolbar">
+                <div>
+                  <div class="title" style="font-size:1rem">Password Generator Studio</div>
+                  <div class="section-note">Create stronger passwords instantly, then copy them or push one directly into the password form.</div>
+                </div>
+                <button class="btn ghost small" onclick="renderPwLab()">Refresh</button>
+              </div>
+              <div class="divider"></div>
+              <div class="pw-preview" id="pwLabPreview">Tap Generate</div>
+              <div class="divider"></div>
+              <div class="two">
+                <div class="fg">
+                  <label>Password Length</label>
+                  <div class="range-row">
+                    <input id="pwLen" type="range" min="12" max="40" value="20" oninput="updatePwLenLabel();renderPwLab()">
+                    <strong id="pwLenLabel">20</strong>
+                  </div>
+                </div>
+                <div class="fg">
+                  <label>Actions</label>
+                  <div class="inline-actions">
+                    <button class="btn blue small" onclick="renderPwLab()">Generate</button>
+                    <button class="btn ghost small" onclick="copyPwLab()">Copy</button>
+                    <button class="btn ghost small" onclick="sendPwLabToForm()">Use In Vault Form</button>
+                  </div>
+                </div>
+              </div>
+              <div class="checks">
+                <label><input id="pwUpper" type="checkbox" checked onchange="renderPwLab()"> Uppercase</label>
+                <label><input id="pwLower" type="checkbox" checked onchange="renderPwLab()"> Lowercase</label>
+                <label><input id="pwNums" type="checkbox" checked onchange="renderPwLab()"> Numbers</label>
+                <label><input id="pwSyms" type="checkbox" checked onchange="renderPwLab()"> Symbols</label>
+              </div>
+            </div>
             <div class="list" id="pwList"></div>
             <div class="hint">Tip: use unique passwords. This vault stays encrypted on your device.</div>
           </div>
@@ -521,7 +736,7 @@
           <div class="bd">
             <div class="callout">
               <strong>Purpose:</strong> If something happens to you, your family can recover what matters (IDs, policies, contacts).<br>
-              <strong>Important:</strong> LifeVault can’t “auto-send” anything without a backend. This feature helps you set a clean, simple plan.
+              <strong>Important:</strong> Privara can’t “auto-send” anything without a backend. This feature helps you set a clean, simple plan.
             </div>
 
             <div class="divider"></div>
@@ -569,7 +784,7 @@
 
         <!-- Referral (Stripe-ready wording) -->
 <div class="card" id="t-ref" style="display:none;margin-top:14px">
-  <div class="hd"><h2>Invite Friends</h2><span class="tag amb">Growth</span></div>
+  <div class="hd"><h2>Share Privara</h2><span class="tag amb">Growth</span></div>
   <div class="bd">
     <div class="hint" style="margin-bottom:10px">
       Share your referral link and earn <strong>$1</strong> for every paying member you invite.
@@ -633,11 +848,20 @@
     </div>
   </div>
 
+
+  <div class="mobile-dock">
+    <button onclick="tab('dash')">🏠 Home</button>
+    <button onclick="tab('pw')">🔑 Passwords</button>
+    <button onclick="tab('docs')">📋 Docs</button>
+    <button onclick="tab('files')">📎 Files</button>
+    <button onclick="openQuickAdd()">➕ Add</button>
+  </div>
+
   <div class="toast" id="toast"></div>
 
 <script>
 /* =========================================================
-   LifeVault™ — Single-file Premium Build (Offline-first)
+   Privara™ — Single-file Premium Build (Offline-first)
    Upgrades included:
    1) Biometric Unlock UI (WebAuthn / platform authenticator)
    2) Stripe Checkout + Billing Portal (client calls your /api endpoints)
@@ -650,11 +874,11 @@
    CONFIG (edit these)
 ========================== */
 const CONFIG = {
-  appOrigin: "https://lifevault.pages.dev",
-  gateOrigin: "https://lifevault-gate.gregkeyt7.workers.dev",
+  appOrigin: "https://privara.pages.dev",
+  gateOrigin: "https://privara-gate.gregkeyt7.workers.dev",
 
-  stripeCheckoutSessionUrl: "https://lifevault-gate.gregkeyt7.workers.dev/api/create-checkout-session",
-  stripePortalSessionUrl:   "https://lifevault-gate.gregkeyt7.workers.dev/api/create-portal-session",
+  stripeCheckoutSessionUrl: "https://privara-gate.gregkeyt7.workers.dev/api/create-checkout-session",
+  stripePortalSessionUrl:   "https://privara-gate.gregkeyt7.workers.dev/api/create-portal-session",
 
   // Auto-lock default (minutes)
   autoLockMinutesDefault: 2,
@@ -669,7 +893,7 @@ const CONFIG = {
 
    // Force all access through the gate domain
   (function () {
-    const GATE_HOST = "lifevault-gate.gregkeyt7.workers.dev";
+    const GATE_HOST = "privara-gate.gregkeyt7.workers.dev";
     if (location.host !== GATE_HOST) {
       location.replace("https://" + GATE_HOST + location.pathname + location.search + location.hash);
     }
@@ -679,17 +903,17 @@ const CONFIG = {
    Storage keys
 ========================== */
 const K = {
-  pin: "lv_pin",
-  salt: "lv_salt",
-  mpver: "lv_mpver",
-  blob: "lv_blob",
-  settings: "lv_settings",
-  user: "lv_user",
-  lastBackup: "lv_last_backup",
-  bio: "lv_bio", // biometric enabled flag + credential id
-  referralCode: "lv_referral_code",
-  referralInvites: "lv_referral_invites",
-  referralEarned: "lv_referral_earned"
+  pin: "pv_pin",
+  salt: "pv_salt",
+  mpver: "pv_mpver",
+  blob: "pv_blob",
+  settings: "pv_settings",
+  user: "pv_user",
+  lastBackup: "pv_last_backup",
+  bio: "pv_bio", // biometric enabled flag + credential id
+  referralCode: "pv_referral_code",
+  referralInvites: "pv_referral_invites",
+  referralEarned: "pv_referral_earned"
 };
 
 const S = {
@@ -835,7 +1059,7 @@ async function verifier(pass, salt){
     false,
     ["sign"]
   );
-  const sig = await crypto.subtle.sign("HMAC", hkey, enc.encode("LifeVault::Verifier"));
+  const sig = await crypto.subtle.sign("HMAC", hkey, enc.encode("Privara::Verifier"));
   return b64(new Uint8Array(sig));
 }
 
@@ -1078,8 +1302,8 @@ async function enableBiometric(){
     const cred = await navigator.credentials.create({
       publicKey:{
         challenge,
-        rp:{ name:"LifeVault" },
-        user:{ id:userId, name:"lifevault-user", displayName:"LifeVault User" },
+        rp:{ name:"Privara" },
+        user:{ id:userId, name:"privara-user", displayName:"Privara User" },
         pubKeyCredParams:[{type:"public-key", alg:-7}],
         authenticatorSelection:{
           authenticatorAttachment:"platform",
@@ -1211,7 +1435,7 @@ function closeEmergency(){ $("emScreen").classList.remove("open"); }
 
 function copyEmergency(){
   const e = VAULT?.emergency || {};
-  const txt = `LifeVault Emergency Summary
+  const txt = `Privara Emergency Summary
 Blood: ${e.bt||"-"}
 Allergies: ${e.al||"-"}
 Meds: ${e.med||"-"}
@@ -1322,6 +1546,57 @@ function genPw(){
   const rnd = crypto.getRandomValues(new Uint8Array(len));
   for(let i=0;i<len;i++) out += chars[rnd[i] % chars.length];
   $("pw_pass").value = out;
+}
+
+
+function advancedPwValue(){
+  const len = Number($("pwLen")?.value || 20);
+  const useUpper = !!$("pwUpper")?.checked;
+  const useLower = !!$("pwLower")?.checked;
+  const useNums  = !!$("pwNums")?.checked;
+  const useSyms  = !!$("pwSyms")?.checked;
+
+  let chars = "";
+  if(useUpper) chars += "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  if(useLower) chars += "abcdefghijkmnopqrstuvwxyz";
+  if(useNums)  chars += "23456789";
+  if(useSyms)  chars += "!@#$%^&*()-_=+[]{}:,.?";
+  if(!chars) chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+
+  const rnd = crypto.getRandomValues(new Uint8Array(len));
+  let out = "";
+  for(let i=0;i<len;i++) out += chars[rnd[i] % chars.length];
+  return out;
+}
+
+function updatePwLenLabel(){
+  if($("pwLenLabel") && $("pwLen")) $("pwLenLabel").textContent = $("pwLen").value;
+}
+
+function renderPwLab(){
+  if(!$("pwLabPreview")) return;
+  updatePwLenLabel();
+  $("pwLabPreview").textContent = advancedPwValue();
+}
+
+function copyPwLab(){
+  const v = $("pwLabPreview")?.textContent?.trim();
+  if(!v) return toast("Generate a password first");
+  navigator.clipboard.writeText(v).then(()=>toast("Password copied ✓")).catch(()=>toast("Copy failed"));
+}
+
+function sendPwLabToForm(){
+  const v = $("pwLabPreview")?.textContent?.trim();
+  if(!v) return toast("Generate a password first");
+  if(!$("pw_pass")){
+    openPw();
+    setTimeout(()=>{
+      if($("pw_pass")) $("pw_pass").value = v;
+    },120);
+    return;
+  }
+  $("pw_pass").value = v;
+  toast("Inserted into password form ✓");
 }
 
 async function savePw(){
@@ -1678,7 +1953,7 @@ async function exportBackup(){
   const b = new Blob([JSON.stringify(pkg,null,2)], {type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(b);
-  a.download = "lifevault-backup.json";
+  a.download = "privara-backup.json";
   a.click();
 
   S.s(K.lastBackup, new Date().toISOString());
@@ -2017,7 +2292,7 @@ async function attachToTemp(kind, useCamera){
    IndexedDB Encrypted File Vault (Upgrade #3)
 ========================== */
 const DB = {
-  name: "lifevault_db",
+  name: "privara_db",
   version: 1,
   store: "files"
 };
@@ -2343,7 +2618,7 @@ function openLegacyChecklist(){
     "Print this and store it with your backup plan",
     `
       <div class="callout">
-        <strong>LifeVault Legacy Plan</strong><br>
+        <strong>Privara Legacy Plan</strong><br>
         Trustee: <span class="mono">${escapeHtml(l.t1||"—")}</span><br>
         Backup Trustee: <span class="mono">${escapeHtml(l.t2||"—")}</span>
       </div>
@@ -2351,7 +2626,7 @@ function openLegacyChecklist(){
       <div class="divider"></div>
 
       <div style="display:grid;gap:8px">
-        <div class="tag">✅ Export LifeVault backup file</div>
+        <div class="tag">✅ Export Privara backup file</div>
         <div class="tag">✅ Store backup file at: <span class="mono">${escapeHtml(l.where||"—")}</span></div>
         <div class="tag">✅ Store sealed Master Password at: <span class="mono">${escapeHtml(l.passwhere||"—")}</span></div>
         <div class="tag">✅ Keep emergency contacts updated</div>
@@ -2372,8 +2647,8 @@ function openLegacyChecklist(){
 function printLegacy(){
   const l = VAULT.legacy || {};
   const html = `
-    <html><head><title>LifeVault Legacy Plan</title></head><body style="font-family:Arial;padding:20px">
-      <h2>LifeVault™ — Digital Legacy Plan</h2>
+    <html><head><title>Privara Legacy Plan</title></head><body style="font-family:Arial;padding:20px">
+      <h2>Privara™ — Digital Legacy Plan</h2>
       <p><b>Primary Trustee:</b> ${escapeHtml(l.t1||"—")}</p>
       <p><b>Backup Trustee:</b> ${escapeHtml(l.t2||"—")}</p>
       <p><b>Backup Location:</b> ${escapeHtml(l.where||"—")}</p>
