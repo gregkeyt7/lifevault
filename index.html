@@ -640,9 +640,11 @@
    CONFIG (edit these)
 ========================== */
 const CONFIG = {
-  // Stripe endpoints (your backend must implement these)
-  stripeCheckoutSessionUrl: "/api/create-checkout-session",
-  stripePortalSessionUrl: "/api/create-portal-session",
+  appOrigin: "https://lifevault.pages.dev",
+  gateOrigin: "https://lifevault-gate.gregkeyt7.workers.dev",
+
+  stripeCheckoutSessionUrl: "https://lifevault-gate.gregkeyt7.workers.dev/api/create-checkout-session",
+  stripePortalSessionUrl:   "https://lifevault-gate.gregkeyt7.workers.dev/api/create-portal-session",
 
   // Auto-lock default (minutes)
   autoLockMinutesDefault: 2,
