@@ -976,6 +976,7 @@ async function openSubscribe(){
     const ref = S.g(K.user) || null;
     const res = await fetch(CONFIG.stripeCheckoutSessionUrl, {
       method: "POST",
+      credentials: "include",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ ref })
     });
@@ -990,7 +991,7 @@ async function openSubscribe(){
 
 async function openBilling(){
   try{
-    const res = await fetch(CONFIG.stripePortalSessionUrl, { method:"POST" });
+    const res = await fetch(CONFIG.stripePortalSessionUrl, { method:"POST", credentials:"include" });
     if(!res.ok) throw new Error("Portal session failed");
     const data = await res.json();
     if(!data?.url) throw new Error("No URL returned");
