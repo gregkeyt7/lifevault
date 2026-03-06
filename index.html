@@ -1722,12 +1722,13 @@ async function doImport(){
 function ensureUser(){
   let u = S.g(K.user);
   if(!u){
-    u = "u" + Math.floor(Math.random()*1e9).toString(36);
+    u = Math.random().toString(36).substring(2,8);
     S.s(K.user, u);
   }
+
   $("refCode").value = u;
 
-  const url = new URL(window.location.href);
+  const url = new URL(CONFIG.appOrigin);
   url.searchParams.set("ref", u);
   $("refLink").value = url.toString();
 }
