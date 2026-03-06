@@ -12,7 +12,10 @@
   style-src 'self' 'unsafe-inline';
   img-src 'self' data:;
   ">
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="manifest.json?v=privara-2" />
+  <meta name="application-name" content="Privara" />
+  <meta name="apple-mobile-web-app-title" content="Privara" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Privara™</title>
 
   <style>
@@ -2736,7 +2739,13 @@ function resetAll(){
 /* Entry */
 (function(){
   if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+    navigator.serviceWorker.getRegistrations().then((regs)=>{
+      regs.forEach((reg)=>{
+        const script = reg.active?.scriptURL || reg.waiting?.scriptURL || reg.installing?.scriptURL || "";
+        if(script && !script.includes("sw.js?v=privara-2")) reg.unregister().catch(()=>{});
+      });
+    }).catch(()=>{});
+    navigator.serviceWorker.register("./sw.js?v=privara-2").catch(()=>{});
   }
 
   boot();
