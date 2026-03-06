@@ -12,10 +12,7 @@
   style-src 'self' 'unsafe-inline';
   img-src 'self' data:;
   ">
-  <link rel="manifest" href="manifest.json?v=privara-2" />
-  <meta name="application-name" content="Privara" />
-  <meta name="apple-mobile-web-app-title" content="Privara" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
   <title>Privara™</title>
 
   <style>
@@ -254,149 +251,9 @@
       color:#fee2e2;
     }
   
-    /* ===== Privara Premium upgrade ===== */
-    :root{
-      --ink:#f8fafc;
-      --glass:rgba(255,255,255,.05);
-      --brandA:#2563eb;
-      --brandB:#7c3aed;
-      --brandC:#06b6d4;
-    }
-    body{
-      background:
-        radial-gradient(1100px 700px at 10% -10%, rgba(37,99,235,.42), transparent 55%),
-        radial-gradient(1000px 680px at 100% 10%, rgba(124,58,237,.32), transparent 55%),
-        radial-gradient(900px 620px at 50% 100%, rgba(6,182,212,.16), transparent 60%),
-        linear-gradient(180deg,#060b16 0%,#0b1220 35%,#0b1220 100%);
-    }
-    .wrap{max-width:1180px}
-    .topbar{
-      background:rgba(6,11,22,.72);
-      box-shadow:0 10px 40px rgba(0,0,0,.18);
-    }
-    .logo{
-      width:42px;height:42px;border-radius:14px;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 32%),
-        linear-gradient(135deg,var(--brandA),var(--brandB) 55%,var(--brandC));
-      box-shadow:0 12px 30px rgba(37,99,235,.28);
-    }
-    .brand-block{
-      position:relative;
-      overflow:hidden;
-      border-radius:24px;
-      border:1px solid rgba(255,255,255,.11);
-      background:
-        radial-gradient(500px 220px at 0% 0%, rgba(37,99,235,.24), transparent 60%),
-        radial-gradient(460px 220px at 100% 0%, rgba(124,58,237,.24), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      padding:20px;
-      margin-bottom:14px;
-      box-shadow:0 24px 80px rgba(0,0,0,.28);
-    }
-    .brand-block::after{
-      content:"";
-      position:absolute; inset:auto -50px -50px auto;
-      width:220px; height:220px; border-radius:50%;
-      background:radial-gradient(circle, rgba(255,255,255,.10), transparent 65%);
-      pointer-events:none;
-    }
-    .brand-grid{
-      display:grid;
-      grid-template-columns:1.35fr .95fr;
-      gap:16px;
-      align-items:stretch;
-    }
-    @media(max-width:900px){ .brand-grid{grid-template-columns:1fr} }
-    .hero-title{
-      margin:0;
-      font-size:clamp(1.65rem,4vw,2.65rem);
-      line-height:1.02;
-      letter-spacing:-1.2px;
-      font-weight:1100;
-      color:var(--ink);
-    }
-    .hero-copy{
-      margin:10px 0 0;
-      max-width:62ch;
-      color:#cbd5e1;
-      line-height:1.5;
-      font-size:.98rem;
-    }
-    .hero-actions,.mini-actions{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;
-    }
-    .glass-box{
-      border:1px solid rgba(255,255,255,.11);
-      background:rgba(255,255,255,.04);
-      border-radius:18px;
-      padding:14px;
-      backdrop-filter:blur(10px);
-    }
-    .stack{display:grid; gap:12px}
-    .feature-chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(255,255,255,.04);
-      font-size:.8rem; font-weight:1000; color:#dbeafe;
-      margin:0 8px 8px 0;
-    }
-    .pw-lab{
-      border:1px solid rgba(255,255,255,.1);
-      background:
-        radial-gradient(420px 160px at 0% 0%, rgba(37,99,235,.12), transparent 60%),
-        rgba(255,255,255,.03);
-      border-radius:20px;
-      padding:16px;
-      margin-bottom:14px;
-    }
-    .pw-preview{
-      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-      font-size:1rem;
-      letter-spacing:.3px;
-      padding:14px;
-      min-height:52px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(3,7,18,.55);
-      overflow-wrap:anywhere;
-    }
-    .range-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
-    .checks{display:flex;gap:12px;flex-wrap:wrap}
-    .checks label{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:999px;padding:8px 12px;color:#dbeafe;
-      background:rgba(255,255,255,.03);margin-bottom:0;
-    }
-    .checks input{width:auto}
-    .mobile-dock{
-      position:fixed; left:50%; transform:translateX(-50%);
-      bottom:14px; z-index:80;
-      width:min(94%,680px);
-      display:none;
-      grid-template-columns:repeat(5,1fr);
-      gap:8px; padding:10px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(6,11,22,.84);
-      backdrop-filter:blur(16px);
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
-    }
-    .mobile-dock button{
-      border:none; border-radius:16px; padding:10px 8px;
-      background:rgba(255,255,255,.05); color:#e5e7eb; font-weight:900;
-      font-size:.8rem;
-    }
-    @media(max-width:900px){
-      .mobile-dock{display:grid}
-      .wrap{padding-bottom:110px}
-    }
-    .section-note{
-      color:#94a3b8;font-size:.82rem;line-height:1.45;
-    }
-
+    .mobile-dock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:80;width:min(94%,680px);display:none;grid-template-columns:repeat(5,1fr);gap:8px;padding:10px;border-radius:22px;border:1px solid rgba(255,255,255,.12);background:rgba(6,11,22,.84);backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+    .mobile-dock button{border:none;border-radius:16px;padding:10px 8px;background:rgba(255,255,255,.05);color:#e5e7eb;font-weight:900;font-size:.8rem}
+    @media(max-width:900px){ .mobile-dock{display:grid} .wrap{padding-bottom:110px} }
   </style>
 </head>
 
@@ -410,7 +267,7 @@
           <div class="logo">PV</div>
           <div>
             <div class="title">Privara™</div>
-            <div class="subtitle">Private, encrypted, family-ready vault</div>
+            <div class="subtitle">Local, private, encrypted vault</div>
           </div>
         </div>
         <span class="pill" id="lockStatusPill">🛡️ Encrypted</span>
@@ -500,7 +357,7 @@
           <div class="logo">PV</div>
           <div>
             <div class="title">Privara™</div>
-            <div class="subtitle" id="subline">Private family vault, premium on every screen</div>
+            <div class="subtitle" id="subline">Private family protection vault</div>
           </div>
         </div>
 
@@ -527,6 +384,9 @@
         </div>
         <div class="bd">
           <div class="item active" data-tab="dash" onclick="tab('dash')">🏠 Dashboard</div>
+          <div class="item" data-tab="family" onclick="tab('family')">👨‍👩‍👧‍👦 Family</div>
+          <div class="item" data-tab="calendar" onclick="tab('calendar')">🗓️ Calendar</div>
+          <div class="item" data-tab="memories" onclick="tab('memories')">📸 Memories</div>
           <div class="item" data-tab="em" onclick="tab('em')">🏥 Emergency Info</div>
           <div class="item" data-tab="pw" onclick="tab('pw')">🔑 Passwords</div>
           <div class="item" data-tab="docs" onclick="tab('docs')">📋 Documents</div>
@@ -548,42 +408,6 @@
             <span class="tag good" id="secTag">Encrypted</span>
           </div>
           <div class="bd">
-            <div class="brand-block">
-              <div class="brand-grid">
-                <div>
-                  <div class="pill good">Premium privacy • only $1.99/month</div>
-                  <h3 class="hero-title">Privara keeps your family’s most important information protected, organized, and ready when life gets serious.</h3>
-                  <p class="hero-copy">Passwords, emergency details, documents, receipts, file storage, and legacy planning in one premium-looking vault that feels worth far more than $1.99.</p>
-                  <div style="margin-top:14px">
-                    <span class="feature-chip">🔐 Encrypted locally</span>
-                    <span class="feature-chip">📱 Beautiful on phone</span>
-                    <span class="feature-chip">🧠 Password generator</span>
-                    <span class="feature-chip">🗂️ Family-ready dashboard</span>
-                  </div>
-                  <div class="hero-actions">
-                    <button class="btn blue" onclick="openSubscribe()">Start Free Trial</button>
-                    <button class="btn ghost" onclick="openBilling()">Manage Billing</button>
-                    <button class="btn ghost" onclick="openQuickAdd()">Quick Add</button>
-                  </div>
-                </div>
-                <div class="stack">
-                  <div class="glass-box">
-                    <div class="subtitle">Privara Promise</div>
-                    <div style="font-size:1.25rem;font-weight:1100;letter-spacing:-.6px;margin-top:6px">Looks premium. Works fast. Feels safe.</div>
-                    <div class="section-note" style="margin-top:8px">Built to feel like a top-tier vault product, but simple enough for everyday families to use without confusion.</div>
-                  </div>
-                  <div class="glass-box">
-                    <div class="subtitle">Fast wins</div>
-                    <div class="mini-actions">
-                      <button class="btn ghost small" onclick="tab('pw')">Passwords</button>
-                      <button class="btn ghost small" onclick="tab('docs')">Documents</button>
-                      <button class="btn ghost small" onclick="tab('files')">Files</button>
-                      <button class="btn ghost small" onclick="tab('legacy')">Legacy</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div class="kpi" id="kpi"></div>
             <div class="divider"></div>
             <div class="toolbar">
@@ -593,6 +417,92 @@
                 <button class="btn ghost small" onclick="openQuickAdd()">Quick Add</button>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Family -->
+        <div class="card" id="t-family" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Family</h2>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="openFamilyTree()">Family Tree</button>
+              <button class="btn blue" onclick="openFamilyMember()">+ Add Member</button>
+            </div>
+          </div>
+          <div class="bd">
+            <div class="two">
+              <div class="fg"><label>Search Family</label><input id="famq" placeholder="Rachel, Taylor, Dad..." oninput="renderFamily()" /></div>
+              <div class="fg"><label>Role Filter</label>
+                <select id="famRole" onchange="renderFamily()">
+                  <option value="all">All</option>
+                  <option value="spouse">Spouse</option>
+                  <option value="child">Child</option>
+                  <option value="parent">Parent</option>
+                  <option value="sibling">Sibling</option>
+                  <option value="grandparent">Grandparent</option>
+                  <option value="relative">Relative</option>
+                  <option value="friend">Trusted Friend</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="kpi" id="familyKpi" style="margin-bottom:12px"></div>
+            <div class="list" id="familyList"></div>
+          </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="card" id="t-calendar" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Calendar</h2>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="seedBirthdayEvents()">Sync Birthdays</button>
+              <button class="btn blue" onclick="openEvent()">+ Add Event</button>
+            </div>
+          </div>
+          <div class="bd">
+            <div class="two">
+              <div class="fg"><label>Search Events</label><input id="evq" placeholder="birthday, anniversary, doctor..." oninput="renderEvents()" /></div>
+              <div class="fg"><label>Type</label>
+                <select id="evtType" onchange="renderEvents()">
+                  <option value="all">All</option>
+                  <option value="birthday">Birthday</option>
+                  <option value="anniversary">Anniversary</option>
+                  <option value="medical">Medical</option>
+                  <option value="school">School</option>
+                  <option value="legacy">Legacy</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="list" id="eventList"></div>
+          </div>
+        </div>
+
+        <!-- Memories -->
+        <div class="card" id="t-memories" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Memories</h2>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="openTimeCapsule()">Time Capsule</button>
+              <button class="btn blue" onclick="openMemory()">+ Add Memory</button>
+            </div>
+          </div>
+          <div class="bd">
+            <div class="two">
+              <div class="fg"><label>Search Memories</label><input id="memq" placeholder="vacation, birthday, prayer..." oninput="renderMemories()" /></div>
+              <div class="fg"><label>Type</label>
+                <select id="memType" onchange="renderMemories()">
+                  <option value="all">All</option>
+                  <option value="journal">Journal</option>
+                  <option value="photo">Photo</option>
+                  <option value="video">Video</option>
+                  <option value="voice">Voice</option>
+                  <option value="milestone">Milestone</option>
+                </select>
+              </div>
+            </div>
+            <div class="list" id="memoryList"></div>
           </div>
         </div>
 
@@ -640,41 +550,6 @@
               </div>
             </div>
 
-            <div class="pw-lab">
-              <div class="toolbar">
-                <div>
-                  <div class="title" style="font-size:1rem">Password Generator Studio</div>
-                  <div class="section-note">Create stronger passwords instantly, then copy them or push one directly into the password form.</div>
-                </div>
-                <button class="btn ghost small" onclick="renderPwLab()">Refresh</button>
-              </div>
-              <div class="divider"></div>
-              <div class="pw-preview" id="pwLabPreview">Tap Generate</div>
-              <div class="divider"></div>
-              <div class="two">
-                <div class="fg">
-                  <label>Password Length</label>
-                  <div class="range-row">
-                    <input id="pwLen" type="range" min="12" max="40" value="20" oninput="updatePwLenLabel();renderPwLab()">
-                    <strong id="pwLenLabel">20</strong>
-                  </div>
-                </div>
-                <div class="fg">
-                  <label>Actions</label>
-                  <div class="inline-actions">
-                    <button class="btn blue small" onclick="renderPwLab()">Generate</button>
-                    <button class="btn ghost small" onclick="copyPwLab()">Copy</button>
-                    <button class="btn ghost small" onclick="sendPwLabToForm()">Use In Vault Form</button>
-                  </div>
-                </div>
-              </div>
-              <div class="checks">
-                <label><input id="pwUpper" type="checkbox" checked onchange="renderPwLab()"> Uppercase</label>
-                <label><input id="pwLower" type="checkbox" checked onchange="renderPwLab()"> Lowercase</label>
-                <label><input id="pwNums" type="checkbox" checked onchange="renderPwLab()"> Numbers</label>
-                <label><input id="pwSyms" type="checkbox" checked onchange="renderPwLab()"> Symbols</label>
-              </div>
-            </div>
             <div class="list" id="pwList"></div>
             <div class="hint">Tip: use unique passwords. This vault stays encrypted on your device.</div>
           </div>
@@ -851,12 +726,11 @@
     </div>
   </div>
 
-
   <div class="mobile-dock">
     <button onclick="tab('dash')">🏠 Home</button>
-    <button onclick="tab('pw')">🔑 Passwords</button>
-    <button onclick="tab('docs')">📋 Docs</button>
-    <button onclick="tab('files')">📎 Files</button>
+    <button onclick="tab('family')">👨‍👩‍👧 Family</button>
+    <button onclick="tab('calendar')">🗓️ Dates</button>
+    <button onclick="tab('memories')">📸 Memories</button>
     <button onclick="openQuickAdd()">➕ Add</button>
   </div>
 
@@ -906,17 +780,17 @@ const CONFIG = {
    Storage keys
 ========================== */
 const K = {
-  pin: "pv_pin",
-  salt: "pv_salt",
-  mpver: "pv_mpver",
-  blob: "pv_blob",
-  settings: "pv_settings",
-  user: "pv_user",
-  lastBackup: "pv_last_backup",
-  bio: "pv_bio", // biometric enabled flag + credential id
-  referralCode: "pv_referral_code",
-  referralInvites: "pv_referral_invites",
-  referralEarned: "pv_referral_earned"
+  pin: "lv_pin",
+  salt: "lv_salt",
+  mpver: "lv_mpver",
+  blob: "lv_blob",
+  settings: "lv_settings",
+  user: "lv_user",
+  lastBackup: "lv_last_backup",
+  bio: "lv_bio", // biometric enabled flag + credential id
+  referralCode: "lv_referral_code",
+  referralInvites: "lv_referral_invites",
+  referralEarned: "lv_referral_earned"
 };
 
 const S = {
@@ -956,7 +830,7 @@ function tab(name){
   document.querySelectorAll(".nav .item").forEach(x=>{
     x.classList.toggle("active", x.dataset.tab === name);
   });
-  ["dash","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
+  ["dash","family","calendar","memories","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
     const el = $("t-"+t);
     if(el) el.style.display = (t === name) ? "block" : "none";
   });
@@ -979,7 +853,6 @@ async function openSubscribe(){
     const ref = S.g(K.user) || null;
     const res = await fetch(CONFIG.stripeCheckoutSessionUrl, {
       method: "POST",
-      credentials: "include",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ ref })
     });
@@ -994,7 +867,7 @@ async function openSubscribe(){
 
 async function openBilling(){
   try{
-    const res = await fetch(CONFIG.stripePortalSessionUrl, { method:"POST", credentials:"include" });
+    const res = await fetch(CONFIG.stripePortalSessionUrl, { method:"POST" });
     if(!res.ok) throw new Error("Portal session failed");
     const data = await res.json();
     if(!data?.url) throw new Error("No URL returned");
@@ -1096,10 +969,13 @@ async function persist(){
 function defaultVault(){
   return {
     emergency:{bt:"",al:"",med:"",cond:"",dr:"",ins:"",ec:""},
+    family:[],
+    events:[],
+    memories:[],
     passwords:[],
-    documents:[],  // can attach fileIds
-    receipts:[],   // can attach fileIds
-    files:[],      // file metadata list (encrypted blobs stored in IndexedDB)
+    documents:[],
+    receipts:[],
+    files:[],
     legacy:{t1:"",t2:"",notes:"",where:"",passwhere:""},
     meta:{
       created:new Date().toISOString(),
@@ -1265,6 +1141,9 @@ async function unlock(){
     VAULT = blob ? await decrypt(blob) : defaultVault();
 
     // ensure any missing new fields
+    VAULT.family = VAULT.family || [];
+    VAULT.events = VAULT.events || [];
+    VAULT.memories = VAULT.memories || [];
     VAULT.files = VAULT.files || [];
     VAULT.legacy = VAULT.legacy || {t1:"",t2:"",notes:"",where:"",passwhere:""};
     VAULT.meta = VAULT.meta || {created:new Date().toISOString(), updated:new Date().toISOString()};
@@ -1550,57 +1429,6 @@ function genPw(){
   const rnd = crypto.getRandomValues(new Uint8Array(len));
   for(let i=0;i<len;i++) out += chars[rnd[i] % chars.length];
   $("pw_pass").value = out;
-}
-
-
-function advancedPwValue(){
-  const len = Number($("pwLen")?.value || 20);
-  const useUpper = !!$("pwUpper")?.checked;
-  const useLower = !!$("pwLower")?.checked;
-  const useNums  = !!$("pwNums")?.checked;
-  const useSyms  = !!$("pwSyms")?.checked;
-
-  let chars = "";
-  if(useUpper) chars += "ABCDEFGHJKLMNPQRSTUVWXYZ";
-  if(useLower) chars += "abcdefghijkmnopqrstuvwxyz";
-  if(useNums)  chars += "23456789";
-  if(useSyms)  chars += "!@#$%^&*()-_=+[]{}:,.?";
-  if(!chars) chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-
-  const rnd = crypto.getRandomValues(new Uint8Array(len));
-  let out = "";
-  for(let i=0;i<len;i++) out += chars[rnd[i] % chars.length];
-  return out;
-}
-
-function updatePwLenLabel(){
-  if($("pwLenLabel") && $("pwLen")) $("pwLenLabel").textContent = $("pwLen").value;
-}
-
-function renderPwLab(){
-  if(!$("pwLabPreview")) return;
-  updatePwLenLabel();
-  $("pwLabPreview").textContent = advancedPwValue();
-}
-
-function copyPwLab(){
-  const v = $("pwLabPreview")?.textContent?.trim();
-  if(!v) return toast("Generate a password first");
-  navigator.clipboard.writeText(v).then(()=>toast("Password copied ✓")).catch(()=>toast("Copy failed"));
-}
-
-function sendPwLabToForm(){
-  const v = $("pwLabPreview")?.textContent?.trim();
-  if(!v) return toast("Generate a password first");
-  if(!$("pw_pass")){
-    openPw();
-    setTimeout(()=>{
-      if($("pw_pass")) $("pw_pass").value = v;
-    },120);
-    return;
-  }
-  $("pw_pass").value = v;
-  toast("Inserted into password form ✓");
 }
 
 async function savePw(){
@@ -2125,12 +1953,30 @@ function calcHealth(){
   return {score, tier, weak, dups};
 }
 
-function renderDash(){
-  const p = (VAULT.passwords||[]).length;
-  const d = (VAULT.documents||[]).length;
-  const r = (VAULT.receipts||[]).length;
-  const f = (VAULT.files||[]).length;
+function nextBirthday(member){
+  if(!member?.birthday) return null;
+  const d = new Date(member.birthday + "T00:00:00");
+  if(Number.isNaN(d.getTime())) return null;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const next = new Date(now.getFullYear(), d.getMonth(), d.getDate());
+  if(next < today) next.setFullYear(now.getFullYear()+1);
+  const days = Math.ceil((next - today) / 86400000);
+  return {date:next, days};
+}
 
+function upcomingEvents(limit=5){
+  const list = [];
+  (VAULT.family||[]).forEach(m=>{ const nb = nextBirthday(m); if(nb) list.push({title:`${m.name}'s birthday`, days:nb.days}); });
+  (VAULT.events||[]).forEach(ev=>{ const days = daysUntil(ev.date); if(days !== null && days >= 0) list.push({title:ev.title||'Event', days}); });
+  return list.sort((a,b)=>a.days-b.days).slice(0, limit);
+}
+
+function renderDash(){
+  const fam = (VAULT.family||[]).length;
+  const events = (VAULT.events||[]).length;
+  const memories = (VAULT.memories||[]).length;
+  const p = (VAULT.passwords||[]).length;
   const h = calcHealth();
   $("healthPill").textContent = `✨ Health: ${h.score}/100 (${h.tier})`;
   $("healthPill").classList.remove("good","warn","bad");
@@ -2138,40 +1984,24 @@ function renderDash(){
   else if(h.score >= 60) $("healthPill").classList.add("warn");
   else $("healthPill").classList.add("bad");
 
-  const lb = S.g(K.lastBackup);
-  const lbTxt = lb ? new Date(lb).toLocaleDateString() : "Never";
-
   $("kpi").innerHTML = `
+    <div class="box"><div class="n">${fam}</div><div class="l">Family Members</div><div class="m">Profiles + birthdays</div></div>
+    <div class="box"><div class="n">${events}</div><div class="l">Calendar Items</div><div class="m">Important dates tracked</div></div>
+    <div class="box"><div class="n">${memories}</div><div class="l">Memories</div><div class="m">Journal, photo, video, voice</div></div>
     <div class="box"><div class="n">${p}</div><div class="l">Passwords</div><div class="m">${h.weak} weak • ${h.dups} dup</div></div>
-    <div class="box"><div class="n">${d}</div><div class="l">Documents</div><div class="m">Expirations tracked</div></div>
-    <div class="box"><div class="n">${r}</div><div class="l">Receipts</div><div class="m">Warranty reminders</div></div>
-    <div class="box"><div class="n">${f}</div><div class="l">Files</div><div class="m">Encrypted in IDB</div></div>
   `;
 
-  const soon = [];
-  (VAULT.documents||[]).forEach(x=>{
-    if(x.exp){
-      const days = daysUntil(x.exp);
-      if(days !== null && days <= 30) soon.push(`Document: ${x.name} (${days}d)`);
-    }
-  });
-  (VAULT.receipts||[]).forEach(x=>{
-    if(x.wexp){
-      const days = daysUntil(x.wexp);
-      if(days !== null && days <= 30) soon.push(`Warranty: ${x.prod} (${days}d)`);
-    }
-  });
-
-  let msg = "No urgent expirations. Add expiry dates to get warnings here.";
-  if(soon.length){
-    msg = "Upcoming: " + soon.slice(0,4).join(" • ");
-  }
-
-  // additional “premium” alerts
+  const soon = upcomingEvents(5);
+  let msg = soon.length ? soon.map(x=>`${x.title} (${x.days}d)`).join(" • ") : "No upcoming birthdays or events yet.";
   if(!S.g(K.lastBackup)) msg += " • Tip: Export a Backup";
   if(h.weak > 0) msg += ` • Fix ${h.weak} weak password(s)`;
-
   $("alerts").textContent = msg;
+
+  const parts = [];
+  if(fam) parts.push(`${fam} family member${fam===1?'':'s'}`);
+  if(events) parts.push(`${events} calendar item${events===1?'':'s'}`);
+  if(memories) parts.push(`${memories} memorie${memories===1?'y':'s'}`);
+  $("subline").textContent = parts.length ? `Family protection with ${parts.join(" • ")}` : "Private family protection vault";
 }
 
 function openVaultHealth(){
@@ -2221,14 +2051,18 @@ function openVaultHealth(){
 function openQuickAdd(){
   openModal(
     "Quick Add",
-    "Add a vault item fast",
+    "Add something meaningful fast",
     `
       <div class="two">
-        <button class="btn blue" onclick="closeModal();tab('pw');openPw()">🔑 Add Password</button>
-        <button class="btn blue" onclick="closeModal();tab('docs');openDoc()">📋 Add Document</button>
+        <button class="btn blue" onclick="closeModal();tab('family');openFamilyMember()">👨‍👩‍👧‍👦 Add Family Member</button>
+        <button class="btn blue" onclick="closeModal();tab('calendar');openEvent()">🗓️ Add Calendar Event</button>
       </div>
       <div class="two" style="margin-top:10px">
-        <button class="btn blue" onclick="closeModal();tab('rec');openRec()">🧾 Add Receipt</button>
+        <button class="btn blue" onclick="closeModal();tab('memories');openMemory()">📸 Add Memory</button>
+        <button class="btn blue" onclick="closeModal();tab('pw');openPw()">🔑 Add Password</button>
+      </div>
+      <div class="two" style="margin-top:10px">
+        <button class="btn blue" onclick="closeModal();tab('docs');openDoc()">📋 Add Document</button>
         <button class="btn blue" onclick="closeModal();tab('files');openFileAdd()">📎 Add File</button>
       </div>
     `,
@@ -2672,6 +2506,34 @@ function printLegacy(){
 }
 
 /* ==========================
+   Family + Calendar + Memories
+========================== */
+function familyName(id){ const m = (VAULT.family||[]).find(x=>x.id===id); return m ? m.name : "—"; }
+function familyRoleLabel(v){ const map = {spouse:'Spouse',child:'Child',parent:'Parent',sibling:'Sibling',grandparent:'Grandparent',relative:'Relative',friend:'Trusted Friend',other:'Other'}; return map[v] || (v || 'Other'); }
+function familyOptions(selected){ return (VAULT.family||[]).map(m=>`<option value="${m.id}" ${selected===m.id?'selected':''}>${escapeHtml(m.name)}</option>`).join(''); }
+function openFamilyMember(id){ const m = (VAULT.family||[]).find(x=>x.id===id) || {id:'',name:'',role:'child',birthday:'',photoFileId:'',parent1:'',parent2:'',spouse:'',notes:''}; openModal(id ? 'Edit Family Member' : 'Add Family Member', 'Build your family hub with birthdays, relationships, and notes', `
+      <input type="hidden" id="fm_id" value="${escapeHtml(m.id||'')}">
+      <div class="two"><div class="fg"><label>Full Name *</label><input id="fm_name" value="${escapeHtml(m.name||'')}" placeholder="Rachel Keyt"></div><div class="fg"><label>Relationship *</label><select id="fm_role"><option value="spouse" ${m.role==='spouse'?'selected':''}>Spouse</option><option value="child" ${m.role==='child'?'selected':''}>Child</option><option value="parent" ${m.role==='parent'?'selected':''}>Parent</option><option value="sibling" ${m.role==='sibling'?'selected':''}>Sibling</option><option value="grandparent" ${m.role==='grandparent'?'selected':''}>Grandparent</option><option value="relative" ${m.role==='relative'?'selected':''}>Relative</option><option value="friend" ${m.role==='friend'?'selected':''}>Trusted Friend</option><option value="other" ${m.role==='other'?'selected':''}>Other</option></select></div></div>
+      <div class="two"><div class="fg"><label>Birthday</label><input id="fm_birthday" type="date" value="${escapeHtml(m.birthday||'')}"></div><div class="fg"><label>Photo</label><div class="inline-actions"><button class="btn ghost small" onclick="attachFamilyPhoto()">Upload Photo</button><span class="tag" id="fm_photo_tag">${m.photoFileId ? 'Photo attached' : 'No photo yet'}</span></div><input type="hidden" id="fm_photo" value="${escapeHtml(m.photoFileId||'')}"></div></div>
+      <div class="two"><div class="fg"><label>Parent / Guardian 1</label><select id="fm_parent1"><option value="">None</option>${familyOptions(m.parent1)}</select></div><div class="fg"><label>Parent / Guardian 2</label><select id="fm_parent2"><option value="">None</option>${familyOptions(m.parent2)}</select></div></div>
+      <div class="fg"><label>Spouse / Partner</label><select id="fm_spouse"><option value="">None</option>${familyOptions(m.spouse)}</select></div>
+      <div class="fg"><label>Notes</label><textarea id="fm_notes" placeholder="Describe this person and anything important to remember...">${escapeHtml(m.notes||'')}</textarea></div>`,
+      `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('family','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveFamilyMember()">Save</button>`); }
+async function attachFamilyPhoto(){ const fid = await addEncryptedFileFlow(false); if(!fid) return; $("fm_photo").value = fid; $("fm_photo_tag").textContent = 'Photo attached'; }
+async function saveFamilyMember(){ const id = $("fm_id").value || crypto.randomUUID(); const name = $("fm_name").value.trim(); if(!name){ toast('Name is required'); return; } const obj = {id,name,role:$("fm_role").value,birthday:$("fm_birthday").value,photoFileId:$("fm_photo").value,parent1:$("fm_parent1").value,parent2:$("fm_parent2").value,spouse:$("fm_spouse").value,notes:$("fm_notes").value.trim()}; const list = VAULT.family || []; const i = list.findIndex(x=>x.id===id); if(i>-1) list[i]=obj; else list.push(obj); VAULT.family = list; markUpdated(); await persist(); closeModal(); renderFamily(); renderDash(); toast('Family member saved ✓'); }
+async function familyAvatar(fid){ if(!fid) return ''; try{ const meta = (VAULT.files||[]).find(x=>x.id===fid); const rec = await dbGet(fid); if(!meta || !rec) return ''; const bytes = await decryptBytes(rec.iv, rec.ct); const blob = new Blob([bytes], {type: meta.type || 'image/jpeg'}); return await new Promise((resolve)=>{ const fr = new FileReader(); fr.onload = ()=>resolve(fr.result || ''); fr.readAsDataURL(blob); }); }catch{ return ''; } }
+async function renderFamily(){ const q = ($("famq")?.value||'').toLowerCase(); const role = $("famRole")?.value || 'all'; const list = (VAULT.family||[]).filter(m=>{ const hay = `${m.name||''} ${m.notes||''}`.toLowerCase(); if(q && !hay.includes(q)) return false; if(role !== 'all' && (m.role||'other') !== role) return false; return true; }).sort((a,b)=>(a.name||'').localeCompare(b.name||'')); const upcoming = (VAULT.family||[]).map(m=>({m, nb: nextBirthday(m)})).filter(x=>x.nb).sort((a,b)=>a.nb.days-b.nb.days); $("familyKpi").innerHTML = `<div class="box"><div class="n">${(VAULT.family||[]).length}</div><div class="l">Profiles</div><div class="m">Family members stored</div></div><div class="box"><div class="n">${upcoming.length}</div><div class="l">Birthdays Tracked</div><div class="m">Upcoming reminders ready</div></div><div class="box"><div class="n">${upcoming[0]?.nb?.days ?? '—'}</div><div class="l">Next Birthday</div><div class="m">${escapeHtml(upcoming[0]?.m?.name || '—')}</div></div><div class="box"><div class="n">${(VAULT.family||[]).filter(x=>x.photoFileId).length}</div><div class="l">Photos</div><div class="m">Portraits attached</div></div>`; const el = $("familyList"); if(!list.length){ el.innerHTML = `<div class="hint">No family members yet. Add your first person to start building the Family hub.</div>`; return; } const cards = await Promise.all(list.map(async m=>{ const img = await familyAvatar(m.photoFileId); const nb = nextBirthday(m); const parentBits = [familyName(m.parent1), familyName(m.parent2)].filter(x=>x && x !== '—').join(' • '); return `<div class="li"><div style="display:flex;gap:12px;align-items:flex-start"><div style="width:58px;height:58px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-weight:1100">${img ? `<img src="${img}" alt="${escapeHtml(m.name)}" style="width:100%;height:100%;object-fit:cover">` : escapeHtml((m.name||'?').slice(0,2).toUpperCase())}</div><div><div class="t">${escapeHtml(m.name)}</div><div class="s">${familyRoleLabel(m.role)}${m.birthday ? ` • Birthday: ${formatDate(m.birthday)}` : ''}${nb ? ` • ${nb.days} day(s) away` : ''}</div><div class="s">${parentBits ? `Parents/Guardians: ${escapeHtml(parentBits)} • ` : ''}${m.spouse ? `Spouse: ${escapeHtml(familyName(m.spouse))}` : ''}</div>${m.notes ? `<div class="s" style="margin-top:6px">${escapeHtml(m.notes)}</div>` : ''}</div></div><div class="acts">${nb && nb.days <= 30 ? `<span class="tag amb">Upcoming</span>` : `<span class="tag good">Saved</span>`}<button class="btn ghost small" onclick="openFamilyMember('${m.id}')">Edit</button></div></div>`; })); el.innerHTML = cards.join(''); }
+function openFamilyTree(){ const people = (VAULT.family||[]); if(!people.length){ toast('Add family members first'); return; } const html = people.map(m=>{ const kids = people.filter(x=>x.parent1===m.id || x.parent2===m.id).map(x=>escapeHtml(x.name)).join(', ') || '—'; return `<div class="li"><div><div class="t">${escapeHtml(m.name)} <span class="tag">${familyRoleLabel(m.role)}</span></div><div class="s">Parents: ${escapeHtml([familyName(m.parent1), familyName(m.parent2)].filter(x=>x && x!=='—').join(' • ') || '—')}</div><div class="s">Spouse: ${escapeHtml(familyName(m.spouse))}</div><div class="s">Children: ${kids}</div></div></div>`; }).join(''); openModal('Family Tree', 'Relationship view', `<div class="list">${html}</div>`, `<button class="btn ghost" onclick="closeModal()">Close</button>`); }
+function openEvent(id){ const ev = (VAULT.events||[]).find(x=>x.id===id) || {id:'',title:'',date:'',type:'other',memberId:'',notes:''}; openModal(id ? 'Edit Event' : 'Add Event', 'Birthdays, anniversaries, school dates, appointments, and legacy reminders', `<input type="hidden" id="ev_id" value="${escapeHtml(ev.id||'')}"><div class="two"><div class="fg"><label>Title *</label><input id="ev_title" value="${escapeHtml(ev.title||'')}" placeholder="Taylor birthday party"></div><div class="fg"><label>Date *</label><input id="ev_date" type="date" value="${escapeHtml(ev.date||'')}"></div></div><div class="two"><div class="fg"><label>Type</label><select id="ev_type"><option value="birthday" ${ev.type==='birthday'?'selected':''}>Birthday</option><option value="anniversary" ${ev.type==='anniversary'?'selected':''}>Anniversary</option><option value="medical" ${ev.type==='medical'?'selected':''}>Medical</option><option value="school" ${ev.type==='school'?'selected':''}>School</option><option value="legacy" ${ev.type==='legacy'?'selected':''}>Legacy</option><option value="other" ${ev.type==='other'?'selected':''}>Other</option></select></div><div class="fg"><label>Linked Family Member</label><select id="ev_member"><option value="">None</option>${familyOptions(ev.memberId)}</select></div></div><div class="fg"><label>Notes</label><textarea id="ev_notes" placeholder="Time, location, what to bring...">${escapeHtml(ev.notes||'')}</textarea></div>`, `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('events','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveEvent()">Save</button>`); }
+async function saveEvent(){ const id = $("ev_id").value || crypto.randomUUID(); const title = $("ev_title").value.trim(); const date = $("ev_date").value; if(!title || !date){ toast('Title and date are required'); return; } const obj = {id,title,date,type:$("ev_type").value,memberId:$("ev_member").value,notes:$("ev_notes").value.trim()}; const list = VAULT.events || []; const i = list.findIndex(x=>x.id===id); if(i>-1) list[i]=obj; else list.push(obj); VAULT.events = list; markUpdated(); await persist(); closeModal(); renderEvents(); renderDash(); toast('Event saved ✓'); }
+async function seedBirthdayEvents(){ let added = 0; VAULT.events = VAULT.events || []; (VAULT.family||[]).forEach(m=>{ if(!m.birthday) return; if(VAULT.events.some(ev=>ev.type==='birthday' && ev.memberId===m.id)) return; VAULT.events.push({id:crypto.randomUUID(), title:`${m.name} birthday`, date:m.birthday, type:'birthday', memberId:m.id, notes:'Synced from Family'}); added++; }); if(added){ markUpdated(); await persist(); renderEvents(); renderDash(); } toast(added ? `Added ${added} birthday event(s) ✓` : 'Birthdays already synced'); }
+function renderEvents(){ const q = ($("evq")?.value||'').toLowerCase(); const type = $("evtType")?.value || 'all'; const list = (VAULT.events||[]).filter(ev=>{ const hay = `${ev.title||''} ${ev.notes||''} ${familyName(ev.memberId)||''}`.toLowerCase(); if(q && !hay.includes(q)) return false; if(type !== 'all' && ev.type !== type) return false; return true; }).sort((a,b)=>(a.date||'').localeCompare(b.date||'')); const el = $("eventList"); if(!list.length){ el.innerHTML = `<div class="hint">No events yet. Add birthdays, anniversaries, school reminders, and legacy check-ins.</div>`; return; } el.innerHTML = list.map(ev=>{ const days = daysUntil(ev.date); return `<div class="li"><div><div class="t">${escapeHtml(ev.title)}</div><div class="s">${formatDate(ev.date)} • ${escapeHtml((ev.type||'other').toUpperCase())}${ev.memberId ? ` • ${escapeHtml(familyName(ev.memberId))}` : ''}</div>${ev.notes ? `<div class="s" style="margin-top:6px">${escapeHtml(ev.notes)}</div>` : ''}</div><div class="acts">${days !== null && days <= 30 ? `<span class="tag amb">${days}d</span>` : `<span class="tag">Tracked</span>`}<button class="btn ghost small" onclick="openEvent('${ev.id}')">Edit</button></div></div>`; }).join(''); }
+function openMemory(id){ const m = (VAULT.memories||[]).find(x=>x.id===id) || {id:'',title:'',kind:'journal',memberId:'',date:new Date().toISOString().slice(0,10),note:'',fileIds:[],timeCapsule:false,openOn:''}; setTempAttach(m.fileIds || []); openModal(id ? 'Edit Memory' : 'Add Memory', 'Journal entries, photos, videos, voice notes, and milestones', `<input type="hidden" id="mem_id" value="${escapeHtml(m.id||'')}"><div class="two"><div class="fg"><label>Title *</label><input id="mem_title" value="${escapeHtml(m.title||'')}" placeholder="Taylor first soccer game"></div><div class="fg"><label>Date</label><input id="mem_date" type="date" value="${escapeHtml(m.date||'')}"></div></div><div class="two"><div class="fg"><label>Type</label><select id="mem_kind"><option value="journal" ${m.kind==='journal'?'selected':''}>Journal</option><option value="photo" ${m.kind==='photo'?'selected':''}>Photo</option><option value="video" ${m.kind==='video'?'selected':''}>Video</option><option value="voice" ${m.kind==='voice'?'selected':''}>Voice</option><option value="milestone" ${m.kind==='milestone'?'selected':''}>Milestone</option></select></div><div class="fg"><label>Linked Family Member</label><select id="mem_member"><option value="">None</option>${familyOptions(m.memberId)}</select></div></div><div class="fg"><label>Story / Notes</label><textarea id="mem_note" placeholder="What happened? Why does it matter?">${escapeHtml(m.note||'')}</textarea></div><div class="two"><div class="fg"><label>Time Capsule?</label><select id="mem_capsule"><option value="no" ${!m.timeCapsule?'selected':''}>No</option><option value="yes" ${m.timeCapsule?'selected':''}>Yes</option></select></div><div class="fg"><label>Open On</label><input id="mem_open" type="date" value="${escapeHtml(m.openOn||'')}"></div></div><div class="divider"></div><div class="inline-actions"><button class="btn ghost small" onclick="attachToTemp('doc',false)">Attach Media/File</button><button class="btn ghost small" onclick="attachToTemp('doc',true)">Take Photo</button></div><div id="d_attach"></div>`, `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('memories','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveMemory()">Save</button>`); renderTempAttach('d_attach'); }
+function openTimeCapsule(){ const list = (VAULT.memories||[]).filter(x=>x.timeCapsule).sort((a,b)=>(a.openOn||'').localeCompare(b.openOn||'')); openModal('Time Capsule', 'Messages and memories saved for the future', list.length ? `<div class="list">${list.map(m=>`<div class="li"><div><div class="t">${escapeHtml(m.title)}</div><div class="s">Open on ${m.openOn ? formatDate(m.openOn) : 'whenever you choose'}${m.memberId ? ` • ${escapeHtml(familyName(m.memberId))}` : ''}</div>${m.note ? `<div class="s" style="margin-top:6px">${escapeHtml(m.note)}</div>` : ''}</div><div class="acts"><button class="btn ghost small" onclick="closeModal();openMemory('${m.id}')">Edit</button></div></div>`).join('')}</div>` : `<div class="hint">No time-capsule memories yet.</div>`, `<button class="btn ghost" onclick="closeModal()">Close</button><button class="btn blue" onclick="closeModal();openMemory()">Add One</button>`); }
+async function saveMemory(){ const id = $("mem_id").value || crypto.randomUUID(); const title = $("mem_title").value.trim(); if(!title){ toast('Title is required'); return; } const obj = {id,title,kind:$("mem_kind").value,memberId:$("mem_member").value,date:$("mem_date").value,note:$("mem_note").value.trim(),fileIds:getTempAttach(),timeCapsule:$("mem_capsule").value === 'yes',openOn:$("mem_open").value}; const list = VAULT.memories || []; const i = list.findIndex(x=>x.id===id); if(i>-1) list[i]=obj; else list.push(obj); VAULT.memories = list; markUpdated(); await persist(); closeModal(); renderMemories(); renderDash(); toast('Memory saved ✓'); }
+function renderMemories(){ const q = ($("memq")?.value||'').toLowerCase(); const type = $("memType")?.value || 'all'; const list = (VAULT.memories||[]).filter(m=>{ const hay = `${m.title||''} ${m.note||''} ${familyName(m.memberId)||''}`.toLowerCase(); if(q && !hay.includes(q)) return false; if(type !== 'all' && m.kind !== type) return false; return true; }).sort((a,b)=>(b.date||'').localeCompare(a.date||'')); const el = $("memoryList"); if(!list.length){ el.innerHTML = `<div class="hint">No memories yet. Add journal entries, photos, videos, or voice-note milestones.</div>`; return; } el.innerHTML = list.map(m=>{ const n = (m.fileIds||[]).length; const badge = m.timeCapsule ? `<span class="tag purp">Time Capsule</span>` : `<span class="tag">${escapeHtml((m.kind||'journal').toUpperCase())}</span>`; return `<div class="li"><div><div class="t">${escapeHtml(m.title)}</div><div class="s">${m.date ? formatDate(m.date) : 'No date'}${m.memberId ? ` • ${escapeHtml(familyName(m.memberId))}` : ''} • ${n} attachment(s)</div>${m.note ? `<div class="s" style="margin-top:6px">${escapeHtml(m.note)}</div>` : ''}${m.timeCapsule && m.openOn ? `<div class="s" style="margin-top:6px">Opens on ${formatDate(m.openOn)}</div>` : ''}</div><div class="acts">${badge}<button class="btn ghost small" onclick="openMemory('${m.id}')">Edit</button></div></div>`; }).join(''); }
+
+/* ==========================
    Boot / Init
 ========================== */
 function hydrateEmergencyForm(){
@@ -2689,6 +2551,9 @@ function renderAll(){
   renderDash();
   hydrateEmergencyForm();
   hydrateLegacy();
+  renderFamily();
+  renderEvents();
+  renderMemories();
   renderPw();
   renderDocs();
   renderRecs();
@@ -2739,13 +2604,7 @@ function resetAll(){
 /* Entry */
 (function(){
   if("serviceWorker" in navigator){
-    navigator.serviceWorker.getRegistrations().then((regs)=>{
-      regs.forEach((reg)=>{
-        const script = reg.active?.scriptURL || reg.waiting?.scriptURL || reg.installing?.scriptURL || "";
-        if(script && !script.includes("sw.js?v=privara-2")) reg.unregister().catch(()=>{});
-      });
-    }).catch(()=>{});
-    navigator.serviceWorker.register("./sw.js?v=privara-2").catch(()=>{});
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
   }
 
   boot();
