@@ -387,6 +387,7 @@
           <div class="item" data-tab="family" onclick="tab('family')">👨‍👩‍👧‍👦 Family</div>
           <div class="item" data-tab="calendar" onclick="tab('calendar')">🗓️ Calendar</div>
           <div class="item" data-tab="memories" onclick="tab('memories')">📸 Memories</div>
+          <div class="item" data-tab="bills" onclick="tab('bills')">💳 Bills & Money</div>
           <div class="item" data-tab="em" onclick="tab('em')">🏥 Emergency Info</div>
           <div class="item" data-tab="pw" onclick="tab('pw')">🔑 Passwords</div>
           <div class="item" data-tab="docs" onclick="tab('docs')">📋 Documents</div>
@@ -435,6 +436,7 @@
               <div class="fg"><label>Role Filter</label>
                 <select id="famRole" onchange="renderFamily()">
                   <option value="all">All</option>
+                  <option value="myself">Myself / Me</option>
                   <option value="spouse">Spouse</option>
                   <option value="child">Child</option>
                   <option value="parent">Parent</option>
@@ -442,7 +444,6 @@
                   <option value="grandparent">Grandparent</option>
                   <option value="relative">Relative</option>
                   <option value="friend">Trusted Friend</option>
-                  <option value="me">Myself</option>
                   <option value="other">Other</option>
                 </select>
               </div>
@@ -504,6 +505,40 @@
               </div>
             </div>
             <div class="list" id="memoryList"></div>
+          </div>
+        </div>
+
+
+        <!-- Bills & Money -->
+        <div class="card" id="t-bills" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Bills & Money</h2>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="openAssetLiabilitySnapshot()">Snapshot</button>
+              <button class="btn blue" onclick="openBill()">+ Add Bill</button>
+            </div>
+          </div>
+          <div class="bd">
+            <div class="two">
+              <div class="fg"><label>Search Bills</label><input id="billq" placeholder="mortgage, power, Netflix..." oninput="renderBills()" /></div>
+              <div class="fg"><label>Category</label>
+                <select id="billType" onchange="renderBills()">
+                  <option value="all">All</option>
+                  <option value="housing">Housing</option>
+                  <option value="utilities">Utilities</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="medical">Medical</option>
+                  <option value="subscription">Subscription</option>
+                  <option value="debt">Debt</option>
+                  <option value="transport">Transport</option>
+                  <option value="education">Education</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="kpi" id="billKpi" style="margin-bottom:12px"></div>
+            <div class="list" id="billList"></div>
+            <div class="hint">Bills automatically build your liability side. Assets can be added next in a dedicated asset tracker so Privara can compute full net worth.</div>
           </div>
         </div>
 
@@ -731,7 +766,7 @@
     <button onclick="tab('dash')">🏠 Home</button>
     <button onclick="tab('family')">👨‍👩‍👧 Family</button>
     <button onclick="tab('calendar')">🗓️ Dates</button>
-    <button onclick="tab('memories')">📸 Memories</button>
+    <button onclick="tab('bills')">💳 Bills</button>
     <button onclick="openQuickAdd()">➕ Add</button>
   </div>
 
@@ -831,7 +866,7 @@ function tab(name){
   document.querySelectorAll(".nav .item").forEach(x=>{
     x.classList.toggle("active", x.dataset.tab === name);
   });
-  ["dash","family","calendar","memories","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
+  ["dash","family","calendar","memories","bills","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
     const el = $("t-"+t);
     if(el) el.style.display = (t === name) ? "block" : "none";
   });
@@ -973,6 +1008,7 @@ function defaultVault(){
     family:[],
     events:[],
     memories:[],
+    bills:[],
     passwords:[],
     documents:[],
     receipts:[],
@@ -1977,6 +2013,8 @@ function renderDash(){
   const fam = (VAULT.family||[]).length;
   const events = (VAULT.events||[]).length;
   const memories = (VAULT.memories||[]).length;
+  const bills = (VAULT.bills||[]).length;
+  const monthlyBills = (VAULT.bills||[]).reduce((sum,b)=>sum + monthlyBillAmount(b), 0);
   const p = (VAULT.passwords||[]).length;
   const h = calcHealth();
   $("healthPill").textContent = `✨ Health: ${h.score}/100 (${h.tier})`;
@@ -1989,6 +2027,7 @@ function renderDash(){
     <div class="box"><div class="n">${fam}</div><div class="l">Family Members</div><div class="m">Profiles + birthdays</div></div>
     <div class="box"><div class="n">${events}</div><div class="l">Calendar Items</div><div class="m">Important dates tracked</div></div>
     <div class="box"><div class="n">${memories}</div><div class="l">Memories</div><div class="m">Journal, photo, video, voice</div></div>
+    <div class="box"><div class="n">${bills}</div><div class="l">Bills</div><div class="m">$${monthlyBills.toFixed(2)}/mo tracked</div></div>
     <div class="box"><div class="n">${p}</div><div class="l">Passwords</div><div class="m">${h.weak} weak • ${h.dups} dup</div></div>
   `;
 
@@ -2063,8 +2102,12 @@ function openQuickAdd(){
         <button class="btn blue" onclick="closeModal();tab('pw');openPw()">🔑 Add Password</button>
       </div>
       <div class="two" style="margin-top:10px">
+        <button class="btn blue" onclick="closeModal();tab('bills');openBill()">💳 Add Bill</button>
         <button class="btn blue" onclick="closeModal();tab('docs');openDoc()">📋 Add Document</button>
+      </div>
+      <div class="two" style="margin-top:10px">
         <button class="btn blue" onclick="closeModal();tab('files');openFileAdd()">📎 Add File</button>
+        <button class="btn ghost" onclick="closeModal()">Done</button>
       </div>
     `,
     `<button class="btn ghost" onclick="closeModal()">Close</button>`
@@ -2510,21 +2553,231 @@ function printLegacy(){
    Family + Calendar + Memories
 ========================== */
 function familyName(id){ const m = (VAULT.family||[]).find(x=>x.id===id); return m ? m.name : "—"; }
-function familyRoleLabel(v){ const map = {spouse:'Spouse',child:'Child',parent:'Parent',sibling:'Sibling',grandparent:'Grandparent',relative:'Relative',friend:'Trusted Friend',other:'Other'}; return map[v] || (v || 'Other'); }
+function familyRoleLabel(v){ const map = {myself:'Myself / Me',spouse:'Spouse',child:'Child',parent:'Parent',sibling:'Sibling',grandparent:'Grandparent',relative:'Relative',friend:'Trusted Friend',other:'Other'}; return map[v] || (v || 'Other'); }
 function familyOptions(selected){ return (VAULT.family||[]).map(m=>`<option value="${m.id}" ${selected===m.id?'selected':''}>${escapeHtml(m.name)}</option>`).join(''); }
-function openFamilyMember(id){ const m = (VAULT.family||[]).find(x=>x.id===id) || {id:'',name:'',role:'child',birthday:'',photoFileId:'',parent1:'',parent2:'',spouse:'',notes:''}; openModal(id ? 'Edit Family Member' : 'Add Family Member', 'Build your family hub with birthdays, relationships, and notes', `
+function cleanPhone(v){ return String(v||'').trim(); }
+function formatPhone(v){ return escapeHtml(v||'—'); }
+function openFamilyMember(id){
+  const m = (VAULT.family||[]).find(x=>x.id===id) || {id:'',name:'',role:'myself',birthday:'',photoFileId:'',parent1:'',parent2:'',spouse:'',phone:'',address:'',email:'',prescriptions:'',notes:''};
+  openModal(
+    id ? 'Edit Family Member' : 'Add Family Member',
+    'Build your family hub with birthdays, relationships, contact details, and prescriptions',
+    `
       <input type="hidden" id="fm_id" value="${escapeHtml(m.id||'')}">
-      <div class="two"><div class="fg"><label>Full Name *</label><input id="fm_name" value="${escapeHtml(m.name||'')}" placeholder="Rachel Keyt"></div><div class="fg"><label>Relationship *</label><select id="fm_role"><option value="spouse" ${m.role==='spouse'?'selected':''}>Spouse</option><option value="child" ${m.role==='child'?'selected':''}>Child</option><option value="parent" ${m.role==='parent'?'selected':''}>Parent</option><option value="sibling" ${m.role==='sibling'?'selected':''}>Sibling</option><option value="grandparent" ${m.role==='grandparent'?'selected':''}>Grandparent</option><option value="relative" ${m.role==='relative'?'selected':''}>Relative</option><option value="friend" ${m.role==='friend'?'selected':''}>Trusted Friend</option><option value="other" ${m.role==='other'?'selected':''}>Other</option></select></div></div>
-      <div class="two"><div class="fg"><label>Birthday</label><input id="fm_birthday" type="date" value="${escapeHtml(m.birthday||'')}"></div><div class="fg"><label>Photo</label><div class="inline-actions"><button class="btn ghost small" onclick="attachFamilyPhoto()">Upload Photo</button><span class="tag" id="fm_photo_tag">${m.photoFileId ? 'Photo attached' : 'No photo yet'}</span></div><input type="hidden" id="fm_photo" value="${escapeHtml(m.photoFileId||'')}"></div></div>
-      <div class="two"><div class="fg"><label>Parent / Guardian 1</label><select id="fm_parent1"><option value="">None</option>${familyOptions(m.parent1)}</select></div><div class="fg"><label>Parent / Guardian 2</label><select id="fm_parent2"><option value="">None</option>${familyOptions(m.parent2)}</select></div></div>
+      <div class="two">
+        <div class="fg"><label>Full Name *</label><input id="fm_name" value="${escapeHtml(m.name||'')}" placeholder="Rachel Keyt"></div>
+        <div class="fg"><label>Relationship *</label>
+          <select id="fm_role">
+            <option value="myself" ${m.role==='myself'?'selected':''}>Myself / Me</option>
+            <option value="spouse" ${m.role==='spouse'?'selected':''}>Spouse</option>
+            <option value="child" ${m.role==='child'?'selected':''}>Child</option>
+            <option value="parent" ${m.role==='parent'?'selected':''}>Parent</option>
+            <option value="sibling" ${m.role==='sibling'?'selected':''}>Sibling</option>
+            <option value="grandparent" ${m.role==='grandparent'?'selected':''}>Grandparent</option>
+            <option value="relative" ${m.role==='relative'?'selected':''}>Relative</option>
+            <option value="friend" ${m.role==='friend'?'selected':''}>Trusted Friend</option>
+            <option value="other" ${m.role==='other'?'selected':''}>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Birthday</label><input id="fm_birthday" type="date" value="${escapeHtml(m.birthday||'')}"></div>
+        <div class="fg"><label>Photo</label><div class="inline-actions"><button class="btn ghost small" onclick="attachFamilyPhoto()">Upload Photo</button><span class="tag" id="fm_photo_tag">${m.photoFileId ? 'Photo attached' : 'No photo yet'}</span></div><input type="hidden" id="fm_photo" value="${escapeHtml(m.photoFileId||'')}"></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Phone Number</label><input id="fm_phone" value="${escapeHtml(m.phone||'')}" placeholder="(706) 555-1234"></div>
+        <div class="fg"><label>Email</label><input id="fm_email" value="${escapeHtml(m.email||'')}" placeholder="name@email.com"></div>
+      </div>
+      <div class="fg"><label>Address</label><input id="fm_address" value="${escapeHtml(m.address||'')}" placeholder="123 Main St, Columbus, GA 31909"></div>
+      <div class="two">
+        <div class="fg"><label>Parent / Guardian 1</label><select id="fm_parent1"><option value="">None</option>${familyOptions(m.parent1)}</select></div>
+        <div class="fg"><label>Parent / Guardian 2</label><select id="fm_parent2"><option value="">None</option>${familyOptions(m.parent2)}</select></div>
+      </div>
       <div class="fg"><label>Spouse / Partner</label><select id="fm_spouse"><option value="">None</option>${familyOptions(m.spouse)}</select></div>
+      <div class="fg"><label>Prescriptions / Medications</label><textarea id="fm_prescriptions" placeholder="Medicine • dose • frequency • refill notes">${escapeHtml(m.prescriptions||'')}</textarea></div>
       <div class="fg"><label>Notes</label><textarea id="fm_notes" placeholder="Describe this person and anything important to remember...">${escapeHtml(m.notes||'')}</textarea></div>`,
-      `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('family','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveFamilyMember()">Save</button>`); }
+    `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('family','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveFamilyMember()">Save</button>`
+  );
+}
 async function attachFamilyPhoto(){ const fid = await addEncryptedFileFlow(false); if(!fid) return; $("fm_photo").value = fid; $("fm_photo_tag").textContent = 'Photo attached'; }
-async function saveFamilyMember(){ const id = $("fm_id").value || crypto.randomUUID(); const name = $("fm_name").value.trim(); if(!name){ toast('Name is required'); return; } const obj = {id,name,role:$("fm_role").value,birthday:$("fm_birthday").value,photoFileId:$("fm_photo").value,parent1:$("fm_parent1").value,parent2:$("fm_parent2").value,spouse:$("fm_spouse").value,notes:$("fm_notes").value.trim()}; const list = VAULT.family || []; const i = list.findIndex(x=>x.id===id); if(i>-1) list[i]=obj; else list.push(obj); VAULT.family = list; markUpdated(); await persist(); closeModal(); renderFamily(); renderDash(); toast('Family member saved ✓'); }
+async function saveFamilyMember(){
+  const id = $("fm_id").value || crypto.randomUUID();
+  const name = $("fm_name").value.trim();
+  if(!name){ toast('Name is required'); return; }
+  const obj = {
+    id,
+    name,
+    role:$("fm_role").value,
+    birthday:$("fm_birthday").value,
+    photoFileId:$("fm_photo").value,
+    phone:cleanPhone($("fm_phone").value),
+    address:$("fm_address").value.trim(),
+    email:$("fm_email").value.trim(),
+    prescriptions:$("fm_prescriptions").value.trim(),
+    parent1:$("fm_parent1").value,
+    parent2:$("fm_parent2").value,
+    spouse:$("fm_spouse").value,
+    notes:$("fm_notes").value.trim()
+  };
+  const list = VAULT.family || [];
+  const i = list.findIndex(x=>x.id===id);
+  if(i>-1) list[i]=obj; else list.push(obj);
+  VAULT.family = list;
+  markUpdated();
+  await persist();
+  closeModal();
+  renderFamily();
+  renderDash();
+  toast('Family member saved ✓');
+}
 async function familyAvatar(fid){ if(!fid) return ''; try{ const meta = (VAULT.files||[]).find(x=>x.id===fid); const rec = await dbGet(fid); if(!meta || !rec) return ''; const bytes = await decryptBytes(rec.iv, rec.ct); const blob = new Blob([bytes], {type: meta.type || 'image/jpeg'}); return await new Promise((resolve)=>{ const fr = new FileReader(); fr.onload = ()=>resolve(fr.result || ''); fr.readAsDataURL(blob); }); }catch{ return ''; } }
-async function renderFamily(){ const q = ($("famq")?.value||'').toLowerCase(); const role = $("famRole")?.value || 'all'; const list = (VAULT.family||[]).filter(m=>{ const hay = `${m.name||''} ${m.notes||''}`.toLowerCase(); if(q && !hay.includes(q)) return false; if(role !== 'all' && (m.role||'other') !== role) return false; return true; }).sort((a,b)=>(a.name||'').localeCompare(b.name||'')); const upcoming = (VAULT.family||[]).map(m=>({m, nb: nextBirthday(m)})).filter(x=>x.nb).sort((a,b)=>a.nb.days-b.nb.days); $("familyKpi").innerHTML = `<div class="box"><div class="n">${(VAULT.family||[]).length}</div><div class="l">Profiles</div><div class="m">Family members stored</div></div><div class="box"><div class="n">${upcoming.length}</div><div class="l">Birthdays Tracked</div><div class="m">Upcoming reminders ready</div></div><div class="box"><div class="n">${upcoming[0]?.nb?.days ?? '—'}</div><div class="l">Next Birthday</div><div class="m">${escapeHtml(upcoming[0]?.m?.name || '—')}</div></div><div class="box"><div class="n">${(VAULT.family||[]).filter(x=>x.photoFileId).length}</div><div class="l">Photos</div><div class="m">Portraits attached</div></div>`; const el = $("familyList"); if(!list.length){ el.innerHTML = `<div class="hint">No family members yet. Add your first person to start building the Family hub.</div>`; return; } const cards = await Promise.all(list.map(async m=>{ const img = await familyAvatar(m.photoFileId); const nb = nextBirthday(m); const parentBits = [familyName(m.parent1), familyName(m.parent2)].filter(x=>x && x !== '—').join(' • '); return `<div class="li"><div style="display:flex;gap:12px;align-items:flex-start"><div style="width:58px;height:58px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-weight:1100">${img ? `<img src="${img}" alt="${escapeHtml(m.name)}" style="width:100%;height:100%;object-fit:cover">` : escapeHtml((m.name||'?').slice(0,2).toUpperCase())}</div><div><div class="t">${escapeHtml(m.name)}</div><div class="s">${familyRoleLabel(m.role)}${m.birthday ? ` • Birthday: ${formatDate(m.birthday)}` : ''}${nb ? ` • ${nb.days} day(s) away` : ''}</div><div class="s">${parentBits ? `Parents/Guardians: ${escapeHtml(parentBits)} • ` : ''}${m.spouse ? `Spouse: ${escapeHtml(familyName(m.spouse))}` : ''}</div>${m.notes ? `<div class="s" style="margin-top:6px">${escapeHtml(m.notes)}</div>` : ''}</div></div><div class="acts">${nb && nb.days <= 30 ? `<span class="tag amb">Upcoming</span>` : `<span class="tag good">Saved</span>`}<button class="btn ghost small" onclick="openFamilyMember('${m.id}')">Edit</button></div></div>`; })); el.innerHTML = cards.join(''); }
+async function renderFamily(){
+  const q = ($("famq")?.value||'').toLowerCase();
+  const role = $("famRole")?.value || 'all';
+  const list = (VAULT.family||[]).filter(m=>{
+    const hay = `${m.name||''} ${m.notes||''} ${m.phone||''} ${m.address||''} ${m.email||''} ${m.prescriptions||''}`.toLowerCase();
+    if(q && !hay.includes(q)) return false;
+    if(role !== 'all' && (m.role||'other') !== role) return false;
+    return true;
+  }).sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  const upcoming = (VAULT.family||[]).map(m=>({m, nb: nextBirthday(m)})).filter(x=>x.nb).sort((a,b)=>a.nb.days-b.nb.days);
+  const withPhone = (VAULT.family||[]).filter(x=>x.phone).length;
+  const withRx = (VAULT.family||[]).filter(x=>(x.prescriptions||'').trim()).length;
+  $("familyKpi").innerHTML = `<div class="box"><div class="n">${(VAULT.family||[]).length}</div><div class="l">Profiles</div><div class="m">Family members stored</div></div><div class="box"><div class="n">${upcoming.length}</div><div class="l">Birthdays Tracked</div><div class="m">Upcoming reminders ready</div></div><div class="box"><div class="n">${withPhone}</div><div class="l">Phone Numbers</div><div class="m">Contacts attached</div></div><div class="box"><div class="n">${withRx}</div><div class="l">Prescriptions</div><div class="m">Medication notes saved</div></div>`;
+  const el = $("familyList");
+  if(!list.length){ el.innerHTML = `<div class="hint">No family members yet. Add your first person to start building the Family hub.</div>`; return; }
+  const cards = await Promise.all(list.map(async m=>{
+    const img = await familyAvatar(m.photoFileId);
+    const nb = nextBirthday(m);
+    const parentBits = [familyName(m.parent1), familyName(m.parent2)].filter(x=>x && x !== '—').join(' • ');
+    return `<div class="li"><div style="display:flex;gap:12px;align-items:flex-start"><div style="width:58px;height:58px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-weight:1100">${img ? `<img src="${img}" alt="${escapeHtml(m.name)}" style="width:100%;height:100%;object-fit:cover">` : escapeHtml((m.name||'?').slice(0,2).toUpperCase())}</div><div><div class="t">${escapeHtml(m.name)}</div><div class="s">${familyRoleLabel(m.role)}${m.birthday ? ` • Birthday: ${formatDate(m.birthday)}` : ''}${nb ? ` • ${nb.days} day(s) away` : ''}</div><div class="s">${m.phone ? `Phone: ${formatPhone(m.phone)} • ` : ''}${m.email ? `Email: ${escapeHtml(m.email)}` : ''}</div><div class="s">${m.address ? `Address: ${escapeHtml(m.address)}` : ''}</div><div class="s">${parentBits ? `Parents/Guardians: ${escapeHtml(parentBits)} • ` : ''}${m.spouse ? `Spouse: ${escapeHtml(familyName(m.spouse))}` : ''}</div>${m.prescriptions ? `<div class="s" style="margin-top:6px"><strong>Prescriptions:</strong> ${escapeHtml(m.prescriptions)}</div>` : ''}${m.notes ? `<div class="s" style="margin-top:6px">${escapeHtml(m.notes)}</div>` : ''}</div></div><div class="acts">${nb && nb.days <= 30 ? `<span class="tag amb">Upcoming</span>` : `<span class="tag good">Saved</span>`}<button class="btn ghost small" onclick="openFamilyMember('${m.id}')">Edit</button></div></div>`;
+  }));
+  el.innerHTML = cards.join('');
+}
 function openFamilyTree(){ const people = (VAULT.family||[]); if(!people.length){ toast('Add family members first'); return; } const html = people.map(m=>{ const kids = people.filter(x=>x.parent1===m.id || x.parent2===m.id).map(x=>escapeHtml(x.name)).join(', ') || '—'; return `<div class="li"><div><div class="t">${escapeHtml(m.name)} <span class="tag">${familyRoleLabel(m.role)}</span></div><div class="s">Parents: ${escapeHtml([familyName(m.parent1), familyName(m.parent2)].filter(x=>x && x!=='—').join(' • ') || '—')}</div><div class="s">Spouse: ${escapeHtml(familyName(m.spouse))}</div><div class="s">Children: ${kids}</div></div></div>`; }).join(''); openModal('Family Tree', 'Relationship view', `<div class="list">${html}</div>`, `<button class="btn ghost" onclick="closeModal()">Close</button>`); }
+
+/* ==========================
+   Bills & Money
+========================== */
+function monthlyBillAmount(b){
+  const amount = Number(b.amount||0);
+  const freq = b.frequency || 'monthly';
+  if(freq === 'weekly') return amount * 52 / 12;
+  if(freq === 'biweekly') return amount * 26 / 12;
+  if(freq === 'quarterly') return amount / 3;
+  if(freq === 'yearly') return amount / 12;
+  return amount;
+}
+function annualBillAmount(b){ return monthlyBillAmount(b) * 12; }
+function dueText(day){
+  const d = Number(day||0);
+  if(!d) return 'No due day';
+  return `Due day ${d}`;
+}
+function billCategoryLabel(v){
+  const map = {housing:'Housing',utilities:'Utilities',insurance:'Insurance',medical:'Medical',subscription:'Subscription',debt:'Debt',transport:'Transport',education:'Education',other:'Other'};
+  return map[v] || 'Other';
+}
+function openBill(id){
+  const b = (VAULT.bills||[]).find(x=>x.id===id) || {id:'',name:'',amount:'',frequency:'monthly',dueDay:'',category:'other',memberId:'',autopay:false,provider:'',accountRef:'',notes:''};
+  openModal(
+    id ? 'Edit Bill' : 'Add Bill',
+    'Track bills, subscriptions, and liabilities',
+    `
+      <input type="hidden" id="bill_id" value="${escapeHtml(b.id||'')}">
+      <div class="two">
+        <div class="fg"><label>Bill Name *</label><input id="bill_name" value="${escapeHtml(b.name||'')}" placeholder="Mortgage, Power, Netflix"></div>
+        <div class="fg"><label>Amount *</label><input id="bill_amount" type="number" min="0" step="0.01" value="${escapeHtml(String(b.amount??''))}" placeholder="89.99"></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Frequency</label><select id="bill_frequency">
+          <option value="monthly" ${b.frequency==='monthly'?'selected':''}>Monthly</option>
+          <option value="weekly" ${b.frequency==='weekly'?'selected':''}>Weekly</option>
+          <option value="biweekly" ${b.frequency==='biweekly'?'selected':''}>Biweekly</option>
+          <option value="quarterly" ${b.frequency==='quarterly'?'selected':''}>Quarterly</option>
+          <option value="yearly" ${b.frequency==='yearly'?'selected':''}>Yearly</option>
+        </select></div>
+        <div class="fg"><label>Due Day</label><input id="bill_dueDay" type="number" min="1" max="31" value="${escapeHtml(String(b.dueDay??''))}" placeholder="15"></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Category</label><select id="bill_category">
+          <option value="housing" ${b.category==='housing'?'selected':''}>Housing</option>
+          <option value="utilities" ${b.category==='utilities'?'selected':''}>Utilities</option>
+          <option value="insurance" ${b.category==='insurance'?'selected':''}>Insurance</option>
+          <option value="medical" ${b.category==='medical'?'selected':''}>Medical / Prescription</option>
+          <option value="subscription" ${b.category==='subscription'?'selected':''}>Subscription</option>
+          <option value="debt" ${b.category==='debt'?'selected':''}>Debt</option>
+          <option value="transport" ${b.category==='transport'?'selected':''}>Transport</option>
+          <option value="education" ${b.category==='education'?'selected':''}>Education</option>
+          <option value="other" ${b.category==='other'?'selected':''}>Other</option>
+        </select></div>
+        <div class="fg"><label>Linked Family Member</label><select id="bill_member"><option value="">None</option>${familyOptions(b.memberId)}</select></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Provider</label><input id="bill_provider" value="${escapeHtml(b.provider||'')}" placeholder="Aflac, Netflix, Synovus"></div>
+        <div class="fg"><label>Account / Policy Ref</label><input id="bill_accountRef" value="${escapeHtml(b.accountRef||'')}" placeholder="Last 4 / policy ref"></div>
+      </div>
+      <div class="fg"><label><input id="bill_autopay" type="checkbox" style="width:auto;margin-right:8px" ${b.autopay?'checked':''}> Autopay enabled</label></div>
+      <div class="fg"><label>Notes</label><textarea id="bill_notes" placeholder="Login details location, grace period, cancellation notes...">${escapeHtml(b.notes||'')}</textarea></div>
+    `,
+    `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('bills','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveBill()">Save</button>`
+  );
+}
+async function saveBill(){
+  const id = $("bill_id").value || crypto.randomUUID();
+  const name = $("bill_name").value.trim();
+  const amount = Number($("bill_amount").value);
+  if(!name || !(amount >= 0)){ toast('Bill name and amount are required'); return; }
+  const obj = {
+    id,
+    name,
+    amount,
+    frequency:$("bill_frequency").value,
+    dueDay:Number($("bill_dueDay").value || 0),
+    category:$("bill_category").value,
+    memberId:$("bill_member").value,
+    autopay:$("bill_autopay").checked,
+    provider:$("bill_provider").value.trim(),
+    accountRef:$("bill_accountRef").value.trim(),
+    notes:$("bill_notes").value.trim()
+  };
+  const list = VAULT.bills || [];
+  const i = list.findIndex(x=>x.id===id);
+  if(i>-1) list[i]=obj; else list.push(obj);
+  VAULT.bills = list;
+  markUpdated();
+  await persist();
+  closeModal();
+  renderBills();
+  renderDash();
+  toast('Bill saved ✓');
+}
+function renderBills(){
+  const q = ($("billq")?.value||'').toLowerCase();
+  const cat = $("billType")?.value || 'all';
+  let list = (VAULT.bills||[]).filter(b=>{
+    const hay = `${b.name||''} ${b.provider||''} ${b.notes||''} ${familyName(b.memberId)||''}`.toLowerCase();
+    if(q && !hay.includes(q)) return false;
+    if(cat !== 'all' && (b.category||'other') !== cat) return false;
+    return true;
+  }).sort((a,b)=> monthlyBillAmount(b)-monthlyBillAmount(a));
+  const totalMonthly = (VAULT.bills||[]).reduce((sum,b)=>sum + monthlyBillAmount(b), 0);
+  const totalAnnual = (VAULT.bills||[]).reduce((sum,b)=>sum + annualBillAmount(b), 0);
+  const subs = (VAULT.bills||[]).filter(b=>(b.category||'')==='subscription').length;
+  const auto = (VAULT.bills||[]).filter(b=>b.autopay).length;
+  $("billKpi").innerHTML = `<div class="box"><div class="n">$${totalMonthly.toFixed(2)}</div><div class="l">Monthly Liabilities</div><div class="m">Tracked recurring spend</div></div><div class="box"><div class="n">$${totalAnnual.toFixed(0)}</div><div class="l">Annual Run Rate</div><div class="m">12-month liability view</div></div><div class="box"><div class="n">${subs}</div><div class="l">Subscriptions</div><div class="m">Recurring memberships tracked</div></div><div class="box"><div class="n">${auto}</div><div class="l">Autopay Bills</div><div class="m">Automatic payments enabled</div></div>`;
+  const el = $("billList");
+  if(!list.length){ el.innerHTML = `<div class="hint">No bills yet. Add your first bill to start building your liability dashboard.</div>`; return; }
+  el.innerHTML = list.map(b=>`<div class="li"><div><div class="t">${escapeHtml(b.name)} <span class="tag">${billCategoryLabel(b.category)}</span></div><div class="s">$${Number(b.amount||0).toFixed(2)} • ${escapeHtml((b.frequency||'monthly').replace(/^./,x=>x.toUpperCase()))} • ${dueText(b.dueDay)} • ${b.autopay ? 'Autopay on' : 'Manual pay'}</div><div class="s">${b.provider ? `Provider: ${escapeHtml(b.provider)} • ` : ''}${b.accountRef ? `Ref: ${escapeHtml(b.accountRef)} • ` : ''}${b.memberId ? `Linked: ${escapeHtml(familyName(b.memberId))}` : ''}</div>${b.notes ? `<div class="s" style="margin-top:6px">${escapeHtml(b.notes)}</div>` : ''}</div><div class="acts"><span class="tag amb">$${monthlyBillAmount(b).toFixed(2)}/mo</span><button class="btn ghost small" onclick="openBill('${b.id}')">Edit</button></div></div>`).join('');
+}
+function openAssetLiabilitySnapshot(){
+  const monthly = (VAULT.bills||[]).reduce((sum,b)=>sum + monthlyBillAmount(b), 0);
+  const annual = monthly * 12;
+  const byCategory = {};
+  (VAULT.bills||[]).forEach(b=>{ const k = billCategoryLabel(b.category); byCategory[k] = (byCategory[k]||0) + monthlyBillAmount(b); });
+  const rows = Object.entries(byCategory).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="li"><div><div class="t">${escapeHtml(k)}</div><div class="s">$${v.toFixed(2)}/month</div></div></div>`).join('') || `<div class="hint">No bill categories yet.</div>`;
+  openModal('Liability Snapshot','Bills automatically create your liability side. Assets can be added next for full net worth.', `<div class="kpi" style="margin-bottom:12px"><div class="box"><div class="n">$${monthly.toFixed(2)}</div><div class="l">Monthly Liabilities</div><div class="m">Current tracked load</div></div><div class="box"><div class="n">$${annual.toFixed(0)}</div><div class="l">Annual Liabilities</div><div class="m">12-month projection</div></div><div class="box"><div class="n">${(VAULT.bills||[]).length}</div><div class="l">Bills Tracked</div><div class="m">Subscriptions + fixed bills</div></div><div class="box"><div class="n">${(VAULT.bills||[]).filter(b=>b.category==='debt').length}</div><div class="l">Debt Accounts</div><div class="m">Liability-heavy items</div></div></div><div class="list">${rows}</div><div class="hint" style="margin-top:10px">Next upgrade: asset tracker for cash, vehicles, property, and investments.</div>`, `<button class="btn ghost" onclick="closeModal()">Close</button><button class="btn blue" onclick="closeModal();tab('bills');openBill()">Add Bill</button>`);
+}
 function openEvent(id){ const ev = (VAULT.events||[]).find(x=>x.id===id) || {id:'',title:'',date:'',type:'other',memberId:'',notes:''}; openModal(id ? 'Edit Event' : 'Add Event', 'Birthdays, anniversaries, school dates, appointments, and legacy reminders', `<input type="hidden" id="ev_id" value="${escapeHtml(ev.id||'')}"><div class="two"><div class="fg"><label>Title *</label><input id="ev_title" value="${escapeHtml(ev.title||'')}" placeholder="Taylor birthday party"></div><div class="fg"><label>Date *</label><input id="ev_date" type="date" value="${escapeHtml(ev.date||'')}"></div></div><div class="two"><div class="fg"><label>Type</label><select id="ev_type"><option value="birthday" ${ev.type==='birthday'?'selected':''}>Birthday</option><option value="anniversary" ${ev.type==='anniversary'?'selected':''}>Anniversary</option><option value="medical" ${ev.type==='medical'?'selected':''}>Medical</option><option value="school" ${ev.type==='school'?'selected':''}>School</option><option value="legacy" ${ev.type==='legacy'?'selected':''}>Legacy</option><option value="other" ${ev.type==='other'?'selected':''}>Other</option></select></div><div class="fg"><label>Linked Family Member</label><select id="ev_member"><option value="">None</option>${familyOptions(ev.memberId)}</select></div></div><div class="fg"><label>Notes</label><textarea id="ev_notes" placeholder="Time, location, what to bring...">${escapeHtml(ev.notes||'')}</textarea></div>`, `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('events','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveEvent()">Save</button>`); }
 async function saveEvent(){ const id = $("ev_id").value || crypto.randomUUID(); const title = $("ev_title").value.trim(); const date = $("ev_date").value; if(!title || !date){ toast('Title and date are required'); return; } const obj = {id,title,date,type:$("ev_type").value,memberId:$("ev_member").value,notes:$("ev_notes").value.trim()}; const list = VAULT.events || []; const i = list.findIndex(x=>x.id===id); if(i>-1) list[i]=obj; else list.push(obj); VAULT.events = list; markUpdated(); await persist(); closeModal(); renderEvents(); renderDash(); toast('Event saved ✓'); }
 async function seedBirthdayEvents(){ let added = 0; VAULT.events = VAULT.events || []; (VAULT.family||[]).forEach(m=>{ if(!m.birthday) return; if(VAULT.events.some(ev=>ev.type==='birthday' && ev.memberId===m.id)) return; VAULT.events.push({id:crypto.randomUUID(), title:`${m.name} birthday`, date:m.birthday, type:'birthday', memberId:m.id, notes:'Synced from Family'}); added++; }); if(added){ markUpdated(); await persist(); renderEvents(); renderDash(); } toast(added ? `Added ${added} birthday event(s) ✓` : 'Birthdays already synced'); }
@@ -2555,6 +2808,7 @@ function renderAll(){
   renderFamily();
   renderEvents();
   renderMemories();
+  renderBills();
   renderPw();
   renderDocs();
   renderRecs();
