@@ -388,6 +388,7 @@
           <div class="item" data-tab="calendar" onclick="tab('calendar')">🗓️ Calendar</div>
           <div class="item" data-tab="memories" onclick="tab('memories')">📸 Memories</div>
           <div class="item" data-tab="bills" onclick="tab('bills')">💳 Bills & Money</div>
+          <div class="item" data-tab="assets" onclick="tab('assets')">🏦 Assets & Net Worth</div>
           <div class="item" data-tab="em" onclick="tab('em')">🏥 Emergency Info</div>
           <div class="item" data-tab="pw" onclick="tab('pw')">🔑 Passwords</div>
           <div class="item" data-tab="docs" onclick="tab('docs')">📋 Documents</div>
@@ -427,6 +428,8 @@
             <h2>Family</h2>
             <div class="inline-actions">
               <button class="btn ghost" onclick="openFamilyTree()">Family Tree</button>
+              <button class="btn ghost" onclick="printFamilySummary()">Print / PDF</button>
+              <button class="btn ghost" onclick="emailFamilySummary()">Email Summary</button>
               <button class="btn blue" onclick="openFamilyMember()">+ Add Member</button>
             </div>
           </div>
@@ -515,6 +518,8 @@
             <h2>Bills & Money</h2>
             <div class="inline-actions">
               <button class="btn ghost" onclick="openAssetLiabilitySnapshot()">Snapshot</button>
+              <button class="btn ghost" onclick="printBillsSummary()">Print / PDF</button>
+              <button class="btn ghost" onclick="emailBillsSummary()">Email Summary</button>
               <button class="btn blue" onclick="openBill()">+ Add Bill</button>
             </div>
           </div>
@@ -539,6 +544,42 @@
             <div class="kpi" id="billKpi" style="margin-bottom:12px"></div>
             <div class="list" id="billList"></div>
             <div class="hint">Bills automatically build your liability side. Assets can be added next in a dedicated asset tracker so Privara can compute full net worth.</div>
+          </div>
+        </div>
+
+        <!-- Assets & Net Worth -->
+        <div class="card" id="t-assets" style="display:none;margin-top:14px">
+          <div class="hd">
+            <h2>Assets & Net Worth</h2>
+            <div class="inline-actions">
+              <button class="btn ghost" onclick="openNetWorthSnapshot()">Snapshot</button>
+              <button class="btn ghost" onclick="printAssetsSummary()">Print / PDF</button>
+              <button class="btn ghost" onclick="emailAssetsSummary()">Email Summary</button>
+              <button class="btn blue" onclick="openAsset()">+ Add Asset</button>
+            </div>
+          </div>
+          <div class="bd">
+            <div class="two">
+              <div class="fg"><label>Search Assets</label><input id="assetq" placeholder="home, checking, 401k, car..." oninput="renderAssets()" /></div>
+              <div class="fg"><label>Category</label>
+                <select id="assetType" onchange="renderAssets()">
+                  <option value="all">All</option>
+                  <option value="cash">Cash</option>
+                  <option value="bank">Bank Account</option>
+                  <option value="investment">Investment</option>
+                  <option value="retirement">Retirement</option>
+                  <option value="crypto">Crypto</option>
+                  <option value="realestate">Real Estate</option>
+                  <option value="vehicle">Vehicle</option>
+                  <option value="business">Business</option>
+                  <option value="collectible">Collectible</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="kpi" id="assetKpi" style="margin-bottom:12px"></div>
+            <div class="list" id="assetList"></div>
+            <div class="hint">Enter assets manually for a clean offline-first net worth dashboard. Bills build liabilities; assets complete the full financial picture.</div>
           </div>
         </div>
 
@@ -766,7 +807,7 @@
     <button onclick="tab('dash')">🏠 Home</button>
     <button onclick="tab('family')">👨‍👩‍👧 Family</button>
     <button onclick="tab('calendar')">🗓️ Dates</button>
-    <button onclick="tab('bills')">💳 Bills</button>
+    <button onclick="tab('assets')">🏦 Assets</button>
     <button onclick="openQuickAdd()">➕ Add</button>
   </div>
 
@@ -866,7 +907,7 @@ function tab(name){
   document.querySelectorAll(".nav .item").forEach(x=>{
     x.classList.toggle("active", x.dataset.tab === name);
   });
-  ["dash","family","calendar","memories","bills","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
+  ["dash","family","calendar","memories","bills","assets","em","pw","docs","rec","files","legacy","ref"].forEach(t=>{
     const el = $("t-"+t);
     if(el) el.style.display = (t === name) ? "block" : "none";
   });
@@ -1009,6 +1050,7 @@ function defaultVault(){
     events:[],
     memories:[],
     bills:[],
+    assets:[],
     passwords:[],
     documents:[],
     receipts:[],
@@ -1181,6 +1223,8 @@ async function unlock(){
     VAULT.family = VAULT.family || [];
     VAULT.events = VAULT.events || [];
     VAULT.memories = VAULT.memories || [];
+    VAULT.bills = VAULT.bills || [];
+    VAULT.assets = VAULT.assets || [];
     VAULT.files = VAULT.files || [];
     VAULT.legacy = VAULT.legacy || {t1:"",t2:"",notes:"",where:"",passwhere:""};
     VAULT.meta = VAULT.meta || {created:new Date().toISOString(), updated:new Date().toISOString()};
@@ -2015,6 +2059,8 @@ function renderDash(){
   const memories = (VAULT.memories||[]).length;
   const bills = (VAULT.bills||[]).length;
   const monthlyBills = (VAULT.bills||[]).reduce((sum,b)=>sum + monthlyBillAmount(b), 0);
+  const assetsTotal = totalAssetsValue();
+  const net = assetsTotal - monthlyBills * 12;
   const p = (VAULT.passwords||[]).length;
   const h = calcHealth();
   $("healthPill").textContent = `✨ Health: ${h.score}/100 (${h.tier})`;
@@ -2028,6 +2074,8 @@ function renderDash(){
     <div class="box"><div class="n">${events}</div><div class="l">Calendar Items</div><div class="m">Important dates tracked</div></div>
     <div class="box"><div class="n">${memories}</div><div class="l">Memories</div><div class="m">Journal, photo, video, voice</div></div>
     <div class="box"><div class="n">${bills}</div><div class="l">Bills</div><div class="m">$${monthlyBills.toFixed(2)}/mo tracked</div></div>
+    <div class="box"><div class="n">$${assetsTotal.toFixed(0)}</div><div class="l">Assets</div><div class="m">${(VAULT.assets||[]).length} items tracked</div></div>
+    <div class="box"><div class="n">$${net.toFixed(0)}</div><div class="l">Net Worth</div><div class="m">Assets − annual liabilities</div></div>
     <div class="box"><div class="n">${p}</div><div class="l">Passwords</div><div class="m">${h.weak} weak • ${h.dups} dup</div></div>
   `;
 
@@ -2035,12 +2083,14 @@ function renderDash(){
   let msg = soon.length ? soon.map(x=>`${x.title} (${x.days}d)`).join(" • ") : "No upcoming birthdays or events yet.";
   if(!S.g(K.lastBackup)) msg += " • Tip: Export a Backup";
   if(h.weak > 0) msg += ` • Fix ${h.weak} weak password(s)`;
+  if((VAULT.assets||[]).length === 0) msg += " • Add your first asset to unlock net worth";
   $("alerts").textContent = msg;
 
   const parts = [];
   if(fam) parts.push(`${fam} family member${fam===1?'':'s'}`);
   if(events) parts.push(`${events} calendar item${events===1?'':'s'}`);
   if(memories) parts.push(`${memories} memorie${memories===1?'y':'s'}`);
+  if((VAULT.assets||[]).length) parts.push(`${(VAULT.assets||[]).length} asset${(VAULT.assets||[]).length===1?'':'s'}`);
   $("subline").textContent = parts.length ? `Family protection with ${parts.join(" • ")}` : "Private family protection vault";
 }
 
@@ -2103,10 +2153,13 @@ function openQuickAdd(){
       </div>
       <div class="two" style="margin-top:10px">
         <button class="btn blue" onclick="closeModal();tab('bills');openBill()">💳 Add Bill</button>
-        <button class="btn blue" onclick="closeModal();tab('docs');openDoc()">📋 Add Document</button>
+        <button class="btn blue" onclick="closeModal();tab('assets');openAsset()">🏦 Add Asset</button>
       </div>
       <div class="two" style="margin-top:10px">
+        <button class="btn blue" onclick="closeModal();tab('docs');openDoc()">📋 Add Document</button>
         <button class="btn blue" onclick="closeModal();tab('files');openFileAdd()">📎 Add File</button>
+      </div>
+      <div class="two" style="margin-top:10px">
         <button class="btn ghost" onclick="closeModal()">Done</button>
       </div>
     `,
@@ -2467,6 +2520,202 @@ async function deleteFile(id){
   renderDash();
 }
 
+
+/* ==========================
+   Reporting helpers (Print / PDF / Email)
+========================== */
+function money(n){ return `$${Number(n||0).toFixed(2)}`; }
+
+function buildPrintableDocument(title, subtitle, bodyHtml){
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;padding:24px;color:#111827}
+      h1{margin:0 0 6px;font-size:28px}
+      .sub{color:#475569;margin-bottom:18px}
+      .card{border:1px solid #cbd5e1;border-radius:14px;padding:14px 16px;margin:0 0 12px}
+      .muted{color:#475569}
+      .row{display:flex;justify-content:space-between;gap:12px}
+      .tag{display:inline-block;border:1px solid #cbd5e1;border-radius:999px;padding:3px 8px;font-size:12px;color:#334155}
+      .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      @media print{ body{padding:0} .noprint{display:none} }
+    </style></head><body>
+    <h1>${escapeHtml(title)}</h1>
+    <div class="sub">${escapeHtml(subtitle || "Privara export")}</div>
+    ${bodyHtml}
+    <script>window.onload=()=>window.print();<\/script>
+  </body></html>`;
+}
+
+function openPrintable(title, subtitle, bodyHtml){
+  const w = window.open("", "_blank");
+  if(!w){ toast("Pop-up blocked"); return; }
+  w.document.write(buildPrintableDocument(title, subtitle, bodyHtml));
+  w.document.close();
+}
+
+function downloadHtmlExport(filename, title, subtitle, bodyHtml){
+  const blob = new Blob([buildPrintableDocument(title, subtitle, bodyHtml)], {type:"text/html"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  toast("Export downloaded ✓");
+}
+
+function sendMail(subject, body){
+  const href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = href;
+}
+
+function printFamilySummary(){
+  const list = (VAULT.family||[]);
+  const body = list.length ? list.map(m=>{
+    return `<div class="card"><div class="row"><strong>${escapeHtml(m.name||"Unnamed")}</strong><span class="tag">${escapeHtml(familyRoleLabel(m.role))}</span></div>
+    <div class="muted">Birthday: ${escapeHtml(m.birthday ? formatDate(m.birthday) : "—")}</div>
+    <div class="muted">Phone: ${escapeHtml(m.phone ? formatPhone(m.phone) : "—")}</div>
+    <div class="muted">Email: ${escapeHtml(m.email||"—")}</div>
+    <div class="muted">Address: ${escapeHtml(m.address||"—")}</div>
+    <div class="muted">Prescriptions: ${escapeHtml(m.prescriptions||"—")}</div>
+    <div class="muted">Notes: ${escapeHtml(m.notes||"—")}</div></div>`;
+  }).join("") : `<div class="card">No family data yet.</div>`;
+  openPrintable("Privara Family Summary","Print or Save as PDF from your browser", body);
+}
+function emailFamilySummary(){
+  const body = (VAULT.family||[]).map(m=>`${m.name} — ${familyRoleLabel(m.role)} | Phone: ${m.phone||"—"} | Email: ${m.email||"—"} | Address: ${m.address||"—"}`).join("\n") || "No family data yet.";
+  sendMail("Privara Family Summary", body + "\n\nTip: use Print / PDF in Privara if you want a shareable attachment.");
+}
+function printBillsSummary(){
+  const list = (VAULT.bills||[]);
+  const monthly = list.reduce((s,b)=>s+monthlyBillAmount(b),0);
+  const annual = list.reduce((s,b)=>s+annualBillAmount(b),0);
+  const body = `<div class="grid"><div class="card"><strong>Monthly Liabilities</strong><div>${money(monthly)}</div></div><div class="card"><strong>Annual Liabilities</strong><div>${money(annual)}</div></div></div>`
+    + (list.length ? list.map(b=>`<div class="card"><div class="row"><strong>${escapeHtml(b.name)}</strong><span class="tag">${escapeHtml(billCategoryLabel(b.category))}</span></div><div class="muted">${money(b.amount)} • ${(b.frequency||"monthly")} • ${dueText(b.dueDay)}</div><div class="muted">Provider: ${escapeHtml(b.provider||"—")} • Linked: ${escapeHtml(familyName(b.memberId))}</div><div class="muted">Autopay: ${b.autopay ? "Yes" : "No"}</div><div class="muted">Notes: ${escapeHtml(b.notes||"—")}</div></div>`).join("") : `<div class="card">No bills tracked yet.</div>`);
+  openPrintable("Privara Bills Summary","Print or Save as PDF from your browser", body);
+}
+function emailBillsSummary(){
+  const monthly = (VAULT.bills||[]).reduce((s,b)=>s+monthlyBillAmount(b),0);
+  const lines = (VAULT.bills||[]).map(b=>`${b.name} — ${money(b.amount)} ${b.frequency||"monthly"} — ${billCategoryLabel(b.category)}`).join("\n") || "No bills tracked yet.";
+  sendMail("Privara Bills Summary", `Monthly liabilities: ${money(monthly)}\n\n${lines}\n\nTip: use Print / PDF in Privara if you want a shareable attachment.`);
+}
+
+/* ==========================
+   Assets + Net Worth
+========================== */
+function assetCategoryLabel(v){
+  const map = {cash:'Cash',bank:'Bank Account',investment:'Investment',retirement:'Retirement',crypto:'Crypto',realestate:'Real Estate',vehicle:'Vehicle',business:'Business',collectible:'Collectible',other:'Other'};
+  return map[v] || 'Other';
+}
+function totalAssetsValue(){ return (VAULT.assets||[]).reduce((sum,a)=>sum + Number(a.value||0), 0); }
+function totalAnnualLiabilities(){ return (VAULT.bills||[]).reduce((sum,b)=>sum + annualBillAmount(b), 0); }
+function totalMonthlyLiabilities(){ return (VAULT.bills||[]).reduce((sum,b)=>sum + monthlyBillAmount(b), 0); }
+function netWorthValue(){ return totalAssetsValue() - totalAnnualLiabilities(); }
+
+function openAsset(id=''){
+  const a = (VAULT.assets||[]).find(x=>x.id===id) || {id:'',name:'',category:'bank',value:'',ownerId:'',institution:'',accountRef:'',updated:'',notes:''};
+  openModal(
+    id ? 'Edit Asset' : 'Add Asset',
+    'Track cash, property, vehicles, investments, and other owned value',
+    `
+      <input type="hidden" id="asset_id" value="${escapeHtml(a.id||'')}">
+      <div class="two">
+        <div class="fg"><label>Asset Name *</label><input id="asset_name" value="${escapeHtml(a.name||'')}" placeholder="Primary Checking, Home, F-150, 401k"></div>
+        <div class="fg"><label>Category</label><select id="asset_category">
+          ${['cash','bank','investment','retirement','crypto','realestate','vehicle','business','collectible','other'].map(v=>`<option value="${v}" ${a.category===v?'selected':''}>${assetCategoryLabel(v)}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Current Value *</label><input id="asset_value" type="number" min="0" step="0.01" value="${escapeHtml(String(a.value??''))}" placeholder="25000"></div>
+        <div class="fg"><label>Owner</label><select id="asset_ownerId"><option value="">None</option>${familyOptions(a.ownerId)}</select></div>
+      </div>
+      <div class="two">
+        <div class="fg"><label>Institution / Holder</label><input id="asset_institution" value="${escapeHtml(a.institution||'')}" placeholder="Synovus, Fidelity, Self-held"></div>
+        <div class="fg"><label>Account / Policy Ref</label><input id="asset_accountRef" value="${escapeHtml(a.accountRef||'')}" placeholder="Last 4 / policy ref / VIN"></div>
+      </div>
+      <div class="fg"><label>Last Updated</label><input id="asset_updated" type="date" value="${escapeHtml(a.updated||'')}"></div>
+      <div class="fg"><label>Notes</label><textarea id="asset_notes" placeholder="Where paperwork is stored, renewal notes, access instructions...">${escapeHtml(a.notes||'')}</textarea></div>
+    `,
+    `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('assets','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveAsset()">Save</button>`
+  );
+}
+
+async function saveAsset(){
+  const id = $("asset_id").value || crypto.randomUUID();
+  const name = $("asset_name").value.trim();
+  const value = Number($("asset_value").value);
+  if(!name){ toast('Asset name required'); return; }
+  if(!(value >= 0)){ toast('Asset value must be 0 or higher'); return; }
+  const item = {
+    id,
+    name,
+    category:$("asset_category").value,
+    value,
+    ownerId:$("asset_ownerId").value,
+    institution:$("asset_institution").value.trim(),
+    accountRef:$("asset_accountRef").value.trim(),
+    updated:$("asset_updated").value,
+    notes:$("asset_notes").value.trim()
+  };
+  const list = VAULT.assets || [];
+  const i = list.findIndex(x=>x.id===id);
+  if(i>=0) list[i] = item; else list.unshift(item);
+  VAULT.assets = list;
+  markUpdated();
+  await persist();
+  closeModal();
+  toast('Asset saved ✓');
+  renderAssets();
+  renderDash();
+}
+
+function renderAssets(){
+  const q = ($("assetq")?.value||'').toLowerCase();
+  const cat = $("assetType")?.value || 'all';
+  let list = (VAULT.assets||[]).filter(a=>{
+    const hay = `${a.name||''} ${a.category||''} ${a.institution||''} ${familyName(a.ownerId)||''} ${a.notes||''}`.toLowerCase();
+    if(q && !hay.includes(q)) return false;
+    if(cat === 'all') return true;
+    return (a.category||'other') === cat;
+  }).sort((a,b)=>Number(b.value||0)-Number(a.value||0));
+
+  const assetsTotal = totalAssetsValue();
+  const annual = totalAnnualLiabilities();
+  const monthly = totalMonthlyLiabilities();
+  const net = netWorthValue();
+  const liquid = (VAULT.assets||[]).filter(a=>['cash','bank'].includes(a.category)).reduce((s,a)=>s+Number(a.value||0),0);
+  $("assetKpi").innerHTML = `<div class="box"><div class="n">${money(assetsTotal)}</div><div class="l">Total Assets</div><div class="m">Manual asset tracker</div></div><div class="box"><div class="n">${money(annual)}</div><div class="l">Annual Liabilities</div><div class="m">Pulled from bills</div></div><div class="box"><div class="n">${money(net)}</div><div class="l">Net Worth</div><div class="m">Assets − annual liabilities</div></div><div class="box"><div class="n">${money(liquid)}</div><div class="l">Liquid Assets</div><div class="m">Cash + bank accounts</div></div>`;
+
+  const el = $("assetList");
+  if(!list.length){ el.innerHTML = `<div class="hint">No assets yet. Add your first asset to build your net worth dashboard.</div>`; return; }
+  el.innerHTML = list.map(a=>`<div class="li"><div><div class="t">${escapeHtml(a.name)} <span class="tag">${assetCategoryLabel(a.category)}</span></div><div class="s">${money(a.value)} • ${a.updated ? `Updated: ${formatDate(a.updated)} • ` : ''}${a.ownerId ? `Owner: ${escapeHtml(familyName(a.ownerId))}` : 'Owner: —'}</div><div class="s">${a.institution ? `Institution: ${escapeHtml(a.institution)} • ` : ''}${a.accountRef ? `Ref: ${escapeHtml(a.accountRef)}` : ''}</div>${a.notes ? `<div class="s" style="margin-top:6px">${escapeHtml(a.notes)}</div>` : ''}</div><div class="acts"><button class="btn ghost small" onclick="openAsset('${a.id}')">Edit</button></div></div>`).join('');
+}
+
+function buildAssetsBodyHtml(){
+  const assetsTotal = totalAssetsValue();
+  const annual = totalAnnualLiabilities();
+  const monthly = totalMonthlyLiabilities();
+  const net = netWorthValue();
+  const byCategory = {};
+  (VAULT.assets||[]).forEach(a=>{ const k = assetCategoryLabel(a.category); byCategory[k] = (byCategory[k]||0)+Number(a.value||0); });
+  const catRows = Object.entries(byCategory).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="card"><div class="row"><strong>${escapeHtml(k)}</strong><span>${money(v)}</span></div></div>`).join("") || `<div class="card">No assets yet.</div>`;
+  const assetRows = (VAULT.assets||[]).map(a=>`<div class="card"><div class="row"><strong>${escapeHtml(a.name)}</strong><span class="tag">${assetCategoryLabel(a.category)}</span></div><div class="muted">Value: ${money(a.value)} • Owner: ${escapeHtml(familyName(a.ownerId))}</div><div class="muted">Institution: ${escapeHtml(a.institution||"—")} • Ref: ${escapeHtml(a.accountRef||"—")}</div><div class="muted">Notes: ${escapeHtml(a.notes||"—")}</div></div>`).join("") || `<div class="card">No assets yet.</div>`;
+  return `<div class="grid"><div class="card"><strong>Total Assets</strong><div>${money(assetsTotal)}</div></div><div class="card"><strong>Monthly Liabilities</strong><div>${money(monthly)}</div></div><div class="card"><strong>Annual Liabilities</strong><div>${money(annual)}</div></div><div class="card"><strong>Net Worth</strong><div>${money(net)}</div></div></div><h3>Asset Allocation</h3>${catRows}<h3>Assets</h3>${assetRows}`;
+}
+
+function openNetWorthSnapshot(){
+  openModal(
+    'Net Worth Snapshot',
+    'Assets minus annual liabilities',
+    buildAssetsBodyHtml(),
+    `<button class="btn ghost" onclick="closeModal()">Close</button><button class="btn ghost" onclick="printAssetsSummary()">Print / PDF</button><button class="btn blue" onclick="downloadAssetsReport()">Download Report</button>`
+  );
+}
+function printAssetsSummary(){ openPrintable('Privara Assets & Net Worth','Print or Save as PDF from your browser', buildAssetsBodyHtml()); }
+function downloadAssetsReport(){ downloadHtmlExport('privara-assets-net-worth-report.html','Privara Assets & Net Worth','Open this file in a browser, then Print → Save as PDF.', buildAssetsBodyHtml()); }
+function emailAssetsSummary(){
+  const msg = `Total assets: ${money(totalAssetsValue())}\nMonthly liabilities: ${money(totalMonthlyLiabilities())}\nAnnual liabilities: ${money(totalAnnualLiabilities())}\nNet worth: ${money(netWorthValue())}\n\nAssets tracked:\n` + ((VAULT.assets||[]).map(a=>`- ${a.name}: ${money(a.value)} (${assetCategoryLabel(a.category)})`).join('\n') || 'No assets yet.') + `\n\nTip: use Print / PDF in Privara if you want a shareable attachment.`;
+  sendMail('Privara Assets & Net Worth Summary', msg);
+}
+
 /* ==========================
    Digital Legacy (Upgrade #4)
 ========================== */
@@ -2776,7 +3025,7 @@ function openAssetLiabilitySnapshot(){
   const byCategory = {};
   (VAULT.bills||[]).forEach(b=>{ const k = billCategoryLabel(b.category); byCategory[k] = (byCategory[k]||0) + monthlyBillAmount(b); });
   const rows = Object.entries(byCategory).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="li"><div><div class="t">${escapeHtml(k)}</div><div class="s">$${v.toFixed(2)}/month</div></div></div>`).join('') || `<div class="hint">No bill categories yet.</div>`;
-  openModal('Liability Snapshot','Bills automatically create your liability side. Assets can be added next for full net worth.', `<div class="kpi" style="margin-bottom:12px"><div class="box"><div class="n">$${monthly.toFixed(2)}</div><div class="l">Monthly Liabilities</div><div class="m">Current tracked load</div></div><div class="box"><div class="n">$${annual.toFixed(0)}</div><div class="l">Annual Liabilities</div><div class="m">12-month projection</div></div><div class="box"><div class="n">${(VAULT.bills||[]).length}</div><div class="l">Bills Tracked</div><div class="m">Subscriptions + fixed bills</div></div><div class="box"><div class="n">${(VAULT.bills||[]).filter(b=>b.category==='debt').length}</div><div class="l">Debt Accounts</div><div class="m">Liability-heavy items</div></div></div><div class="list">${rows}</div><div class="hint" style="margin-top:10px">Next upgrade: asset tracker for cash, vehicles, property, and investments.</div>`, `<button class="btn ghost" onclick="closeModal()">Close</button><button class="btn blue" onclick="closeModal();tab('bills');openBill()">Add Bill</button>`);
+  openModal('Liability Snapshot','Bills automatically create your liability side. Assets now complete your full net worth dashboard.', `<div class="kpi" style="margin-bottom:12px"><div class="box"><div class="n">$${monthly.toFixed(2)}</div><div class="l">Monthly Liabilities</div><div class="m">Current tracked load</div></div><div class="box"><div class="n">$${annual.toFixed(0)}</div><div class="l">Annual Liabilities</div><div class="m">12-month projection</div></div><div class="box"><div class="n">${(VAULT.bills||[]).length}</div><div class="l">Bills Tracked</div><div class="m">Subscriptions + fixed bills</div></div><div class="box"><div class="n">${(VAULT.bills||[]).filter(b=>b.category==='debt').length}</div><div class="l">Debt Accounts</div><div class="m">Liability-heavy items</div></div></div><div class="list">${rows}</div><div class="hint" style="margin-top:10px">Use the Assets section to track cash, vehicles, property, and investments.</div>`, `<button class="btn ghost" onclick="closeModal()">Close</button><button class="btn blue" onclick="closeModal();tab('bills');openBill()">Add Bill</button>`);
 }
 function openEvent(id){ const ev = (VAULT.events||[]).find(x=>x.id===id) || {id:'',title:'',date:'',type:'other',memberId:'',notes:''}; openModal(id ? 'Edit Event' : 'Add Event', 'Birthdays, anniversaries, school dates, appointments, and legacy reminders', `<input type="hidden" id="ev_id" value="${escapeHtml(ev.id||'')}"><div class="two"><div class="fg"><label>Title *</label><input id="ev_title" value="${escapeHtml(ev.title||'')}" placeholder="Taylor birthday party"></div><div class="fg"><label>Date *</label><input id="ev_date" type="date" value="${escapeHtml(ev.date||'')}"></div></div><div class="two"><div class="fg"><label>Type</label><select id="ev_type"><option value="birthday" ${ev.type==='birthday'?'selected':''}>Birthday</option><option value="anniversary" ${ev.type==='anniversary'?'selected':''}>Anniversary</option><option value="medical" ${ev.type==='medical'?'selected':''}>Medical</option><option value="school" ${ev.type==='school'?'selected':''}>School</option><option value="legacy" ${ev.type==='legacy'?'selected':''}>Legacy</option><option value="other" ${ev.type==='other'?'selected':''}>Other</option></select></div><div class="fg"><label>Linked Family Member</label><select id="ev_member"><option value="">None</option>${familyOptions(ev.memberId)}</select></div></div><div class="fg"><label>Notes</label><textarea id="ev_notes" placeholder="Time, location, what to bring...">${escapeHtml(ev.notes||'')}</textarea></div>`, `<button class="btn ghost" onclick="closeModal()">Cancel</button>${id?`<button class="btn red" onclick="delItem('events','${id}')">Delete</button>`:''}<button class="btn blue" onclick="saveEvent()">Save</button>`); }
 async function saveEvent(){ const id = $("ev_id").value || crypto.randomUUID(); const title = $("ev_title").value.trim(); const date = $("ev_date").value; if(!title || !date){ toast('Title and date are required'); return; } const obj = {id,title,date,type:$("ev_type").value,memberId:$("ev_member").value,notes:$("ev_notes").value.trim()}; const list = VAULT.events || []; const i = list.findIndex(x=>x.id===id); if(i>-1) list[i]=obj; else list.push(obj); VAULT.events = list; markUpdated(); await persist(); closeModal(); renderEvents(); renderDash(); toast('Event saved ✓'); }
